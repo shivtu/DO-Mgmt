@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 // import hardwarefault.js file
 const services = require('../view/services');
 const bugfix = require('../view/bugfix');
+const users = require('../view/users');
 
 // Connect to mongoDB
 mongoose.connect('mongodb://localhost:27017/TicketingDB', {useNewUrlParser: true}, (err) =>{
@@ -39,6 +40,7 @@ app.use((req,res, next) =>{
 // route hardwarefault request to hardwarefault.js file
 app.use('/api/v1/services', services);
 app.use('/api/v1/bugfix', bugfix);
+app.use('/api/v1/users', users);
 
 // Handle all errors
 app.use((req, res, next) =>{
