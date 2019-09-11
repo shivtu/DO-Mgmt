@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Users = require('../model/usermodel');
+const authCheck = require('../auth/authentication');
 
 router.get('/record', (req, res, next) =>{
     Users.findOne({_id: '5d74c5223d57502120ef2d18'}).then((result) =>{

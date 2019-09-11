@@ -4,7 +4,7 @@ const newProjectRequestSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     SRID: String,
     customerName: String,
-    serviceType: 'New Project Request',
+    serviceType: String,
     priority: Number,
     createdOn: Date,
     createdBy: String,

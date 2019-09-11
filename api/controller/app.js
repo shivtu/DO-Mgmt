@@ -5,9 +5,10 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 // import hardwarefault.js file
-const services = require('../view/services');
-const bugfix = require('../view/bugfix');
-const users = require('../view/users');
+const services = require('../response/services');
+const bugfix = require('../response/bugfix');
+const users = require('../response/users');
+const newproject = require('../response/newproject');
 
 // Connect to mongoDB
 mongoose.connect('mongodb://localhost:27017/TicketingDB', {useNewUrlParser: true}, (err) =>{
@@ -41,6 +42,7 @@ app.use((req,res, next) =>{
 app.use('/api/v1/services', services);
 app.use('/api/v1/bugfix', bugfix);
 app.use('/api/v1/users', users);
+app.use('/api/v1/newproject', newproject);
 
 // Handle all errors
 app.use((req, res, next) =>{

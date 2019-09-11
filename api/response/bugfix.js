@@ -2,20 +2,39 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const Bugfix = require('../model/bugfixmodel');
+const authCheck = require('../auth/authentication');
 
-router.get('/record', (req, res, next) =>{
-    Bugfix.findOne({_id: '5d74da467032d51e54d5363b'}).then((result) =>{
-        res.status(200).json({status: result.SRID});
-    }).catch((e) => res.status(200).json({status: e.message}));
-    // res.status(200).json({status: 'success'});
+// find a BFR
+router.get('/:serviceId', (req, res, next) =>{
+    // Execute authentication
+    authCheck.then((role) =>{
+    // Check if auth succeeded
+    if((role[1] === 'user' || role[1] === 'admin') && role[0]){
+        const serviceId = req.params.serviceId.toUpperCase();
+        Bugfix.findOne({SRID: serviceId}).then((result) =>{
+        res.status(200).json({status: result});
+    })
+    .catch((e) => res.status(200).json({status: e.message}));
+    } else {
+        res.status(401).json(
+            {
+                status: 'unauthorized'
+            }
+        );
+    }
+    }).catch((err)=>{
+        res.status(500).json({status: 'Could not authorize'});
+    });
 });
 
+
+// Create a BFR
 router.post('/create', (req, res, next) =>{
     const utcDate = new Date();
     const BFR = new Bugfix({
         _id: new mongoose.Types.ObjectId(),
         SRID: 'BFR'+Date.now(),
-        CustomerName: req.body.CustomerName,
+        customerName: req.body.CustomerName,
         serviceType: 'Bug Fix Request',
         priority: req.body.Priority,
         createdOn: utcDate.toUTCString(),
