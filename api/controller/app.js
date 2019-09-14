@@ -4,14 +4,13 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-// import hardwarefault.js file
 const services = require('../response/services');
 const bugfix = require('../response/bugfix');
 const users = require('../response/users');
 const newproject = require('../response/newproject');
 
 // Connect to mongoDB
-mongoose.connect('mongodb://localhost:27017/TicketingDB', {useNewUrlParser: true}, (err) =>{
+mongoose.connect('mongodb://localhost:27017/TicketingDB', {useNewUrlParser: true, useFindAndModify: false}, (err) =>{
     if(!err){
         console.log('Connected to DB');
     }else{
@@ -38,7 +37,7 @@ app.use((req,res, next) =>{
     next();
 });
 
-// route hardwarefault request to hardwarefault.js file
+//Handle routes
 app.use('/api/v1/services', services);
 app.use('/api/v1/bugfix', bugfix);
 app.use('/api/v1/users', users);

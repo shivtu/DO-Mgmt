@@ -4,15 +4,26 @@ const mongoose = require("mongoose");
 const Newproject = require("../model/newrprojectmodel");
 const Validate = require("../controller/validate");
 
+/*Find instance using service ID*/
 router.get("/find/:serviceId", (req, res, next) => {
   const serviceId = req.params.serviceId.toUpperCase();
   Newproject.findOne({ SRID: serviceId })
     .then(result => {
-      res.status(200).json({ status: result });
+      res.status(200).json({ data: result });
     })
-    .catch(e => res.status(200).json({ status: e.message }));
+    .catch(e => res.status(200).json({ data: e.message }));
 });
 
+/* Find all instances*/
+router.get("/findAll", (req, res, next) => {
+  Newproject.find()
+    .then(result => {
+      res.status(200).json({ data: result });
+    })
+    .catch(e => res.status(500).json({ data: e.message }));
+});
+
+/**Create a NPR - New Project Request */
 router.post("/create", (req, res, next) => {
   const utcDate = new Date();
   const NPR = new Newproject({
@@ -31,11 +42,10 @@ router.post("/create", (req, res, next) => {
     childTask: {},
     files: req.body.files
   });
-  // console.log(req.body.assignedTo);
   NPR.save()
     .then(result => {
       res.status(201).json({
-        status: result
+        data: result
       });
     })
     .catch(e => {
@@ -43,18 +53,17 @@ router.post("/create", (req, res, next) => {
     });
 });
 
-router.patch("/update/:_id", (req, res, next) =>{
-  Validate[1].then((msg) => {
-    console.log(msg)
-  });
-  const _id = req.params._id;
-  var updateData = {
-    status: req.body.status
-  }
-  Newproject.findByIdAndUpdate(_id, updateData, (err, result) =>{
+/**update NPR, request body to be plain JSON object (Nested JSON not allowed) */
+router.patch("/update/:_id", Validate[0], (req, res, next) =>{
+  Newproject.findByIdAndUpdate({_id: req.params._id}, {$set: req.body}, {new: true}) /**{new: true} parameter returns the updated object */
+  .then((result) =>{
     res.status(200).json({
-      status: result
-    });
+      data: result
+    })
+  }).catch((err)=>{
+    res.status(404).json({
+      data: 'record not found'
+    })
   });
 });
 

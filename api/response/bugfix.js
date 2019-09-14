@@ -5,33 +5,19 @@ const Bugfix = require("../model/bugfixmodel");
 const authCheck = require("../auth/authentication");
 
 // find a BFR
-router.get("/find/:serviceId", (req, res, next) => {
-  // Execute authentication
-  authCheck
-    .then(role => {
-      // Check if auth succeeded
-      if ((role[1] === "user" || role[1] === "admin") && role[0]) {
-        const serviceId = req.params.serviceId.toUpperCase();
-        Bugfix.findOne({ SRID: serviceId })
-          .then(result => {
-            res.status(200).json({
-              status: result
-            });
-          })
-          .catch(e =>
-            res.status(200).json({
-              status: e.message
-            })
-          );
-      } else {
-        res.status(401).json({
-          status: "unauthorized"
-        });
-      }
+router.get("/find/:serviceId", authCheck, (req, res, next) => {
+  const serviceId = req.params.serviceId.toUpperCase();
+  Bugfix.findOne({ SRID: serviceId })
+    .then(result => {
+      res.status(200).json({
+        status: result
+      });
     })
-    .catch(err => {
-      res.status(500).json({ status: "Could not authorize" });
-    });
+    .catch(e =>
+      res.status(200).json({
+        status: e.message
+      })
+    );
 });
 
 // Create a BFR
@@ -55,7 +41,7 @@ router.post("/create", (req, res, next) => {
   BFR.save()
     .then(result => {
       res.status(201).json({
-        ServiceRequest: BFR
+        ServiceRequest: result
       });
     })
     .catch(e => {
