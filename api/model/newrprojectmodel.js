@@ -14,7 +14,7 @@ const newProjectRequestSchema = mongoose.Schema({
     status: String,
     repoLink: String,
     childTask: JSON,
-    files: Array
+    files: JSON
 });
 
 module.exports = mongoose.model('NewProjectRequest', newProjectRequestSchema);

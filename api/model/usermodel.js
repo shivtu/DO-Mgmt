@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
     group: Number,
     userId: Number,
     Gender: Boolean,
-    Bio: String,
+    Bio: JSON,
     createdBy: String,
     createdOn: Number,
     displayPicture: String

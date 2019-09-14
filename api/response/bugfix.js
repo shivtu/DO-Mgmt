@@ -10,12 +10,12 @@ router.get("/find/:serviceId", authCheck, (req, res, next) => {
   Bugfix.findOne({ SRID: serviceId })
     .then(result => {
       res.status(200).json({
-        status: result
+        result: result
       });
     })
     .catch(e =>
       res.status(200).json({
-        status: e.message
+        result: e.message
       })
     );
 });
@@ -41,7 +41,7 @@ router.post("/create", (req, res, next) => {
   BFR.save()
     .then(result => {
       res.status(201).json({
-        ServiceRequest: result
+        result: result
       });
     })
     .catch(e => {

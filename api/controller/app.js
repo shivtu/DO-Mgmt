@@ -6,8 +6,10 @@ const mongoose = require('mongoose');
 
 const services = require('../response/services');
 const bugfix = require('../response/bugfix');
+const failfix = require('../response/failfix');
 const users = require('../response/users');
 const newproject = require('../response/newproject');
+const counters = require('../response/counters');
 
 // Connect to mongoDB
 mongoose.connect('mongodb://localhost:27017/TicketingDB', {useNewUrlParser: true, useFindAndModify: false}, (err) =>{
@@ -40,8 +42,10 @@ app.use((req,res, next) =>{
 //Handle routes
 app.use('/api/v1/services', services);
 app.use('/api/v1/bugfix', bugfix);
+app.use('/api/v1/failfix', failfix);
 app.use('/api/v1/users', users);
 app.use('/api/v1/newproject', newproject);
+app.use('/api/v1/counters', counters);
 
 // Handle all errors
 app.use((req, res, next) =>{

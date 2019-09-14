@@ -13,7 +13,7 @@ const bugFixSchema = mongoose.Schema({
     status: String,
     endDate: Date,
     NPRId: String,
-    files: Array
+    files: JSON
 });
 
 module.exports = mongoose.model('Bugfix', bugFixSchema);
