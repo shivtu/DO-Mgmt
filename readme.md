@@ -47,7 +47,8 @@ HTTP Request Type: <code>POST</code>
 <br/>
 Resource URI: <code>domain.com/api/v1/newproject/create</code>
 <br/>
-Required Parameters: 
+<b>Required Parameters:</b> 
+Parameter Name:
 <code>customerName</code>
 <br/>
 Type: <code>String</code>
