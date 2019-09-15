@@ -75,4 +75,22 @@ Request body format: <code>JSON</code>
     <td>any string</td>
     <td>This field can be customized to retrieve users from table</td>
   </tr>
+  <tr>
+    <td>summary</td>
+    <td>String</td>
+    <td>any string</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>description</td>
+    <td>String</td>
+    <td>any string</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>status</td>
+    <td>String</td>
+    <td>created, in-progress, on-hold, completed, canceled</td>
+    <td>To customize status types edit newprojectmodel.js - line no. 3, variable statusTypes[]</td>
+  </tr>
 </table>
