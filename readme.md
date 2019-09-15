@@ -54,20 +54,13 @@
   <tr>
     <td>POST</td>
     <td>domain.com/api/v1/newproject/create</td>
-    <td>customerName: String</td>
-    <td>Any</td>
-  </tr>
-  ### Create a New Project Request (NPR)
-  <tr>
-    <th>HTTP Request Type</th>
-    <th>Request URI</th>
-    <th>Required Parameters: Type</th>
-    <th>Acceptable Values</th>
-  </tr>
-  <tr>
-    <td>POST</td>
-    <td>domain.com/api/v1/newproject/create</td>
-    <td>customerName: String</td>
+    <td>
+    customerName: String
+    <br/>
+    createdBy: String
+    <br/>
+    summary: String
+    </td>
     <td>Any</td>
   </tr>
 </table>
