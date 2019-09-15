@@ -43,3 +43,7 @@
 
 ## REST Web-Services Usage
 ### Create a New Project Request (NPR)
+<h4>HTTP Request type</h4>
+<p>POST</p>
+<h4>URI</4>
+<p>domain.com//api/v1/newproject/create</p>
