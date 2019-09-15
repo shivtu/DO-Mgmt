@@ -48,10 +48,20 @@ HTTP Request Type: <code>POST</code>
 Resource URI: <code>domain.com/api/v1/newproject/create</code>
 <br/>
 <b>Required Parameters:</b>
-<br/>
-Parameter Name:
-<code>customerName</code>
-<br/>
-Type: <code>String</code>
-<br/>
-Accepted Values: <code>any string</code>
+<table>
+  <tr>
+    <th>Parameter Name</th>
+    <th>Parameter Type</th>
+    <th>Accepted Values</th>
+  </tr>
+  <tr>
+    <td>customerName</td>
+    <td>String</td>
+    <td>any string</td>
+  </tr>
+  <tr>
+    <td>priority</td>
+    <td>Number</td>
+    <td>1,2,3,4,5</td>
+  </tr>
+</table>
