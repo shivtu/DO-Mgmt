@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const Bugfix = require("../model/bugfixmodel");
 const authCheck = require("../auth/authentication");
+const Counters = require("../model/countersmodel");
 
 // find a BFR
 router.get("/find/:serviceId", authCheck, (req, res, next) => {
@@ -22,15 +23,17 @@ router.get("/find/:serviceId", authCheck, (req, res, next) => {
 
 // Create a BFR
 router.post("/create", (req, res, next) => {
+  BFRSequence.exec()
+  .then((seq) =>{
   const utcDate = new Date();
   const BFR = new Bugfix({
     _id: new mongoose.Types.ObjectId(),
-    SRID: "BFR" + Date.now(),
-    customerName: req.body.CustomerName,
+    SRID: "BFR" + seq.sequence_value,
+    customerName: req.body.customerName,
     serviceType: "Bug Fix Request",
     priority: req.body.Priority,
-    createdOn: utcDate.toUTCString(),
-    CreatedBy: req.body.CreatedBy,
+    createdOn: new Date().toUTCString(),
+    createdBy: req.body.createdBy,
     summary: req.body.summary,
     description: req.body.description,
     status: "created",
@@ -44,9 +47,24 @@ router.post("/create", (req, res, next) => {
         result: result
       });
     })
-    .catch(e => {
-      console.log(e.message);
+    .catch(err => {
+      res.status(400).json({
+        result: err.message
+      });
     });
+  })
+  .catch((seqErr) =>{
+    res.status(500).json({
+      result: seqErr.message
+    });
+  });
 });
+
+/**Update sequence number to create BFRID */
+const BFRSequence = Counters.findOneAndUpdate(
+  { modelType: "BFR" },
+  { $inc: { sequence_value: 1 } },
+  { new: true }
+);
 
 module.exports = router;
