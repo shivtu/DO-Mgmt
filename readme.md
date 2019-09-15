@@ -45,15 +45,23 @@
 ### Create a New Project Request (NPR)
 <table>
     <tbody>
-        <tr>HTTP Request Type</tr>
+        <tr>
+        HTTP Request Type
+        </tr>
         <tr>Request URI</tr>
         <tr>Required Parameters</tr>
-        <td>POST</td>
         <td>domain.com/api/v1/newproject/create</td>
     </tbody>
 </table>
-<!-- <h4>HTTP Request type: POST</h4>
-<h4>Request URI: domain.com/api/v1/newproject/create</h4>
-<h4>Required parameters</h4>
-<code>customerName: String</code>
-<code>priority: Number <Acceptable items - 1,2,3,4,5></code> -->
+<table>
+  <tr>
+    <th>HTTP Request Type</th>
+    <th>Request URI</th>
+    <th>Required Parameters</th>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td>domain.com/api/v1/newproject/create</td>
+    <td>customerName</td>
+  </tr>
+</table>
