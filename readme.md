@@ -13,7 +13,7 @@
     <li>Application Fail Fix Request (FFR)</li>
     <li>File uploads for each type of request (NPR, BFR, FFR)</li>
     <li>User profile creation</li>
-    <li>Loosely coupled authentication and authorization modules</li>
+    <li>Loosely coupled authentication and authorization modules for customizing and integrating third party auth services</li>
 </ul>
 
 <h4>Dependencies</h4>
@@ -45,6 +45,19 @@
 ### Create a New Project Request (NPR)
 
 <table>
+  <tr>
+    <th>HTTP Request Type</th>
+    <th>Request URI</th>
+    <th>Required Parameters: Type</th>
+    <th>Acceptable Values</th>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td>domain.com/api/v1/newproject/create</td>
+    <td>customerName: String</td>
+    <td>Any</td>
+  </tr>
+  ### Create a New Project Request (NPR)
   <tr>
     <th>HTTP Request Type</th>
     <th>Request URI</th>
