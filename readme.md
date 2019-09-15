@@ -47,6 +47,8 @@ HTTP Request Type: <code>POST</code>
 <br/>
 Resource URI: <code>domain.com/api/v1/newproject/create</code>
 <br/>
+Request body format: <code>JSON</code>
+<br/>
 <b>Required Parameters:</b>
 <table>
   <tr>
