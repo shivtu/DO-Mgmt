@@ -43,7 +43,8 @@
 
 ## REST Web-Services Usage
 ### Create a New Project Request (NPR)
-<h4>HTTP Request type</h4>
-<p>POST</p>
-<h4>URI</4>
-<p>domain.com//api/v1/newproject/create</p>
+<h4>HTTP Request type: POST</h4>
+<h4>Request URI: domain.com/api/v1/newproject/create</h4>
+<h4>Required parameters</h4>
+<code>customerName: String</code>
+<code>priority: Number <Acceptable items - 1,2,3,4,5></code>
