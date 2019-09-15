@@ -23,20 +23,22 @@
     <li>Packages used : 
         <ol>
             <li>
-                <a href="https://mongoosejs.com/">Mongoose MongoDB ODM</a>, <a href="https://www.npmjs.com/package/mongoose">NPM Package</a>
+                <a href="https://mongoosejs.com/">Mongoose MongoDB ODM</a>
+                <br/>
+                <a href="https://www.npmjs.com/package/mongoose">NPM Package here</a>
             </li>
             <li>
-                <a href="https://github.com/expressjs/morgan">Morgan HTTP request logger middleware</a>, <a href="https://www.npmjs.com/package/morgan">NPM Package</a>
+                <a href="https://github.com/expressjs/morgan">Morgan HTTP request logger middleware</a>
+                <br/>
+                <a href="https://www.npmjs.com/package/morgan">NPM Package here</a>
             </li>
             <li>
-                <a href="https://github.com/expressjs/body-parser">Node.js body parsing middleware</a>, <a href="https://www.npmjs.com/package/body-parser">NPM Package</a>
+                <a href="https://github.com/expressjs/body-parser">Node.js body parsing middleware</a>
+                <br/>
+                <a href="https://www.npmjs.com/package/body-parser">NPM Package here</a>
             </li>
         <ol>
     </li>
-    <li>Application Fail Fix Request (FFR)</li>
-    <li>File uploads for each type of request (NPR, BFR, FFR)</li>
-    <li>User profile creation</li>
-    <li>Loosely coupled authentication and authorization modules</li>
 </ul>
 
 ## REST Web-Services Usage
