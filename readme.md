@@ -46,10 +46,10 @@
 <table>
     <tbody>
         <tr>HTTP Request Type</tr>
-        <td>POST</td>
         <tr>Request URI</tr>
-        <td>domain.com/api/v1/newproject/create</td>
         <tr>Required Parameters</tr>
+        <td>POST</td>
+        <td>domain.com/api/v1/newproject/create</td>
     </tbody>
 </table>
 <!-- <h4>HTTP Request type: POST</h4>
