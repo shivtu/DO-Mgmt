@@ -43,25 +43,18 @@
 
 ## REST Web-Services Usage
 ### Create a New Project Request (NPR)
-<table>
-    <tbody>
-        <tr>
-        HTTP Request Type
-        </tr>
-        <tr>Request URI</tr>
-        <tr>Required Parameters</tr>
-        <td>domain.com/api/v1/newproject/create</td>
-    </tbody>
-</table>
+
 <table>
   <tr>
     <th>HTTP Request Type</th>
     <th>Request URI</th>
-    <th>Required Parameters</th>
+    <th>Required Parameters: Type</th>
+    <th>Acceptable Values</th>
   </tr>
   <tr>
     <td>POST</td>
     <td>domain.com/api/v1/newproject/create</td>
-    <td>customerName</td>
+    <td>customerName: String</td>
+    <td>Any</td>
   </tr>
 </table>
