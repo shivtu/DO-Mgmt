@@ -53,15 +53,24 @@ Resource URI: <code>domain.com/api/v1/newproject/create</code>
     <th>Parameter Name</th>
     <th>Parameter Type</th>
     <th>Accepted Values</th>
+    <th>Additional Info</th>
   </tr>
   <tr>
     <td>customerName</td>
     <td>String</td>
     <td>any string</td>
+    <td>N/A</td>
   </tr>
   <tr>
     <td>priority</td>
     <td>Number</td>
     <td>1,2,3,4,5</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>createdBy</td>
+    <td>String</td>
+    <td>any string</td>
+    <td>This field can be customized to retrieve users from table</td>
   </tr>
 </table>
