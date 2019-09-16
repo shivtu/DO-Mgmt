@@ -117,8 +117,8 @@ Request body format: <code>JSON</code>
   <tr>
     <td>serviceType</td>
     <td>String</td>
-    <td><address>< prefixed value ></address></td>
-    <td>New Project Request</td>
+    <td><address> < prefixed value > </address></td>
+    <td>Prefixed Value: 'New Project Request'</td>
   </tr>
   <tr>
     <td>assignedTo</td>
@@ -134,6 +134,18 @@ Request body format: <code>JSON</code>
   </tr>
   <tr>
     <td>childTask (Epic)</td>
+    <td>JSON</td>
+    <td><address>any json</address></td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>updates</td>
+    <td>JSON</td>
+    <td><address><code>{"updateBy": any string, "updatedOn": Date Time, "updateSummary": any string, "updateDescription": any string}</code></address></td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>files</td>
     <td>JSON</td>
     <td><address>any json</address></td>
     <td>N/A</td>
