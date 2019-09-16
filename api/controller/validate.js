@@ -13,7 +13,4 @@ validateMethods = {
   
 }
 
-
-// const validateArray = [shouldStatusUpdate, someFunction];
-
 exports.validationMethod = validateMethods;
