@@ -105,7 +105,7 @@ Request body format: <code>JSON</code>
   <tr>
     <td>_id</td>
     <td>String</td>
-    <td><code>Auto-Generated</code></td>
+    <td><label>Auto-Generated</label></td>
     <td>Unique to each entry</td>
   </tr>
 </table>
