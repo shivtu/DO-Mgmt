@@ -108,4 +108,34 @@ Request body format: <code>JSON</code>
     <td><address>< Auto-Generated ></address></td>
     <td>Unique to each entry</td>
   </tr>
+  <tr>
+    <td>SRID</td>
+    <td>String</td>
+    <td><address>< Auto-Generated ></address></td>
+    <td>auto increaments with a prefix 'NPR'</td>
+  </tr>
+  <tr>
+    <td>serviceType</td>
+    <td>String</td>
+    <td><address>< prefixed value ></address></td>
+    <td>New Project Request</td>
+  </tr>
+  <tr>
+    <td>assignedTo</td>
+    <td>String</td>
+    <td><address>any string</address></td>
+    <td>can be customized to populate with the user name retrieved from DB</td>
+  </tr>
+  <tr>
+    <td>repoLink</td>
+    <td>String</td>
+    <td><address>any string</address></td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>childTask (Epic)</td>
+    <td>JSON</td>
+    <td><address>any json</address></td>
+    <td>N/A</td>
+  </tr>
 </table>
