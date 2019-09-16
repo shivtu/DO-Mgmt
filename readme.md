@@ -111,8 +111,8 @@ Request body format: <code>JSON</code>
   <tr>
     <td>SRID</td>
     <td>String</td>
-    <td><address>< Auto-Generated ></address></td>
-    <td>auto increaments with a prefix 'NPR'</td>
+    <td><address> < Auto-Generated > </address></td>
+    <td>auto increaments with a prefix 'NPR', used as index on the DB. Unique to each entry</td>
   </tr>
   <tr>
     <td>serviceType</td>
