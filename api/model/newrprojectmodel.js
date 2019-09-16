@@ -20,6 +20,7 @@ const newProjectRequestSchema = mongoose.Schema({
     repoLink: {type: String},
     childTask: {type: JSON},
     updates: {type: JSON},
+    lifeCycle: {type: JSON}, /**{assignedUser: userName, startDate: DateTime(), endDate: DateTime(), status: status} */
     files: {type: JSON}
 });
 

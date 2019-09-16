@@ -54,7 +54,7 @@ router.post("/create", (req, res, next) => {
 });
 
 /**update NPR, request body to be plain JSON object (Nested JSON not allowed) */
-router.patch("/update/:_id", Validate[0], (req, res, next) => {
+router.patch("/update/:_id", (req, res, next) => {
   Newproject.findByIdAndUpdate(
     { _id: req.params._id },
     { $set: req.body },
@@ -70,6 +70,12 @@ router.patch("/update/:_id", Validate[0], (req, res, next) => {
         data: "record not found"
       });
     });
+});
+
+router.patch("/experiment", Validate.validationMethod.isAssigningRequest, (req, res, next) => {
+  res.status(200).json({
+    result:'after 5 seconds'
+  })
 });
 
 module.exports = router;
