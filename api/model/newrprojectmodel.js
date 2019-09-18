@@ -5,6 +5,10 @@ const priorityTypes = [1,2,3,4,5]; /* Describes the priority an assigned develop
 Priorities can be changed in an already created request depending upon the task at hand
 priorities are not related/coupled with time lines (end date, start date) */
 
+const fileTypes = {
+    "orignalFileName": String
+}
+
 const newProjectRequestSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     SRID: {type :String, required: true, index: true, unique: true}, /* Set index to true for faster search on DB. This field is auto generated */
@@ -23,5 +27,6 @@ const newProjectRequestSchema = mongoose.Schema({
     lifeCycle: {type: JSON}, /**{assignedUser: userName, startDate: DateTime(), endDate: DateTime(), status: status} */
     files: {type: JSON}
 });
+
 
 module.exports = mongoose.model('NewProjectRequest', newProjectRequestSchema);

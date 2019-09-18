@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const Newproject = require("../model/newrprojectmodel");
 const Validate = require("../controller/validate");
+const Counters = require("../model/countersmodel");
 
 /*Find instance using service ID*/
 router.get("/find/:serviceId", (req, res, next) => {
@@ -24,11 +25,13 @@ router.get("/findAll", (req, res, next) => {
 });
 
 /**Create a NPR - New Project Request */
-router.post("/create", (req, res, next) => {
+router.post("/create", Validate.validationMethod.isUploadingfile, (req, res, next) => {
+  NPRSequence.exec()
+  .then((seq) => {
   const utcDate = new Date();
   const NPR = new Newproject({
     _id: new mongoose.Types.ObjectId(),
-    SRID: "NPR" + Date.now(),
+    SRID: "NPR" + seq.sequence_value,
     customerName: req.body.customerName,
     serviceType: "New Project Request",
     priority: req.body.priority,
@@ -40,24 +43,55 @@ router.post("/create", (req, res, next) => {
     status: "created",
     repoLink: req.body.repoLink,
     childTask: {},
-    files: req.body.files
+    files: req.body.files,
+    lifeCycle: [{assignedTo: req.body.assignedTo, assignedOn: utcDate.toUTCString()}]
   });
   NPR.save()
     .then(result => {
       res.status(201).json({
-        data: result
+        result: result
       });
     })
     .catch(e => {
-      console.log(e.message);
+      res.status(400).json({
+        result: e.message
+      });
     });
+  })
+  .catch((seqErr) =>{
+    res.status(500).json({
+      result: seqErr
+    });
+  });
 });
 
+
 /**update NPR, request body to be plain JSON object (Nested JSON not allowed) */
-router.patch("/experiment", Validate.validationMethod.isAssigningRequest, (req, res, next) => {
-  res.status(200).json({
-    result:'after 5 seconds'
-  })
+router.patch("/experiment/:_id", Validate.validationMethod.isAssigningRequest,
+  Validate.validationMethod.isUploadingfile, (req, res, next) =>{
+     
 });
+
+
+router.patch("/update/:_id", Validate.validationMethod.isAssigningRequest,
+Validate.validationMethod.isUploadingfile, (req, res, next) => {
+    Newproject.findByIdAndUpdate({_id: req.params._id}, req.body, {new: true})
+    .then((result) =>{
+      res.status(200).json({
+        result: result
+      });
+    })
+    .catch((err) =>{
+      result: err.message
+    });
+  });
+
+
+/**Update sequence number to create NPRID */
+const NPRSequence = Counters.findOneAndUpdate(
+  { modelType: "NPR" },
+  { $inc: { sequence_value: 1 } },
+  { new: true }
+);
 
 module.exports = router;
