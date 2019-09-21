@@ -155,7 +155,7 @@ Request body format: <code>JSON</code>
   <tr>
     <td>lifeCycle</td>
     <td>JSON</td>
-    <td><address><code>{"assignedTo": any string, "assignedOn": Date Time}</code></address></td>
-    <td>This field is Auto-Generted</td>
+    <td><address>< Auto-Generated ></address></td>
+    <td>This field is Auto-Generted in the following format<br/><code>{"assignedTo": any string, "assignedOn": Date Time}</code></td>
   </tr>
 </table>
