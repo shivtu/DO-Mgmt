@@ -149,7 +149,7 @@ Request body format: <code>JSON</code>
   <tr>
     <td>files</td>
     <td>Array</td>
-    <td><address><code>["file name", base64 string]</code></address></td>
+    <td><address><code>[any string, base64 string]</code></address></td>
     <td>Accepted array length 2<br/>first element of array should be the original file name, second element should be a base64 string of the file</td>
   </tr>
   <tr>
