@@ -19,7 +19,8 @@
 <h4>Dependencies</h4>
 <ul>
     <li>Built using nodeJS</li>
-    <li>REST Framework : <a href="https://expressjs.com/">ExpressJS Fast</a>,
+    <li>REST Framework : <a href="https://expressjs.com/">ExpressJS</a>
+    <br/>
     <a href="https://www.npmjs.com/package/express">Express NPM Package</a></li>
     <li>Packages used : 
         <ol>
@@ -148,7 +149,7 @@ Request body format: <code>JSON</code>
   <tr>
     <td>files</td>
     <td>Array</td>
-    <td><address>["file name", "< base64 string >"]</address></td>
+    <td><address><code>["file name", base64 string]</code></address></td>
     <td>Accepted array length 2<br/>first element of array should be the original file name, second element should be a base64 string of the file</td>
   </tr>
   <tr>
