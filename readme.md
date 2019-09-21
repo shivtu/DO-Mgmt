@@ -19,23 +19,24 @@
 <h4>Dependencies</h4>
 <ul>
     <li>Built using nodeJS</li>
-    <li>REST Framework : <a href="https://expressjs.com/">ExpressJS Fast, unopinionated, minimalist web framework</a>, <a href="https://www.npmjs.com/package/express">NPM Package</a></li>
+    <li>REST Framework : <a href="https://expressjs.com/">ExpressJS Fast</a>,
+    <a href="https://www.npmjs.com/package/express">Express NPM Package</a></li>
     <li>Packages used : 
         <ol>
             <li>
                 <a href="https://mongoosejs.com/">Mongoose MongoDB ODM</a>
                 <br/>
-                <a href="https://www.npmjs.com/package/mongoose">NPM Package here</a>
+                <a href="https://www.npmjs.com/package/mongoose">Mongoose NPM Package</a>
             </li>
             <li>
-                <a href="https://github.com/expressjs/morgan">Morgan HTTP request logger middleware</a>
+                <a href="https://github.com/expressjs/morgan">Morgan</a>
                 <br/>
-                <a href="https://www.npmjs.com/package/morgan">NPM Package here</a>
+                <a href="https://www.npmjs.com/package/morgan">Morgan NPM Package</a>
             </li>
             <li>
-                <a href="https://github.com/expressjs/body-parser">Node.js body parsing middleware</a>
+                <a href="https://github.com/expressjs/body-parser">Body-Parser</a>
                 <br/>
-                <a href="https://www.npmjs.com/package/body-parser">NPM Package here</a>
+                <a href="https://www.npmjs.com/package/body-parser">Body-Parser NPM Package</a>
             </li>
         <ol>
     </li>
@@ -147,7 +148,7 @@ Request body format: <code>JSON</code>
   <tr>
     <td>files</td>
     <td>JSON</td>
-    <td><address>any json</address></td>
-    <td>N/A</td>
+    <td><address>Array</address></td>
+    <td>Accepted array length 2<br/>first element of array should be the original file name, second element should be a base64 string of the file</td>
   </tr>
 </table>

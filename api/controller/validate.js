@@ -1,6 +1,4 @@
 const express = require("express");
-const router = express.Router();
-const mongoose = require("mongoose");
 const Newproject = require("../model/newrprojectmodel");
 const Bugfix = require("../model/bugfixmodel");
 const fs = require("fs");
@@ -12,7 +10,7 @@ validateMethods = {
    */
   isAssigningRequest: (req, res, next) => {
     const utcDate = new Date();
-    if(req.body.assignedTo !== 'undefined') {
+    if(req.body.assignedTo !== undefined) {
       req.body['status'] = 'in-progress';
       Newproject.findById({_id: req.params._id})
       .then((result) =>{
@@ -26,6 +24,8 @@ validateMethods = {
         });
       });
       req.body['lifeCycle'] = [{assignedTo: req.body.assignedTo, assignedOn: utcDate.toUTCString()}]
+    } else {
+      next()
     }
   },
 
@@ -50,7 +50,21 @@ validateMethods = {
                                                                                 to existing ticket, find existing 
                                                                                 array of file field and push new JSON 
                                                                                 object to existing array of file field */
-      Newproject.findById(req.params._id).then((result) =>{
+                                                                     
+      const baseUrlContent = (req.baseUrl).split('/');
+      let requestType = baseUrlContent[baseUrlContent.length - 1];
+      switch(requestType) { /**switch between service request type to search existing array of file field
+                             depending upon the request made by the user */
+        case 'newproject':
+          requestType = Newproject;
+          break;
+        case 'bugfix':
+          requestType = Bugfix;
+          break;
+        default:
+          break;
+      }
+      requestType.findById(req.params._id).then((result) =>{
         
       this.validationMethod.saveFile(req, res, next)
       .then((savedFilePaths) => {
@@ -77,6 +91,11 @@ validateMethods = {
 
   /**isFileSaved promise wrapped in saveFile function that returns the promise for cunsmption by other methods  */
   saveFile: (req, res, next) =>{
+    if((req.body.files).length !== 2) {
+      res.status(400).json({
+        result: 'request body files array can be of length 2 only'
+      });
+    }
     isFileSaved= new Promise((resolve, reject) =>{
     const originalFileName = req.body.files[0];
     const fileContent = req.body.files[1];

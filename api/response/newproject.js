@@ -26,7 +26,7 @@ router.get("/findAll", (req, res, next) => {
 
 /**Create a NPR - New Project Request */
 router.post("/create", Validate.validationMethod.isUploadingfile, (req, res, next) => {
-  NPRSequence.exec()
+  NPRSequence.exec() /**Increament NPR sequence number */
   .then((seq) => {
   const utcDate = new Date();
   const NPR = new Newproject({
@@ -42,7 +42,7 @@ router.post("/create", Validate.validationMethod.isUploadingfile, (req, res, nex
     assignedTo: req.body.assignedTo,
     status: "created",
     repoLink: req.body.repoLink,
-    childTask: {},
+    childTasks: [],
     files: req.body.files,
     lifeCycle: [{assignedTo: req.body.assignedTo, assignedOn: utcDate.toUTCString()}]
   });
@@ -67,9 +67,16 @@ router.post("/create", Validate.validationMethod.isUploadingfile, (req, res, nex
 
 
 /**update NPR, request body to be plain JSON object (Nested JSON not allowed) */
-router.patch("/experiment/:_id", Validate.validationMethod.isAssigningRequest,
-  Validate.validationMethod.isUploadingfile, (req, res, next) =>{
-     
+router.delete("/experiment/:_id",  (req, res, next) =>{
+  Newproject.findByIdAndRemove({_id: req.params._id})
+  .then((result) => {
+    res.status(200).json({
+      result: result
+    });
+  })
+  .catch((err) => {
+    next();
+  });
 });
 
 

@@ -22,7 +22,7 @@ const newProjectRequestSchema = mongoose.Schema({
     assignedTo: {type: String},
     status: {type: String, required: true, enum: statusTypes},
     repoLink: {type: String},
-    childTask: {type: JSON},
+    childTasks: {type: JSON},
     updates: {type: JSON},
     lifeCycle: {type: JSON}, /**{assignedUser: userName, startDate: DateTime(), endDate: DateTime(), status: status} */
     files: {type: JSON}
