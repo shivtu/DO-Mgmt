@@ -154,7 +154,7 @@ Request body format: <code>JSON</code>
   <tr>
     <td>lifeCycle</td>
     <td>JSON</td>
-    <td><address>{"assignedTo": < username >, "assignedOn": < utc date string >}</address></td>
-    <td>Accepted array length 2<br/>first element of array should be the original file name, second element should be a base64 string of the file</td>
+    <td><address>< Auto-Generated ></address></td>
+    <td>feild format is : {"assignedTo": < username >, "assignedOn": < utc date string >}</td>
   </tr>
 </table>
