@@ -38,7 +38,7 @@ const newProjectRequestSchema = mongoose.Schema({
   status: { type: String, required: true, enum: statusTypes },
   repoLink: { type: String },
   childTasks: { type: Array },
-  updates: { type: Array, default: [] },
+  updateNotes: { type: Array, default: [] },
   lifeCycle: {
     type: Array, default: []
   } /**{assignedUser: userName, assignedOn: Date} */,

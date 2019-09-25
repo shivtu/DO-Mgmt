@@ -44,7 +44,30 @@ validateMethods = {
 
   /**Check if user is providing update notes */
   isProvidingUpdates: (req, res, next) =>{
-
+    const originalUrlContent = req.originalUrl.split('/');
+    if(originalUrlContent[4] === 'create'){ /**User is trying to provide update to a new request */
+      switch(originalUrlContent[3]) {
+        case 'newproject':
+          res.status(400).json({
+            result: 'cannot insert update notes without creating NPR'
+          });
+        case 'bugfix':
+          res.status(400).json({
+            result: 'cannot insert update notes without creating BFR'
+          });
+        case 'failfix':
+          res.status(400).json({
+            result: 'cannot insert update notes without creating FFR'
+          });
+        default:
+          res.status(500).json({
+            result: 'something just broke',
+            message: 'was the web service recently upgraded?'
+          });  
+      }
+    } else {
+      next();
+    }
   },
 
   /**Check if user is trying to upload file */

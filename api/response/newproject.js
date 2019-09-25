@@ -7,9 +7,19 @@ const Counters = require("../model/countersmodel");
 const auth = require("../auth/authentication");
 
 /*Find instance using service ID*/
-router.get("/find/:serviceId", (req, res, next) => {
+router.get("/find/srid/:serviceId", (req, res, next) => {
   const serviceId = req.params.serviceId.toUpperCase();
   Newproject.findOne({ SRID: serviceId })
+    .then(result => {
+      res.status(200).json({ result: result });
+    })
+    .catch(e => res.status(200).json({ data: e.message }));
+});
+
+/*Find instance using service ID*/
+router.get("/find/_id/:_Id", (req, res, next) => {
+  const objectID = req.params._id.toUpperCase();
+  Newproject.findOne({ _id: objectID })
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -29,6 +39,7 @@ router.get("/findAll", (req, res, next) => {
 router.post(
   "/create",
   Validate.validationMethod.isUploadingfile,
+  Validate.validationMethod.isProvidingUpdates,
   (req, res, next) => {
     NPRSequence.exec() /**Increament NPR sequence number */
       .then(seq => {
@@ -103,6 +114,7 @@ router.patch(
   Validate.validationMethod.isAssigningRequest,
   Validate.validationMethod.isUploadingfile,
   Validate.validationMethod.isClosingRequest,
+  Validate.validationMethod.isProvidingUpdates,
   (req, res, next) => {
     Newproject.findByIdAndUpdate({ _id: req.params._id }, req.body, {
       new: true
