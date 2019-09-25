@@ -10,6 +10,7 @@ const failfix = require("../response/failfix");
 const users = require("../response/users");
 const newproject = require("../response/newproject");
 const counters = require("../response/counters");
+const auth = require("../auth/authentication");
 
 /*Connect to mongoDB using Mongoose*/
 mongoose.connect(
@@ -35,7 +36,7 @@ GitHub issue : https://github.com/Automattic/mongoose/issues/6890*/
 /*Morgan for server logs*/
 app.use(morgan("dev"));
 
-// Body parser to parse request body/ payload
+/* Body parser to parse request body/payload **/
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -44,7 +45,7 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Origin, X-Requested-With, Content-Type, Accept, Authorization");
   if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Method", "PUT, POST, PATCH, DELETE");
+    res.header("Access-Control-Allow-Method", "PUT, POST, PATCH, DELETE, GET");
     return res.status(200).json({});
   }
   // Continue with request

@@ -2,19 +2,48 @@ const https = require("https");
 
 /* Dummy module for authentication and authorization
  call next() after third party auth,
- setTimeout function mocks the delay created in calling a third party service */
+ setTimeout function mocks the delay created in calling a third party authentication service */
 
- authCheck = (req, res, next) => {
-  var promise1 = new Promise((resolve, reject) => {
+authMethods = {
+
+  promise2 :new Promise((resolve, reject) =>{
+  setTimeout(() => {
+      resolve({auth: true, role: 'admin'});
+  }, 3000);
+}),
+
+authCheck: (req, res, next) => {
+  const promise1 = new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve();
-    }, 5000);
+      if(req.headers.authorization === 'admin') {
+        resolve({auth: true, role: 'admin'});
+      }else {
+        reject('non-admin');
+      }
+    }, 3000);
   });
 
   promise1.then(value => {
     console.log(value);
     next();
-  });
+    }).catch((err) => {
+      res.status(500).json({
+        result: 'Could not resolve authentiaction',
+        message: err.message
+      });
+    })
+  },
+
+  userRole: (req, res, next) =>{
+    setTimeout(() => {
+      if(req.headers.authorization === 'admin') {
+        next();
+      }else {
+        return 'non-admin';
+      }
+    }, 3000);
+    
+  }
 };
 
-module.exports = authCheck
+exports.authenticationMethod = authMethods;

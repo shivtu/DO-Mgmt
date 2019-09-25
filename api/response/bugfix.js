@@ -6,7 +6,7 @@ const authCheck = require("../auth/authentication");
 const Counters = require("../model/countersmodel");
 
 // find a BFR
-router.get("/find/:serviceId", authCheck, (req, res, next) => {
+router.get("/find/:serviceId", (req, res, next) => {
   const serviceId = req.params.serviceId.toUpperCase();
   Bugfix.findOne({ SRID: serviceId })
     .then(result => {
