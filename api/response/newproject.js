@@ -19,7 +19,7 @@ router.get("/find/srid/:serviceId", (req, res, next) => {
 /*Find instance using service ID*/
 router.get("/find/_id/:_Id", (req, res, next) => {
   const objectID = req.params._id.toUpperCase();
-  Newproject.findOne({ _id: objectID })
+  Newproject.findById({ _id: objectID })
     .then(result => {
       res.status(200).json({ result: result });
     })
