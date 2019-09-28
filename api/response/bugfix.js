@@ -31,7 +31,7 @@ router.post("/create", (req, res, next) => {
     SRID: "BFR" + seq.sequence_value,
     customerName: req.body.customerName,
     serviceType: "Bug Fix Request",
-    priority: req.body.Priority,
+    impact: req.body.impact,
     createdOn: new Date().toUTCString(),
     createdBy: req.body.createdBy,
     summary: req.body.summary,

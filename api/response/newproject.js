@@ -55,7 +55,7 @@ router.post(
           summary: req.body.summary,
           description: req.body.description,
           assignedTo: req.body.assignedTo,
-          status: "created",
+          phase: "created",
           repoLink: req.body.repoLink,
           childTasks: [],
           files: req.body.files,
