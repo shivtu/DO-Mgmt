@@ -41,7 +41,7 @@ const newProjectRequestSchema = mongoose.Schema({
   assignedTo: { type: String },
   phase: { type: String, required: true, enum: phases },
   repoLink: { type: String },
-  epics: { type: Array },
+  epics: { type: Array, default: [] },
   updateNotes: { type: Array, default: [] },
   lifeCycle: {
     type: Array, default: []

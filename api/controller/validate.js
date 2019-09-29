@@ -4,6 +4,18 @@ const Bugfix = require("../model/bugfixmodel");
 const fs = require("fs");
 
 validateMethods = {
+
+  doesNPRExist: (req, res, next) =>{
+    Newproject.findOne({ SRID: req.params.SRID })
+    .then(() => {
+      next();
+    })
+    .catch(err => {
+      res.status(400).json({
+        result: 'NPR not found'
+      });
+    });
+  },
   /**Check if user is assigning the request to other user
    * If true, add/overwrite status = in-progress
    */
@@ -45,7 +57,7 @@ validateMethods = {
   /**Check if user is providing update notes */
   isProvidingUpdates: (req, res, next) =>{
     const originalUrlContent = req.originalUrl.split('/');
-    if(originalUrlContent[4] === 'create'){ /**User is trying to provide update to a new request */
+    if(originalUrlContent[4] === 'update'){ /**User is trying to provide update to a new request */
       switch(originalUrlContent[3]) {
         case 'newproject':
           res.status(400).json({
