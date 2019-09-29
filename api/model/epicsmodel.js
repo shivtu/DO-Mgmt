@@ -12,7 +12,7 @@ priorities are not related/coupled with time lines (end date, start date) */
 
 const epicsSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  NPRID: {type: String, required: true },
+  NPRID: {type: String, required: true, index: true },
   SRID: {
     type: String,
     required: true,
