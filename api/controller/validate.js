@@ -7,8 +7,14 @@ validateMethods = {
 
   doesNPRExist: (req, res, next) =>{
     Newproject.findOne({ SRID: req.params.SRID })
-    .then(() => {
-      next();
+    .then((result) => {
+      if(result !== null) {
+        next();
+      } else {
+        res.status(400).json({
+          result: 'NPRID not found',
+        });
+      }
     })
     .catch(err => {
       res.status(400).json({

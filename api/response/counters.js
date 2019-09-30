@@ -13,23 +13,23 @@ router.get("/all", (req, res, next) => {
   });
 });
 
-// router.post("/addCounter", (req, res, next) => {
-//   const CTR = new Counters({
-//     _id: new mongoose.Types.ObjectId(),
-//     modelType: "SPR",
-//     sequence_value: 1,
-//   });
-//   CTR.save().then((result) =>{
-//     res.status(201).json({
-//       result: result
-//     });
-//   })
-//   .catch((err) =>{
-//     res.status(500).json({
-//       result: err
-//     });
-//   });
-// });
+router.post("/addCounter", (req, res, next) => {
+  const CTR = new Counters({
+    _id: new mongoose.Types.ObjectId(),
+    modelType: "EPC",
+    sequence_value: 1,
+  });
+  CTR.save().then((result) =>{
+    res.status(201).json({
+      result: result
+    });
+  })
+  .catch((err) =>{
+    res.status(500).json({
+      result: err
+    });
+  });
+});
 
 router.delete("/delete/:_id", (req, res, next) =>{
 
