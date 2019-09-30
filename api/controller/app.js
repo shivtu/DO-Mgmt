@@ -11,6 +11,7 @@ const users = require("../response/users");
 const newproject = require("../response/newproject");
 const counters = require("../response/counters");
 const epic = require("../response/epics");
+const sprint = require("../response/sprints");
 
 /*Connect to mongoDB using Mongoose*/
 mongoose.connect(
@@ -59,6 +60,7 @@ app.use("/api/v1/failfix", failfix);
 app.use("/api/v1/users", users);
 app.use("/api/v1/newproject", newproject);
 app.use("/api/v1/epic", epic);
+app.use("/api/v1/sprint", sprint);
 app.use("/api/v1/counters", counters);
 
 // Handle all errors

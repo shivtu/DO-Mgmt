@@ -1,14 +1,34 @@
 const express = require("express");
 const Newproject = require("../model/newrprojectmodel");
+const NewEpic = require("../model/epicsmodel");
 const Bugfix = require("../model/bugfixmodel");
 const fs = require("fs");
 
 validateMethods = {
 
+  doesEPCExist: (req, res, next) =>{
+    NewEpic.findOne({SRID: req.params.SRID})
+    .then((result) =>{
+      if(result.SRID === req.params.SRID) {
+        req.body['NPRID'] = result.NPRID; 
+        next();
+      } else {
+        res.status(400).json({
+          result: 'EPIC not found'
+        });
+      }
+    })
+    .catch((error) =>{
+      res.status(500).json({
+        result: 'Could not find EPIC'
+      });
+    });
+  },
+
   doesNPRExist: (req, res, next) =>{
     Newproject.findOne({ SRID: req.params.SRID })
     .then((result) => {
-      if(result !== null) {
+      if(result.SRID === req.params.SRID) {
         next();
       } else {
         res.status(400).json({
@@ -63,7 +83,7 @@ validateMethods = {
   /**Check if user is providing update notes */
   isProvidingUpdates: (req, res, next) =>{
     const originalUrlContent = req.originalUrl.split('/');
-    if(originalUrlContent[4] === 'update'){ /**User is trying to provide update to a new request */
+    if(originalUrlContent[4] !== 'update' && req.body.updateNotes !== undefined){ /**User is trying to provide update to a new request */
       switch(originalUrlContent[3]) {
         case 'newproject':
           res.status(400).json({
@@ -83,8 +103,37 @@ validateMethods = {
             message: 'was the web service recently upgraded?'
           });  
       }
+    } else if((req.body.updateNotes).length === 2) {
+      const baseUrlContent = req.baseUrl.split("/");
+      let requestType = baseUrlContent[baseUrlContent.length - 1];
+      
+      switch(requestType){
+        case 'newproject':
+          requestType = Newproject
+          break;
+        case 'bugfix':
+          requestType = Bugfix
+          break;
+        default:
+          break;
+      }
+
+      requestType.findById(req.params._id)
+      .then((result) =>{
+        const newNote = {summary:req.body.updateNotes[0], description: req.body.updateNotes[1]}
+        result.updateNotes.push(newNote);
+        req.body.updateNotes = result.updateNotes;
+        next();
+      })
+      .catch((error) =>{
+        result.status(500).json({
+          result: error.message
+        });
+      });
     } else {
-      next();
+      res.status(400).json({
+        result: 'updateNotes can be an array of length 2 only'
+      });
     }
   },
 

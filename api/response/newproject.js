@@ -40,6 +40,7 @@ router.post(
   "/create",
   Validate.validationMethod.isUploadingfile,
   Validate.validationMethod.isProvidingUpdates,
+  Validate.validationMethod.isClosingRequest,
   (req, res, next) => {
     NPRSequence.exec() /**Increament NPR sequence number */
       .then(seq => {
@@ -111,10 +112,9 @@ router.delete("/delete/:_id", (req, res, next) =>{
 /**update NPR, request body to be plain JSON object (Nested JSON not allowed) */
 router.patch(
   "/update/:_id",
+  Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isAssigningRequest,
   Validate.validationMethod.isUploadingfile,
-  Validate.validationMethod.isClosingRequest,
-  Validate.validationMethod.isProvidingUpdates,
   (req, res, next) => {
     Newproject.findByIdAndUpdate({ _id: req.params._id }, req.body, {
       new: true

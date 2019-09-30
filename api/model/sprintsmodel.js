@@ -27,14 +27,16 @@ const sprintsSchema = mongoose.Schema({
     index: true,
     unique: true
   } /* Set index to true for faster search on DB. This field is auto generated */,
-  customerName: { type: String, required: true, index: true },
-  product: { type: String, require: true, index: true },
+  customerName: { type: String },
+  product: { type: String },
   productVersion: { type: Array, require: true, default: [] },
   serviceType: { type: String, default: "Epic" },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
   createdBy: { type: String, required: true },
   summary: { type: String, required: true },
-  backLogs: { type: Array, required: true, default: [] },
+  toDo: { type:Array },
+  doing: { type:Array },
+  done: { type:Array },
   files: { type: Array, default: [] },
 });
 
