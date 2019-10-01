@@ -6,11 +6,12 @@ const fs = require("fs");
 
 validateMethods = {
 
-  doesEPCExist: (req, res, next) =>{
+  getEpicSprints: (req, res, next) =>{
     NewEpic.findOne({SRID: req.params.SRID})
     .then((result) =>{
       if(result.SRID === req.params.SRID) {
-        req.body['NPRID'] = result.NPRID; 
+        req.body['NPRID'] = result.NPRID;
+        req.body['sprintArrayinEpic'] = result.sprints;
         next();
       } else {
         res.status(400).json({
@@ -23,6 +24,17 @@ validateMethods = {
         result: 'Could not find EPIC'
       });
     });
+    // NewEpic.findOne({SRID: req.params.SRID})
+    // .then((result) =>{
+    //     res.status(200).json({
+    //         result: result
+    //     });
+    // })
+    // .catch((error) => {
+    //     res.status(500).json({
+    //         result: 'internal server error'
+    //     });
+    // });
   },
 
   doesNPRExist: (req, res, next) =>{

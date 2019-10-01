@@ -40,6 +40,20 @@ router.post("/create/:SRID", Validate.validationMethod.doesNPRExist, (req, res, 
     });
 });
 
+router.get("/find/SRID/:SRID", (req, res, next) =>{
+    NewEpic.findOne({SRID: req.params.SRID})
+    .then((result) =>{
+        res.status(200).json({
+            result: result
+        });
+    })
+    .catch((error) => {
+        res.status(500).json({
+            result: 'internal server error'
+        });
+    });
+});
+
 /* Find all instances*/
 router.get("/findAll", (req, res, next) => {
     NewEpic.find()

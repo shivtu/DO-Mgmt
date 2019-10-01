@@ -29,7 +29,7 @@ const epicsSchema = mongoose.Schema({
   backLogs: { type: Array, required: true },
   priority: { type: Number, enum: priorityTypes},
   files: { type: Array, default: [] },
-  sprints: {type: Array }
+  sprints: { type: Array }
 });
 
 module.exports = mongoose.model("Epics", epicsSchema);

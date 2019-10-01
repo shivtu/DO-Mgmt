@@ -7,12 +7,10 @@ const Validate = require("../controller/validate");
 const Counters = require("../model/countersmodel");
 const auth = require("../auth/authentication");
 
-router.post("/create/:SRID", Validate.validationMethod.doesEPCExist,
+router.post("/create/:SRID", Validate.validationMethod.getEpicSprints,
 (req, res, next) =>{
-    // console.log(typeof (req.body.backLogs));
     SPRSequence.exec().then((seq) => {
         const utcDate = new Date();
-        // console.log(req.body);
         const SPR = new NewSprint({
             _id: new mongoose.Types.ObjectId(),
             SRID: "SPR" + seq.sequence_value,
@@ -29,9 +27,23 @@ router.post("/create/:SRID", Validate.validationMethod.doesEPCExist,
         });
         SPR.save()
         .then((result) =>{
-            res.status(201).json({
-                result: result
+            const SPRResult = result;
+            req.body.sprintArrayinEpic.push(SPRResult.SRID);
+            const newSprintsArrayForEpic = req.body.sprintArrayinEpic;
+            sprResult = result
+            /**Update sprints field in Epic */
+            NewEpic.findOneAndUpdate(req.params.SRID, {sprints: newSprintsArrayForEpic}, {new: true})
+            .then((result) =>{
+                res.status(201).json({
+                    result: SPRResult
+                });
+            }).catch((error) =>{
+                res.status(500).json({
+                    result: 'Internal server error',
+                    message: error.message
+                });
             });
+            console.log(req.body.currentSprintArrayinEpic);
         })
         .catch((error) =>{
             res.status(500).json({
