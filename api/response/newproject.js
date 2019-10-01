@@ -27,8 +27,18 @@ router.get("/find/_id/:_Id", (req, res, next) => {
 });
 
 /* Find all instances*/
-router.get("/findAll", (req, res, next) => {
+router.get("/find/findAll", (req, res, next) => {
   Newproject.find()
+    .then(result => {
+      res.status(200).json({ result: result });
+    })
+    .catch(e => res.status(500).json({ result: e.message }));
+});
+
+/* Find all instances conditionally*/
+router.get("/find/filter", (req, res, next) => {
+  // console.log('params',req.query);
+  Newproject.find(req.query)
     .then(result => {
       res.status(200).json({ result: result });
     })

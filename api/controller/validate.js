@@ -1,4 +1,3 @@
-const express = require("express");
 const Newproject = require("../model/newrprojectmodel");
 const NewEpic = require("../model/epicsmodel");
 const Bugfix = require("../model/bugfixmodel");
@@ -6,7 +5,8 @@ const fs = require("fs");
 
 validateMethods = {
 
-  getEpicSprints: (req, res, next) =>{
+  getEpicSprints: (req, res, next) =>{ /**Get Epic then find the existing sprints field in the Epic
+                                        and pass it to original request with sprint array attached to req body */
     NewEpic.findOne({SRID: req.params.SRID})
     .then((result) =>{
       if(result.SRID === req.params.SRID) {

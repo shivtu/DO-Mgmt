@@ -28,7 +28,8 @@ router.post("/create/:SRID", Validate.validationMethod.getEpicSprints,
         SPR.save()
         .then((result) =>{
             const SPRResult = result;
-            req.body.sprintArrayinEpic.push(SPRResult.SRID);
+            req.body.sprintArrayinEpic.push(SPRResult.SRID); /**Push the newly created SPR to existing array of Epic
+                                                                sprints received from Validate.js (getEpicSprintsmethod) */
             const newSprintsArrayForEpic = req.body.sprintArrayinEpic;
             sprResult = result
             /**Update sprints field in Epic */
@@ -72,8 +73,17 @@ router.patch("/update/:SRID",(req, res, next) =>{
 });
 
 /* Find all instances*/
-router.get("/findAll", (req, res, next) => {
+router.get("/find/findAll", (req, res, next) => {
     NewSprint.find()
+      .then(result => {
+        res.status(200).json({ result: result });
+      })
+      .catch(e => res.status(500).json({ result: e.message }));
+  });
+
+/* Find all instances conditionally*/
+router.get("/find/filter", (req, res, next) => {
+    NewSprint.find(req.query)
       .then(result => {
         res.status(200).json({ result: result });
       })

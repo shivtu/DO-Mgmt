@@ -40,12 +40,16 @@ router.post("/create/:SRID", Validate.validationMethod.doesNPRExist, (req, res, 
     });
 });
 
+/**Find Epic using SRID */
 router.get("/find/SRID/:SRID", (req, res, next) =>{
     NewEpic.findOne({SRID: req.params.SRID})
     .then((result) =>{
-        res.status(200).json({
-            result: result
-        });
+        console.log(result)
+        if(result === null) {
+            res.status(404).json({ result: 'no records found' });
+        } else {
+            res.status(200).json({ result: result });
+        }
     })
     .catch((error) => {
         res.status(500).json({
@@ -55,10 +59,27 @@ router.get("/find/SRID/:SRID", (req, res, next) =>{
 });
 
 /* Find all instances*/
-router.get("/findAll", (req, res, next) => {
+router.get("/find/findAll", (req, res, next) => {
     NewEpic.find()
       .then(result => {
-        res.status(200).json({ result: result });
+        if(result.length < 1) {
+            res.status(404).json({ result: 'no records found' });
+        } else {
+            res.status(200).json({ result: result });
+        }
+      })
+      .catch(e => res.status(500).json({ result: e.message }));
+  });
+
+/* Find all instances conditionally*/
+router.get("/find/filter", (req, res, next) => {
+    NewEpic.find(req.query)
+      .then(result => {
+        if(result.length < 1) {
+            res.status(404).json({ result: 'no records found' });
+        } else {
+            res.status(200).json({ result: result });
+        }
       })
       .catch(e => res.status(500).json({ result: e.message }));
   });
