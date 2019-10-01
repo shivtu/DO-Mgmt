@@ -6,7 +6,7 @@ const authCheck = require("../auth/authentication");
 const Counters = require("../model/countersmodel");
 
 // find a BFR
-router.get("/find/:serviceId", (req, res, next) => {
+router.get("/find/SRID/:serviceId", (req, res, next) => {
   const serviceId = req.params.serviceId.toUpperCase();
   Bugfix.findOne({ SRID: serviceId })
     .then(result => {
@@ -25,11 +25,19 @@ router.get("/find/:serviceId", (req, res, next) => {
 router.post("/create", (req, res, next) => {
   BFRSequence.exec()
   .then((seq) =>{
+    if(req.body.affectedVersions[0] === undefined){
+      res.status(400).json({
+        result: 'Affected versions is required'
+      });
+      return;
+    }
   const utcDate = new Date();
   const BFR = new Bugfix({
     _id: new mongoose.Types.ObjectId(),
     SRID: "BFR" + seq.sequence_value,
     customerName: req.body.customerName,
+    product: req.body.product,
+    affectedVersions: req.body.affectedVersions,
     serviceType: "Bug Fix Request",
     impact: req.body.impact,
     createdOn: new Date().toUTCString(),
@@ -58,6 +66,16 @@ router.post("/create", (req, res, next) => {
       result: seqErr.message
     });
   });
+});
+
+router.get("/find/findAll", (req, res, next) =>{
+  Bugfix.find()
+  .then((result) =>{
+    result.status(200).json({
+      result: result
+    });
+  })
+  .catch();
 });
 
 /**Update sequence number to create BFRID */

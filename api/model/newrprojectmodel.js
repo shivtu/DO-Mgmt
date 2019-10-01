@@ -30,7 +30,7 @@ const newProjectRequestSchema = mongoose.Schema({
   } /* Set index to true for faster search on DB. This field is auto generated */,
   customerName: { type: String, required: true },
   product: { type: String, require: true},
-  productVersion: { type: Array, require: true, default: [] },
+  productVersion: { type: Array, required: true },
   releases: { type: Array, default: [] },
   serviceType: { type: String, default: "New Project Request" },
   priority: { type: Number, required: true, enum: priorityTypes },

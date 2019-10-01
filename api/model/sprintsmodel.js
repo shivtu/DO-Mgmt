@@ -37,6 +37,7 @@ const sprintsSchema = mongoose.Schema({
   toDo: { type:Array },
   doing: { type:Array },
   done: { type:Array },
+  labels: { type: String },
   files: { type: Array, default: [] },
 });
 

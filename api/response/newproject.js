@@ -52,6 +52,12 @@ router.post(
   Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isClosingRequest,
   (req, res, next) => {
+    // if(!productVersion.isArray() || productVersion[0] === undefined) {
+    //   res.status(400).json({
+    //     result: 'Product version is required'
+    //   });
+    //   return;
+    // }
     NPRSequence.exec() /**Increament NPR sequence number */
       .then(seq => {
         const utcDate = new Date();
