@@ -28,7 +28,7 @@ router.post(
           files: [],
           sprints: []
         });
-        EPC.save()
+        EPC.save().exec()
           .then(result => {
             
             (req.body.currentNPREpicsArray).push(result.SRID);
@@ -62,7 +62,7 @@ router.post(
 
 /**Find Epic using SRID */
 router.get("/find/SRID/:SRID", (req, res, next) => {
-  NewEpic.findOne({ SRID: req.params.SRID })
+  NewEpic.findOne({ SRID: req.params.SRID }).exec()
     .then(result => {
       console.log(result);
       if (result === null) {
@@ -80,7 +80,7 @@ router.get("/find/SRID/:SRID", (req, res, next) => {
 
 /* Find all instances*/
 router.get("/find/findAll", (req, res, next) => {
-  NewEpic.find()
+  NewEpic.find().exec()
     .then(result => {
       if (result.length < 1) {
         res.status(404).json({ result: "no records found" });
@@ -93,7 +93,7 @@ router.get("/find/findAll", (req, res, next) => {
 
 /* Find all instances conditionally*/
 router.get("/find/filter", (req, res, next) => {
-  NewEpic.find(req.query)
+  NewEpic.find(req.query).exec()
     .then(result => {
       if (result.length < 1) {
         res.status(404).json({ result: "no records found" });

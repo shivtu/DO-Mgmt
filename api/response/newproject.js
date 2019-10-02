@@ -9,7 +9,7 @@ const auth = require("../auth/authentication");
 /*Find instance using service ID*/
 router.get("/find/srid/:serviceId", (req, res, next) => {
   const serviceId = req.params.serviceId.toUpperCase();
-  Newproject.findOne({ SRID: serviceId })
+  Newproject.findOne({ 'SRID': serviceId }).exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -19,7 +19,7 @@ router.get("/find/srid/:serviceId", (req, res, next) => {
 /*Find instance using service ID*/
 router.get("/find/_id/:_Id", (req, res, next) => {
   const objectID = req.params._id.toUpperCase();
-  Newproject.findById({ _id: objectID })
+  Newproject.findById({ _id: objectID }).exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -28,7 +28,7 @@ router.get("/find/_id/:_Id", (req, res, next) => {
 
 /* Find all instances*/
 router.get("/find/findAll", (req, res, next) => {
-  Newproject.find()
+  Newproject.find().exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -38,7 +38,7 @@ router.get("/find/findAll", (req, res, next) => {
 /* Find all instances conditionally*/
 router.get("/find/filter", (req, res, next) => {
   // console.log('params',req.query);
-  Newproject.find(req.query)
+  Newproject.find(req.query).exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -78,7 +78,7 @@ router.post(
             }
           ]
         });
-        NPR.save()
+        NPR.save().exec()
           .then(result => {
             res.status(201).json({
               result: result
@@ -109,7 +109,7 @@ router.delete("/experiment/:_id", auth.authenticationMethod.authCheck, (req, res
 
 /**Delete request IDs */
 router.delete("/delete/:_id", (req, res, next) =>{
-  Newproject.findByIdAndRemove({ _id: req.params._id })
+  Newproject.findByIdAndRemove({ _id: req.params._id }).exec()
     .then(result => {
       res.status(200).json({
         result: result
@@ -130,7 +130,7 @@ router.patch(
   (req, res, next) => {
     Newproject.findByIdAndUpdate({ _id: req.params._id }, req.body, {
       new: true
-    })
+    }).exec()
       .then(result => {
         res.status(200).json({
           result: result

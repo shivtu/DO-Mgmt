@@ -8,7 +8,7 @@ const Counters = require("../model/countersmodel");
 // find a BFR
 router.get("/find/SRID/:serviceId", (req, res, next) => {
   const serviceId = req.params.serviceId.toUpperCase();
-  Bugfix.findOne({ SRID: serviceId })
+  Bugfix.findOne({ 'SRID': serviceId }).exec()
     .then(result => {
       res.status(200).json({
         result: result
@@ -49,7 +49,7 @@ router.post("/create", (req, res, next) => {
     NPRId: req.body.NPRId,
     files: req.body.files
   });
-  BFR.save()
+  BFR.save().exec()
     .then(result => {
       res.status(201).json({
         result: result
@@ -69,7 +69,7 @@ router.post("/create", (req, res, next) => {
 });
 
 router.get("/find/findAll", (req, res, next) =>{
-  Bugfix.find()
+  Bugfix.find().exec()
   .then((result) =>{
     result.status(200).json({
       result: result
