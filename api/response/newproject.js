@@ -141,10 +141,12 @@ router.patch(
         });
       })
       .catch(err => {
-        result: err.message;
-      });
+        res.status(500).json({
+          result: err.message
+        });
+      });;
   }
-);
+)
 
 /**Update sequence number to create NPRID */
 const NPRSequence = Counters.findOneAndUpdate(

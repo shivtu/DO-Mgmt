@@ -11,11 +11,11 @@ const phases = [
 make sure no methods in Vlidate.js gets affected  */
 
 const priorityTypes = [
-  1,
-  2,
-  3,
-  4,
-  5
+  '1',
+  '2',
+  '3',
+  '4',
+  '5'
 ]; /* Describes the priority an assigned developer/user should give to the assigned task.
 Priorities can be changed in an already created request depending upon the task at hand
 priorities are not related/coupled with time lines (end date, start date) */
@@ -33,7 +33,7 @@ const newProjectRequestSchema = mongoose.Schema({
   productVersion: { type: Array, required: true },
   releases: { type: Array, default: [] },
   serviceType: { type: String, default: "New Project Request" },
-  priority: { type: Number, required: true, enum: priorityTypes },
+  priority: { type: String, required: true, enum: priorityTypes },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
   createdBy: { type: String, required: true },
   summary: { type: String, required: true },

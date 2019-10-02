@@ -65,13 +65,21 @@ validateMethods = {
    */
   isAssigningRequest: (req, res, next) => {
     const utcDate = new Date();
+    const originalUrlContent = req.originalUrl.split('/');
+    
     if (req.body.assignedTo !== undefined) {
-      req.body["status"] = "in-progress"; //Always put request to in-progress state if the request is being assigned to another user
-      Newproject.findById({ _id: req.params._id })
+
+      /**Always put request to in-progress state if the request is being assigned to another user*/
+      req.body["status"] = "in-progress";
+
+      /**User is assigning an existing record  */
+      if(originalUrlContent[4] === 'update'){
+        Newproject.findById({ _id: req.params._id })
         .then(result => {
           result.lifeCycle.push({
             assignedTo: req.body.assignedTo,
-            assignedOn: utcDate.toUTCString()
+            assignedOn: utcDate.toUTCString(),
+            assignedBy: req.body.currentUser
           });
           req.body["lifeCycle"] = result.lifeCycle;
           next();
@@ -81,9 +89,15 @@ validateMethods = {
             result: err.message
           });
         });
-      req.body["lifeCycle"] = [
-        { assignedTo: req.body.assignedTo, assignedOn: utcDate.toUTCString() }
-      ];
+      } else if(originalUrlContent[4] === 'create') {
+        /**user is assigning a newly created record */
+        req.body['lifeCycle'] = []; //set lifecycle to empty array
+        (req.body.lifeCycle).push({ /**push the lifecycle data to empty array */
+          assignedTo: req.body.assignedTo,
+          assignedOn: utcDate.toUTCString(),
+          assignedBy: req.body.currentUser
+        })
+      };
     } else {
       next();
     }
@@ -105,12 +119,12 @@ validateMethods = {
 
   /**Check if user is providing update notes */
   isProvidingUpdates: (req, res, next) => {
+    
     const originalUrlContent = req.originalUrl.split('/');
     if (originalUrlContent[4] === 'create' && req.body.updateNotes !== undefined) { /**User is trying to provide update to a new request */
       console.log("User is trying to provide update to a new request");
       switch (originalUrlContent[3]) {
         case 'newproject':
-          console.log('update notes', req.body.updateNotes);
           res.status(400).json({
             result: 'cannot insert update notes without creating NPR'
           });
@@ -156,6 +170,12 @@ validateMethods = {
 
       requestType.findById(req.params._id)
         .then((result) => {
+          if(result === null) { /**If there are no records for _id return 400 */
+            res.status(400).json({
+              result: req.params._id + ' does not represent any record'
+            });
+            return;
+          }
           /**Format updateNotes field with fields : "summary", "description", "updatedBy"
            * field: "updatedBy" is managed @authentication.js
            */
