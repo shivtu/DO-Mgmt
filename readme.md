@@ -129,13 +129,13 @@ Request body format: <code>JSON</code>
     <td>N/A</td>
   </tr>
   <tr>
-    <td>Epics</td>
+    <td>epics</td>
     <td>Array</td>
     <td><address>Array Object</address></td>
     <td>N/A</td>
   </tr>
   <tr>
-    <td>updates</td>
+    <td>updateNotes</td>
     <td>Array</td>
     <td><address><code>{"updateBy": any string, "updatedOn": Date Time, "updateSummary": any string, "updateDescription": any string}</code></address></td>
     <td>N/A</td>
