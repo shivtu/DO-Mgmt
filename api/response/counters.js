@@ -16,7 +16,7 @@ router.get("/all", (req, res, next) => {
 router.post("/addCounter", (req, res, next) => {
   const CTR = new Counters({
     _id: new mongoose.Types.ObjectId(),
-    modelType: "EPC",
+    modelType: "FFR",
     sequence_value: 1,
   });
   CTR.save().then((result) =>{

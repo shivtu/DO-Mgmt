@@ -9,7 +9,7 @@ const auth = require("../auth/authentication");
 /*Find instance using service ID*/
 router.get("/find/srid/:serviceId", (req, res, next) => {
   const serviceId = req.params.serviceId.toUpperCase();
-  Newproject.findOne({ 'SRID': serviceId }).exec()
+  Newproject.findOne({ SRID: serviceId }).exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -28,7 +28,7 @@ router.get("/find/_id/:_Id", (req, res, next) => {
 
 /* Find all instances*/
 router.get("/find/findAll", (req, res, next) => {
-  Newproject.find().exec()
+  Newproject.find()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -38,7 +38,7 @@ router.get("/find/findAll", (req, res, next) => {
 /* Find all instances conditionally*/
 router.get("/find/filter", (req, res, next) => {
   // console.log('params',req.query);
-  Newproject.find(req.query).exec()
+  Newproject.find(req.query)
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -50,8 +50,14 @@ router.post(
   "/create",
   Validate.validationMethod.isUploadingfile,
   Validate.validationMethod.isProvidingUpdates,
-  Validate.validationMethod.isAssigningRequest,
+  Validate.validationMethod.isClosingRequest,
   (req, res, next) => {
+    // if(!productVersion.isArray() || productVersion[0] === undefined) {
+    //   res.status(400).json({
+    //     result: 'Product version is required'
+    //   });
+    //   return;
+    // }
     NPRSequence.exec() /**Increament NPR sequence number */
       .then(seq => {
         const utcDate = new Date();
@@ -73,12 +79,11 @@ router.post(
           lifeCycle: [
             {
               assignedTo: req.body.assignedTo,
-              assignedOn: utcDate.toUTCString(),
-              assignedBy: req.body.currentUser
+              assignedOn: utcDate.toUTCString()
             }
           ]
         });
-        NPR.save().exec()
+        NPR.save()
           .then(result => {
             res.status(201).json({
               result: result
@@ -109,7 +114,7 @@ router.delete("/experiment/:_id", auth.authenticationMethod.authCheck, (req, res
 
 /**Delete request IDs */
 router.delete("/delete/:_id", (req, res, next) =>{
-  Newproject.findByIdAndRemove({ _id: req.params._id }).exec()
+  Newproject.findByIdAndRemove({ _id: req.params._id })
     .then(result => {
       res.status(200).json({
         result: result
@@ -126,23 +131,20 @@ router.patch(
   Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isAssigningRequest,
   Validate.validationMethod.isUploadingfile,
-  Validate.validationMethod.isClosingRequest,
   (req, res, next) => {
     Newproject.findByIdAndUpdate({ _id: req.params._id }, req.body, {
       new: true
-    }).exec()
+    })
       .then(result => {
         res.status(200).json({
           result: result
         });
       })
       .catch(err => {
-        res.status(500).json({
-          result: err.message
-        });
-      });;
+        result: err.message;
+      });
   }
-)
+);
 
 /**Update sequence number to create NPRID */
 const NPRSequence = Counters.findOneAndUpdate(

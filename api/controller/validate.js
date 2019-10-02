@@ -107,6 +107,11 @@ validateMethods = {
         next(); /**If user is creating new reecord and assign it simoultaneously continue with request */
       }
     } else {
+      req.body.lifeCycle = {
+        assignedTo: requestAnimationFrame.body.currentUser,
+        assignedOn: utcDate.toUTCString(),
+        assignedBy: 'auto-assigned'
+      };
       next();
     }
   },

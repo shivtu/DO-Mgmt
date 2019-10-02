@@ -28,7 +28,7 @@ router.post(
           files: [],
           sprints: []
         });
-        EPC.save().exec()
+        EPC.save()
           .then(result => {
             
             (req.body.currentNPREpicsArray).push(result.SRID);
