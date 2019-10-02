@@ -60,6 +60,18 @@ Request body format: <code>JSON</code>
     <td>N/A</td>
   </tr>
   <tr>
+    <td>product</td>
+    <td>String</td>
+    <td>any string</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
+    <td>productVersion</td>
+    <td>Array</td>
+    <td>Array Object</td>
+    <td>N/A</td>
+  </tr>
+  <tr>
     <td>priority</td>
     <td>Number</td>
     <td>1,2,3,4,5</td>
@@ -111,6 +123,12 @@ Request body format: <code>JSON</code>
     <td>auto increaments with a prefix 'NPR', used as index on the DB. Unique to each entry</td>
   </tr>
   <tr>
+    <td>createdOn</td>
+    <td>Date</td>
+    <td>< Auto-generated ></td>
+    <td>UTC date string gets auto-generated as per server local time</td>
+  </tr>
+  <tr>
     <td>serviceType</td>
     <td>String</td>
     <td><address> < prefixed value > </address></td>
@@ -151,5 +169,11 @@ Request body format: <code>JSON</code>
     <td>JSON</td>
     <td><address>< Auto-Generated ></address></td>
     <td>This field is Auto-Generted in the following format<br/><code>{"assignedTo": any string, "assignedOn": Date Time, "assignedBy":"<user name>"}</code></td>
+  </tr>
+  <tr>
+    <td>updatedOn</td>
+    <td>Date</td>
+    <td><address>< Auto-Generated ></address></td>
+    <td>Auto generated UTC date string as per server local time</code></td>
   </tr>
 </table>
