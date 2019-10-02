@@ -50,13 +50,8 @@ router.post(
   "/create",
   Validate.validationMethod.isUploadingfile,
   Validate.validationMethod.isProvidingUpdates,
+  Validate.validationMethod.isAssigningRequest,
   (req, res, next) => {
-    // if(!productVersion.isArray() || productVersion[0] === undefined) {
-    //   res.status(400).json({
-    //     result: 'Product version is required'
-    //   });
-    //   return;
-    // }
     NPRSequence.exec() /**Increament NPR sequence number */
       .then(seq => {
         const utcDate = new Date();
@@ -67,7 +62,7 @@ router.post(
           serviceType: "New Project Request",
           priority: req.body.priority,
           createdOn: utcDate.toUTCString(),
-          createdBy: req.body.createdBy,
+          createdBy: req.body.currentUser,
           summary: req.body.summary,
           description: req.body.description,
           assignedTo: req.body.assignedTo,
@@ -78,7 +73,8 @@ router.post(
           lifeCycle: [
             {
               assignedTo: req.body.assignedTo,
-              assignedOn: utcDate.toUTCString()
+              assignedOn: utcDate.toUTCString(),
+              assignedBy: req.body.currentUser
             }
           ]
         });

@@ -24,25 +24,38 @@ validateMethods = {
           result: 'Could not find EPIC'
         });
       });
-    // NewEpic.findOne({SRID: req.params.SRID})
-    // .then((result) =>{
-    //     res.status(200).json({
-    //         result: result
-    //     });
-    // })
-    // .catch((error) => {
-    //     res.status(500).json({
-    //         result: 'internal server error'
-    //     });
-    // });
   },
 
 
+  isEpicBackLogOk: (req, res, next) =>{
+    if(req.body.backLogs !== undefined && Array.isArray(req.body.backLogs)) {
+      (req.body.backLogs).forEach(eachBackLog => {
+        Object.keys(eachBackLog).forEach(key =>{
+          if(key === "feature" || key === "points") {
+          } else {
+            res.status(400).json({
+              result: "Ill formated request body, see docs to format backLogs Array",
+              message: "https://github.com/shivtu/DO-Mgmt"
+            });
+          }
+        });
+      });
+      next();
+    } else if(req.body.backLogs !== undefined && !Array.isArray(req.body.backLogs)){
+      res.status(400).json({
+        result: "backLogs field must be an array",
+        message: "https://github.com/shivtu/DO-Mgmt"
+      });
+    }
+  },
+
 
   doesNPRExist: (req, res, next) => {
-    Newproject.findOne({ SRID: req.params.SRID })
+    Newproject.findOne({ 'SRID': req.params.SRID })
       .then((result) => {
         if (result.SRID === req.params.SRID) {
+          req.body['currentNPREpicsArray'] = result.epics;
+          console.log('findOne', req.body.currentNPREpicsArray);
           next();
         } else {
           res.status(400).json({
@@ -64,13 +77,14 @@ validateMethods = {
    * If true, add/overwrite status = in-progress
    */
   isAssigningRequest: (req, res, next) => {
+
     const utcDate = new Date();
     const originalUrlContent = req.originalUrl.split('/');
     
     if (req.body.assignedTo !== undefined) {
 
       /**Always put request to in-progress state if the request is being assigned to another user*/
-      req.body["status"] = "in-progress";
+     req.body.phase = "in-progress";
 
       /**User is assigning an existing record  */
       if(originalUrlContent[4] === 'update'){
@@ -89,15 +103,9 @@ validateMethods = {
             result: err.message
           });
         });
-      } else if(originalUrlContent[4] === 'create') {
-        /**user is assigning a newly created record */
-        req.body['lifeCycle'] = []; //set lifecycle to empty array
-        (req.body.lifeCycle).push({ /**push the lifecycle data to empty array */
-          assignedTo: req.body.assignedTo,
-          assignedOn: utcDate.toUTCString(),
-          assignedBy: req.body.currentUser
-        })
-      };
+      } else {
+        next(); /**If user is creating new reecord and assign it simoultaneously continue with request */
+      }
     } else {
       next();
     }
@@ -191,7 +199,7 @@ validateMethods = {
           });
         });
     } else if((originalUrlContent[4] !== 'update') && (req.body.updateNotes === undefined)) {
-      console.log("User is trying to update exsiting record without inserting updateNotes");
+      console.log("User is trying to update new record without inserting updateNotes");
       next();
     }
   },

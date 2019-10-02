@@ -31,12 +31,12 @@ router.post("/create/:SRID", Validate.validationMethod.getEpicSprints,
             req.body.sprintArrayinEpic.push(SPRResult.SRID); /**Push the newly created SPR to existing array of Epic
                                                                 sprints received from Validate.js (getEpicSprintsmethod) */
             const newSprintsArrayForEpic = req.body.sprintArrayinEpic;
-            sprResult = result
+            sprResult = result;
             /**Update sprints field in Epic */
-            NewEpic.findOneAndUpdate(req.params.SRID, {sprints: newSprintsArrayForEpic}, {new: true})
+            NewEpic.findOneAndUpdate({'SRID':req.params.SRID}, {sprints: newSprintsArrayForEpic}, {new: true})
             .then((result) =>{
                 res.status(201).json({
-                    result: SPRResult
+                    result: sprResult
                 });
             }).catch((error) =>{
                 res.status(500).json({
