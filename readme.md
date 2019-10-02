@@ -10,7 +10,7 @@ Devops Management Tool
 <ul>
     <li>New Project Requests (NPR)</li>
     <li>Epics (User Stories) for NPR</li>
-    <li>Sprints for Epic BackLogs</li>
+    <li>Sprints for Epic BackLogs (SPR)</li>
     <li>Bug Fix Requests (BFR)</li>
     <li>Application Fail Fix Request (FFR)</li>
     <li>File uploads for (NPR, BFR, FFR)</li>
