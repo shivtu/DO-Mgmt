@@ -12,6 +12,7 @@ const newproject = require("../response/newproject");
 const counters = require("../response/counters");
 const epic = require("../response/epics");
 const sprint = require("../response/sprints");
+const Auth = require("../auth/authentication");
 
 /*Connect to mongoDB using Mongoose*/
 mongoose.connect(
@@ -54,14 +55,14 @@ app.use((req, res, next) => {
 });
 
 //Handle routes
-app.use("/api/v1/services", services);
-app.use("/api/v1/bugfix", bugfix);
-app.use("/api/v1/failfix", failfix);
-app.use("/api/v1/users", users);
-app.use("/api/v1/newproject", newproject);
-app.use("/api/v1/epic", epic);
-app.use("/api/v1/sprint", sprint);
-app.use("/api/v1/counters", counters);
+app.use("/api/v1/services", Auth.authenticationMethod.dummyAuth, services);
+app.use("/api/v1/bugfix", Auth.authenticationMethod.dummyAuth, bugfix);
+app.use("/api/v1/failfix", Auth.authenticationMethod.dummyAuth, failfix);
+app.use("/api/v1/users", Auth.authenticationMethod.dummyAuth, users);
+app.use("/api/v1/newproject", Auth.authenticationMethod.dummyAuth, newproject);
+app.use("/api/v1/epic", Auth.authenticationMethod.dummyAuth, epic);
+app.use("/api/v1/sprint", Auth.authenticationMethod.dummyAuth, sprint);
+app.use("/api/v1/counters", Auth.authenticationMethod.dummyAuth, counters);
 
 // Handle all errors
 app.use((req, res, next) => {

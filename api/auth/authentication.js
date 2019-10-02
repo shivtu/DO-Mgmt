@@ -1,5 +1,3 @@
-const https = require("https");
-
 /* Dummy module for authentication and authorization
  call next() after third party auth,
  setTimeout function mocks the delay created in calling a third party authentication service */
@@ -11,6 +9,12 @@ authMethods = {
       resolve({auth: true, role: 'admin'});
   }, 3000);
 }),
+
+dummyAuth: (req, res, next) =>{
+  const credsCheck = req.headers.authorization;
+  console.log('auth success');
+  next();
+},
 
 authCheck: (req, res, next) => {
   const promise1 = new Promise((resolve, reject) => {
