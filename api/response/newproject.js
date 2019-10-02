@@ -50,7 +50,6 @@ router.post(
   "/create",
   Validate.validationMethod.isUploadingfile,
   Validate.validationMethod.isProvidingUpdates,
-  Validate.validationMethod.isClosingRequest,
   (req, res, next) => {
     // if(!productVersion.isArray() || productVersion[0] === undefined) {
     //   res.status(400).json({
@@ -131,6 +130,7 @@ router.patch(
   Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isAssigningRequest,
   Validate.validationMethod.isUploadingfile,
+  Validate.validationMethod.isClosingRequest,
   (req, res, next) => {
     Newproject.findByIdAndUpdate({ _id: req.params._id }, req.body, {
       new: true

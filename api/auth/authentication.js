@@ -11,8 +11,8 @@ authMethods = {
 }),
 
 dummyAuth: (req, res, next) =>{
-  const credsCheck = req.headers.authorization;
   console.log('auth success');
+  req.body['currentUser'] = "Super Man";
   next();
 },
 

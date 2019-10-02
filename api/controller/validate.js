@@ -5,25 +5,25 @@ const fs = require("fs");
 
 validateMethods = {
 
-  getEpicSprints: (req, res, next) =>{ /**Get Epic then find the existing sprints field in the Epic
+  getEpicSprints: (req, res, next) => { /**Get Epic then find the existing sprints field in the Epic
                                         and pass it to original request with sprint array attached to req body */
-    NewEpic.findOne({SRID: req.params.SRID})
-    .then((result) =>{
-      if(result.SRID === req.params.SRID) {
-        req.body['NPRID'] = result.NPRID;
-        req.body['sprintArrayinEpic'] = result.sprints;
-        next();
-      } else {
-        res.status(400).json({
-          result: 'EPIC not found'
+    NewEpic.findOne({ SRID: req.params.SRID })
+      .then((result) => {
+        if (result.SRID === req.params.SRID) {
+          req.body['NPRID'] = result.NPRID;
+          req.body['sprintArrayinEpic'] = result.sprints;
+          next();
+        } else {
+          res.status(400).json({
+            result: 'EPIC not found'
+          });
+        }
+      })
+      .catch((error) => {
+        res.status(500).json({
+          result: 'Could not find EPIC'
         });
-      }
-    })
-    .catch((error) =>{
-      res.status(500).json({
-        result: 'Could not find EPIC'
       });
-    });
     // NewEpic.findOne({SRID: req.params.SRID})
     // .then((result) =>{
     //     res.status(200).json({
@@ -37,23 +37,29 @@ validateMethods = {
     // });
   },
 
-  doesNPRExist: (req, res, next) =>{
+
+
+  doesNPRExist: (req, res, next) => {
     Newproject.findOne({ SRID: req.params.SRID })
-    .then((result) => {
-      if(result.SRID === req.params.SRID) {
-        next();
-      } else {
+      .then((result) => {
+        if (result.SRID === req.params.SRID) {
+          next();
+        } else {
+          res.status(400).json({
+            result: 'NPRID not found',
+          });
+        }
+      })
+      .catch(err => {
         res.status(400).json({
-          result: 'NPRID not found',
+          result: 'NPR not found'
         });
-      }
-    })
-    .catch(err => {
-      res.status(400).json({
-        result: 'NPR not found'
       });
-    });
   },
+
+
+
+
   /**Check if user is assigning the request to other user
    * If true, add/overwrite status = in-progress
    */
@@ -83,21 +89,28 @@ validateMethods = {
     }
   },
 
+
+
+
   /**Check if user is closing/canceling the request */
   isClosingRequest: (req, res, next) => {
-    if(req.body.status === 'completed' || req.body.status === 'canceled') {
+    if (req.body.status === 'completed' || req.body.status === 'canceled') {
       const utcDate = new Date();
       req.body['closedOn'] = utcDate.toUTCString();
     }
     next();
   },
 
+
+
   /**Check if user is providing update notes */
-  isProvidingUpdates: (req, res, next) =>{
+  isProvidingUpdates: (req, res, next) => {
     const originalUrlContent = req.originalUrl.split('/');
-    if(originalUrlContent[4] !== 'update' && req.body.updateNotes !== undefined){ /**User is trying to provide update to a new request */
-      switch(originalUrlContent[3]) {
+    if (originalUrlContent[4] === 'create' && req.body.updateNotes !== undefined) { /**User is trying to provide update to a new request */
+      console.log("User is trying to provide update to a new request");
+      switch (originalUrlContent[3]) {
         case 'newproject':
+          console.log('update notes', req.body.updateNotes);
           res.status(400).json({
             result: 'cannot insert update notes without creating NPR'
           });
@@ -113,13 +126,24 @@ validateMethods = {
           res.status(500).json({
             result: 'something just broke',
             message: 'was the web service recently upgraded?'
-          });  
+          });
       }
-    } else if((req.body.updateNotes).length === 2) {
+    } else if ((originalUrlContent[4] === 'update') 
+    && (req.body.updateNotes !== undefined) 
+    && (Array.isArray(req.body.updateNotes))) {
+      console.log("User is trying to insert updateNotes on existing record");
+      if((req.body.updateNotes).length !== 2) {
+        console.log("User is trying to insert ill formatted updateNotes on existing record");
+        res.status(400).json({
+          result: "updateNotes can be of length 2 only",
+          message: "readme file: https://github.com/shivtu/DO-Mgmt"
+        });
+        return;
+      }
       const baseUrlContent = req.baseUrl.split("/");
       let requestType = baseUrlContent[baseUrlContent.length - 1];
-      
-      switch(requestType){
+
+      switch (requestType) {
         case 'newproject':
           requestType = Newproject
           break;
@@ -131,23 +155,29 @@ validateMethods = {
       }
 
       requestType.findById(req.params._id)
-      .then((result) =>{
-        const newNote = {summary:req.body.updateNotes[0], description: req.body.updateNotes[1]}
-        result.updateNotes.push(newNote);
-        req.body.updateNotes = result.updateNotes;
-        next();
-      })
-      .catch((error) =>{
-        result.status(500).json({
-          result: error.message
+        .then((result) => {
+          /**Format updateNotes field with fields : "summary", "description", "updatedBy"
+           * field: "updatedBy" is managed @authentication.js
+           */
+          const newNote = { summary: req.body.updateNotes[0], description: req.body.updateNotes[1], updatedBy: req.body.currentUser }
+          /**Push the newly formated updateNotes field to existing array */
+          result.updateNotes.push(newNote);
+          req.body.updateNotes = result.updateNotes;
+          next();
+        })
+        .catch((error) => {
+          result.status(500).json({
+            result: error.message
+          });
         });
-      });
-    } else {
-      res.status(400).json({
-        result: 'updateNotes can be an array of length 2 only'
-      });
+    } else if((originalUrlContent[4] !== 'update') && (req.body.updateNotes === undefined)) {
+      console.log("User is trying to update exsiting record without inserting updateNotes");
+      next();
     }
   },
+
+
+
 
   /**Check if user is trying to upload file */
   isUploadingfile: (req, res, next) => {
@@ -178,7 +208,7 @@ validateMethods = {
       const baseUrlContent = req.baseUrl.split("/");
       let requestType = baseUrlContent[baseUrlContent.length - 1];
       switch (
-        requestType /**switch between service request type to search existing array of file field
+      requestType /**switch between service request type to search existing array of file field
                              depending upon the request made by the user */
       ) {
         case "newproject":
@@ -220,6 +250,10 @@ validateMethods = {
     }
   },
 
+
+
+
+
   /**isFileSaved promise wrapped in saveFile function that returns the promise for cunsmption by other methods  */
   saveFile: (req, res, next) => {
     if (req.body.files.length !== 2) {
@@ -256,7 +290,7 @@ validateMethods = {
     return isFileSaved;
   },
 
-  _promise: new Promise((resolve, reject) => {})
+  _promise: new Promise((resolve, reject) => { })
 };
 
 exports.validationMethod = validateMethods;
