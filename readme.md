@@ -1,4 +1,5 @@
-# Devops Management Tool
+#
+Devops Management Tool
 ## Gist
 ### A comprehensive dev-ops tool
 ### Ticketing based system crafted specifically for dev-ops/developer teams
@@ -8,10 +9,11 @@
 <h4>Support for</h4>
 <ul>
     <li>New Project Requests (NPR)</li>
-    <li>Child tasks (epics) for NPR</li>
+    <li>Epics (User Stories) for NPR</li>
+    <li>Sprints for Epic BackLogs</li>
     <li>Bug Fix Requests (BFR)</li>
     <li>Application Fail Fix Request (FFR)</li>
-    <li>File uploads for each type of request (NPR, BFR, FFR)</li>
+    <li>File uploads for (NPR, BFR, FFR)</li>
     <li>User profile creation</li>
     <li>Loosely coupled authentication and authorization modules for customizing and integrating third party auth services</li>
 </ul>
@@ -20,24 +22,16 @@
 <ul>
     <li>Built using nodeJS</li>
     <li>REST Framework : <a href="https://expressjs.com/">ExpressJS</a>
-    <br/>
-    <a href="https://www.npmjs.com/package/express">Express NPM Package</a></li>
     <li>Packages used : 
         <ol>
             <li>
                 <a href="https://mongoosejs.com/">Mongoose MongoDB ODM</a>
-                <br/>
-                <a href="https://www.npmjs.com/package/mongoose">Mongoose NPM Package</a>
             </li>
             <li>
                 <a href="https://github.com/expressjs/morgan">Morgan</a>
-                <br/>
-                <a href="https://www.npmjs.com/package/morgan">Morgan NPM Package</a>
             </li>
             <li>
                 <a href="https://github.com/expressjs/body-parser">Body-Parser</a>
-                <br/>
-                <a href="https://www.npmjs.com/package/body-parser">Body-Parser NPM Package</a>
             </li>
         <ol>
     </li>
@@ -75,7 +69,7 @@ Request body format: <code>JSON</code>
     <td>createdBy</td>
     <td>String</td>
     <td>any string</td>
-    <td>This field can be customized to retrieve users from table</td>
+    <td>This field can be customized to retrieve users from table (currently a dummy auth module executes)</td>
   </tr>
   <tr>
     <td>summary</td>
@@ -90,10 +84,10 @@ Request body format: <code>JSON</code>
     <td>N/A</td>
   </tr>
   <tr>
-    <td>status</td>
+    <td>phase</td>
     <td>String</td>
     <td>created, in-progress, on-hold, completed, canceled</td>
-    <td>To customize status types edit newprojectmodel.js - variable: statusTypes[]</td>
+    <td>To customize status types edit newprojectmodel.js</td>
   </tr>
 </table>
 <b>Additional Parameters:</b>
@@ -135,14 +129,14 @@ Request body format: <code>JSON</code>
     <td>N/A</td>
   </tr>
   <tr>
-    <td>childTask (Epic)</td>
-    <td>JSON</td>
-    <td><address>any json</address></td>
+    <td>Epics</td>
+    <td>Array</td>
+    <td><address>Array Object</address></td>
     <td>N/A</td>
   </tr>
   <tr>
     <td>updates</td>
-    <td>JSON</td>
+    <td>Array</td>
     <td><address><code>{"updateBy": any string, "updatedOn": Date Time, "updateSummary": any string, "updateDescription": any string}</code></address></td>
     <td>N/A</td>
   </tr>
@@ -156,6 +150,6 @@ Request body format: <code>JSON</code>
     <td>lifeCycle</td>
     <td>JSON</td>
     <td><address>< Auto-Generated ></address></td>
-    <td>This field is Auto-Generted in the following format<br/><code>{"assignedTo": any string, "assignedOn": Date Time}</code></td>
+    <td>This field is Auto-Generted in the following format<br/><code>{"assignedTo": any string, "assignedOn": Date Time, "assignedBy":"<user name>"}</code></td>
   </tr>
 </table>
