@@ -5,7 +5,7 @@
 ### Built as a light weight blazing fast service for medium to large teams
 <h4> License : <a href="https://mit-license.org/">MIT</a></h4>
 
-<h4>Ticketing support for</h4>
+<h4>Support for</h4>
 <ul>
     <li>New Project Requests (NPR)</li>
     <li>Child tasks (epics) for NPR</li>
