@@ -277,22 +277,22 @@ curl --request GET \
   
   #### Example expected response for the above query
   
-  {
-    "result": [
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-02T13:05:34.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedOn": "Wed, 02 Oct 2019 13:05:34 GMT",
-                    "assignedBy": "Super Man"
-                }
-            ],
-            "files": [],
+      {
+        "result": [
+            {
+                "productVersion": [],
+                "releases": [],
+                "serviceType": "New Project Request",
+                "createdOn": "2019-10-02T13:05:34.000Z",
+                "epics": [],
+                "updateNotes": [],
+                "lifeCycle": [
+                    {
+                        "assignedOn": "Wed, 02 Oct 2019 13:05:34 GMT",
+                        "assignedBy": "Super Man"
+                    }
+                ],
+                "files": [],
 
 
 
@@ -315,36 +315,24 @@ curl --request GET \
   
 #### Example expected response for the above query
 
-{
-    "result": {
-        "productVersion": [],
-        "releases": [],
-        "serviceType": "New Project Request",
-        "createdOn": "2019-10-02T13:06:28.000Z",
-        "epics": [],
-        "updateNotes": [],
-        "lifeCycle": [
-            {
-                "assignedOn": "Wed, 02 Oct 2019 13:06:28 GMT",
-                "assignedBy": "Super Man"
-            }
-        ],
-        "files": [],
-        "sprints": [],
-        "_id": "5d94a0d4852eed4fd4286966",
-        "SRID": "NPR4",
-        "customerName": "Google",
-        "priority": "1",
-        "createdBy": "Super Man",
-        "summary": "create a devops tool",
-        "description": "Create an end to end devops-tool for medium to large scale teams",
-        "phase": "created",
-        "__v": 0
-    }
-}
-"sprints": [],
-            "_id": "5d94a09e85e71a3784bb833a",
-            "SRID": "NPR3",
+    {
+        "result": {
+            "productVersion": [],
+            "releases": [],
+            "serviceType": "New Project Request",
+            "createdOn": "2019-10-02T13:06:28.000Z",
+            "epics": [],
+            "updateNotes": [],
+            "lifeCycle": [
+                {
+                    "assignedOn": "Wed, 02 Oct 2019 13:06:28 GMT",
+                    "assignedBy": "Super Man"
+                }
+            ],
+            "files": [],
+            "sprints": [],
+            "_id": "5d94a0d4852eed4fd4286966",
+            "SRID": "NPR4",
             "customerName": "Google",
             "priority": "1",
             "createdBy": "Super Man",
@@ -353,8 +341,20 @@ curl --request GET \
             "phase": "created",
             "__v": 0
         }
-    ]
-}
+    }
+    "sprints": [],
+                "_id": "5d94a09e85e71a3784bb833a",
+                "SRID": "NPR3",
+                "customerName": "Google",
+                "priority": "1",
+                "createdBy": "Super Man",
+                "summary": "create a devops tool",
+                "description": "Create an end to end devops-tool for medium to large scale teams",
+                "phase": "created",
+                "__v": 0
+            }
+        ]
+    }
 
 
 ### Find single record of NewProject Request using SRID (NPR)
@@ -376,33 +376,33 @@ curl --request GET \
   
 #### Example expected response for the above query
 
-{
-    "result": {
-        "productVersion": [],
-        "releases": [],
-        "serviceType": "New Project Request",
-        "createdOn": "2019-10-02T13:06:28.000Z",
-        "epics": [],
-        "updateNotes": [],
-        "lifeCycle": [
-            {
-                "assignedOn": "Wed, 02 Oct 2019 13:06:28 GMT",
-                "assignedBy": "Super Man"
-            }
-        ],
-        "files": [],
-        "sprints": [],
-        "_id": "5d94a0d4852eed4fd4286966",
-        "SRID": "NPR4",
-        "customerName": "Google",
-        "priority": "1",
-        "createdBy": "Super Man",
-        "summary": "create a devops tool",
-        "description": "Create an end to end devops-tool for medium to large scale teams",
-        "phase": "created",
-        "__v": 0
+    {
+        "result": {
+            "productVersion": [],
+            "releases": [],
+            "serviceType": "New Project Request",
+            "createdOn": "2019-10-02T13:06:28.000Z",
+            "epics": [],
+            "updateNotes": [],
+            "lifeCycle": [
+                {
+                    "assignedOn": "Wed, 02 Oct 2019 13:06:28 GMT",
+                    "assignedBy": "Super Man"
+                }
+            ],
+            "files": [],
+            "sprints": [],
+            "_id": "5d94a0d4852eed4fd4286966",
+            "SRID": "NPR4",
+            "customerName": "Google",
+            "priority": "1",
+            "createdBy": "Super Man",
+            "summary": "create a devops tool",
+            "description": "Create an end to end devops-tool for medium to large scale teams",
+            "phase": "created",
+            "__v": 0
+        }
     }
-}
 
 
 ### Find single record of NewProject Request using _id (NPR)
@@ -424,31 +424,31 @@ curl --request GET \
   
 #### Example expected response for the above query
 
-{
-    "result": {
-        "productVersion": [],
-        "releases": [],
-        "serviceType": "New Project Request",
-        "createdOn": "2019-10-02T13:06:28.000Z",
-        "epics": [],
-        "updateNotes": [],
-        "lifeCycle": [
-            {
-                "assignedOn": "Wed, 02 Oct 2019 13:06:28 GMT",
-                "assignedBy": "Super Man"
-            }
-        ],
-        "files": [],
-        "sprints": [],
-        "_id": "5d94a0d4852eed4fd4286966",
-        "SRID": "NPR4",
-        "customerName": "Google",
-        "priority": "1",
-        "createdBy": "Super Man",
-        "summary": "create a devops tool",
-        "description": "Create an end to end devops-tool for medium to large scale teams",
-        "phase": "created",
-        "__v": 0
+    {
+        "result": {
+            "productVersion": [],
+            "releases": [],
+            "serviceType": "New Project Request",
+            "createdOn": "2019-10-02T13:06:28.000Z",
+            "epics": [],
+            "updateNotes": [],
+            "lifeCycle": [
+                {
+                    "assignedOn": "Wed, 02 Oct 2019 13:06:28 GMT",
+                    "assignedBy": "Super Man"
+                }
+            ],
+            "files": [],
+            "sprints": [],
+            "_id": "5d94a0d4852eed4fd4286966",
+            "SRID": "NPR4",
+            "customerName": "Google",
+            "priority": "1",
+            "createdBy": "Super Man",
+            "summary": "create a devops tool",
+            "description": "Create an end to end devops-tool for medium to large scale teams",
+            "phase": "created",
+            "__v": 0
+        }
     }
-}
 
