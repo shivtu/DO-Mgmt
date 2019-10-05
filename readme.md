@@ -325,7 +325,7 @@ curl --request GET \
   --header 'Host: localhost:5000' \
   --header 'cache-control: no-cache'
   
-#### Example response expected
+#### Example expected response for the above query
 
 {
     "result": {
