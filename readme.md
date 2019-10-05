@@ -21,7 +21,7 @@ Devops Management Tool
 <h4>Dependencies</h4>
 <ul>
     <li>Built using nodeJS | <a href="https://nodejs.org/en/">nodeJS</a></li>
-    <li>DataBase Mongo DB | <a href="https://nodejs.org/en/">nodeJS</a></li>
+    <li>DataBase Mongo DB | <a href="https://nodejs.org/en/">MongoDB</a></li>
     <li>REST Framework : <a href="https://expressjs.com/">ExpressJS</a>
     <li>Packages used : 
         <ol>
@@ -177,7 +177,7 @@ Request body format: <code>JSON</code>
     <td>files</td>
     <td>Array</td>
     <td><address><code>[any string, base64 string]</code></address></td>
-    <td>Accepted array length 2<br/>first element of array should be the original file name, second element should be a base64 string of the file</td>
+    <td>Accepted array length 2<br/>first element of array should be the original file name, second element should be a base64 string of the file<br/>To change the directory path where files get saved look into file Validate.js method named saveFile, variable named: uploadFolder</td>
   </tr>
   <tr>
     <td>lifeCycle</td>
