@@ -17,7 +17,7 @@ router.get("/find/srid/:serviceId", (req, res, next) => {
 });
 
 /*Find instance using service ID*/
-router.get("/find/_id/:_Id", (req, res, next) => {
+router.get("/find/_id/:_id", (req, res, next) => {
   const objectID = req.params._id.toUpperCase();
   Newproject.findById({ _id: objectID }).exec()
     .then(result => {
@@ -65,6 +65,7 @@ router.post(
           _id: new mongoose.Types.ObjectId(),
           SRID: "NPR" + seq.sequence_value,
           customerName: req.body.customerName,
+          product: req.body.product,
           serviceType: "New Project Request",
           priority: req.body.priority,
           createdOn: utcDate.toUTCString(),
