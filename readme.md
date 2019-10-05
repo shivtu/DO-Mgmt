@@ -210,7 +210,7 @@ curl -X POST \
  ,"assignedTo":"SpiderMan", "repoLink":"https://github.com/shivtu/DO-Mgmt"}'
  
  #### Example response for the above query
-<code>
+<textearea disabled="true">
     {
     "result": {
         "productVersion": [],
@@ -241,4 +241,4 @@ curl -X POST \
         "__v": 0
     }
 }
-</code>
+</textarea>
