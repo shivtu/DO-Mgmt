@@ -20,8 +20,8 @@ Devops Management Tool
 
 <h4>Dependencies</h4>
 <ul>
-    <li>Built using nodeJS</li>
-    <li>DataBase Mongo DB</li>
+    <li>Built using nodeJS | <a href="https://nodejs.org/en/">nodeJS</a></li>
+    <li>DataBase Mongo DB | <a href="https://nodejs.org/en/">nodeJS</a></li>
     <li>REST Framework : <a href="https://expressjs.com/">ExpressJS</a>
     <li>Packages used : 
         <ol>
