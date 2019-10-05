@@ -208,3 +208,37 @@ curl -X POST \
   -H 'cache-control: no-cache' \
   -d '{"customerName":"Tesla", "product":"car infotainment tool", "priority":"2", "summary":"another example summary", "description":"another example long description"
  ,"assignedTo":"SpiderMan", "repoLink":"https://github.com/shivtu/DO-Mgmt"}'
+ 
+ #### Example response for the above query
+<code>
+    {
+    "result": {
+        "productVersion": [],
+        "releases": [],
+        "serviceType": "New Project Request",
+        "createdOn": "2019-10-05T06:56:14.000Z",
+        "epics": [],
+        "updateNotes": [],
+        "lifeCycle": [
+            {
+                "assignedTo": "SpiderMan",
+                "assignedOn": "Sat, 05 Oct 2019 06:56:14 GMT"
+            }
+        ],
+        "files": [],
+        "sprints": [],
+        "_id": "5d983e8e1b378e08606dd81d",
+        "SRID": "NPR15",
+        "customerName": "Tesla",
+        "product": "car infotainment tool",
+        "priority": "2",
+        "createdBy": "Super Man",
+        "summary": "another example summary",
+        "description": "another example long description",
+        "assignedTo": "SpiderMan",
+        "phase": "created",
+        "repoLink": "https://github.com/shivtu/DO-Mgmt",
+        "__v": 0
+    }
+}
+</code>
