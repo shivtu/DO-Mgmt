@@ -273,8 +273,6 @@ curl --request GET \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Host: localhost:5000' \
-  --header 'Postman-Token: 23480450-79f9-442f-8458-407eab023bdf,16a91d82-4c1e-4281-a8ed-9733ddec3b95' \
-  --header 'User-Agent: PostmanRuntime/7.17.1' \
   --header 'cache-control: no-cache'
   
   #### Example expected response for the above query
