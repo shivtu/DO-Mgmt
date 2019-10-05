@@ -278,21 +278,34 @@ curl --request GET \
   #### Example expected response for the above query
   
       {
-        "result": [
-            {
-                "productVersion": [],
-                "releases": [],
-                "serviceType": "New Project Request",
-                "createdOn": "2019-10-02T13:05:34.000Z",
-                "epics": [],
-                "updateNotes": [],
-                "lifeCycle": [
-                    {
-                        "assignedOn": "Wed, 02 Oct 2019 13:05:34 GMT",
-                        "assignedBy": "Super Man"
-                    }
-                ],
-                "files": [],
+    "result": [
+        {
+            "productVersion": [],
+            "releases": [],
+            "serviceType": "New Project Request",
+            "createdOn": "2019-10-02T13:05:34.000Z",
+            "epics": [],
+            "updateNotes": [],
+            "lifeCycle": [
+                {
+                    "assignedOn": "Wed, 02 Oct 2019 13:05:34 GMT",
+                    "assignedBy": "Super Man"
+                }
+            ],
+            "files": [],
+            "sprints": [],
+            "_id": "5d94a09e85e71a3784bb833a",
+            "SRID": "NPR3",
+            "customerName": "Google",
+            "priority": "1",
+            "createdBy": "Super Man",
+            "summary": "create a devops tool",
+            "description": "Create an end to end devops-tool for medium to large scale teams",
+            "phase": "created",
+            "__v": 0
+        }
+    ]
+}
 
 
 
