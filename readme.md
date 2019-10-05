@@ -261,7 +261,7 @@ curl --request GET \
 ### Find NewProject Requests using filters (NPR)
 HTTP Request Type: <code>GET</code>
 <br/>
-Resource URI: <code>http://domain.com/api/v1/newproject/find/filter?<field name>="<field value>"&<field name>=<field value</code>
+Resource URI: <code>http://domain.com/api/v1/newproject/find/filter?< field name >=<  field value >&< field name >=< field value ></code>
 <br/>
 Request URI params: None
 
