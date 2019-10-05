@@ -165,7 +165,7 @@ Request body format: <code>JSON</code>
     <td>epics</td>
     <td>Array</td>
     <td><address>Array Object</address></td>
-    <td>N/A</td>
+    <td>Auto populates while creating epics against the new project</td>
   </tr>
   <tr>
     <td>updateNotes</td>
