@@ -203,8 +203,6 @@ curl --request POST \
   --header 'Content-Length: 238' \
   --header 'Content-Type: application/json' \
   --header 'Host: localhost:5000' \
-  --header 'Postman-Token: 95e2e8ee-07c5-4fe9-bef9-1c67c69d16b5,b8551ecf-d0a1-470c-bc8b-6942b76fec09' \
-  --header 'User-Agent: PostmanRuntime/7.17.1' \
   --header 'cache-control: no-cache' \
   --data '{"customerName":"Tesla", "product":"car infotainment tool", "priority":"2", "summary":"another example summary", "description":"another example long description"\r\n ,"assignedTo":"SpiderMan", "repoLink":"https://github.com/shivtu/DO-Mgmt"}'
  
@@ -257,8 +255,6 @@ curl --request GET \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Host: localhost:5000' \
-  --header 'Postman-Token: cd2389d4-09c9-4c87-b6c2-1656f6e54b01,4c2791c0-2a7e-4798-8153-dd8856d71ee4' \
-  --header 'User-Agent: PostmanRuntime/7.17.1' \
   --header 'cache-control: no-cache'
  
  
