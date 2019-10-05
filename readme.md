@@ -140,13 +140,13 @@ Request body format: <code>JSON</code>
   <tr>
     <td>createdOn</td>
     <td>Date</td>
-    <td>< Auto-generated ></td>
+    <td><address> < Auto-Generated > </address></td>
     <td>UTC date string gets auto-generated as per server local time</td>
   </tr>
   <tr>
     <td>serviceType</td>
     <td>String</td>
-    <td><address> < prefixed value > </address></td>
+    <td><address> < Prefixed Value > </address></td>
     <td>Prefixed Value: 'New Project Request'</td>
   </tr>
   <tr>
