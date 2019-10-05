@@ -263,7 +263,7 @@ HTTP Request Type: <code>GET</code>
 <br/>
 Resource URI: <code>http://domain.com/api/v1/newproject/find/filter?< field name >=<  field value >&< field name >=< field value ></code>
 <br/>
-Request URI params: None
+Request URI params: param name and value
 
 #### Example HTTP request (Shell CURL)
 curl --request GET \
@@ -314,7 +314,7 @@ HTTP Request Type: <code>GET</code>
 <br/>
 Resource URI: <code>http://domain/api/v1/newproject/find/srid/NPR3</code>
 <br/>
-Request URI params: None
+Request URI params: NPR's SRID
 
 #### Example HTTP request (Shell CURL)
 curl --request GET \
@@ -369,53 +369,6 @@ curl --request GET \
         ]
     }
 
-
-### Find single record of NewProject Request using SRID (NPR)
-HTTP Request Type: <code>GET</code>
-<br/>
-Resource URI: <code>http://domain/api/v1/newproject/find/srid/<record SRID></code>
-<br/>
-Request URI params: None
-
-#### Example HTTP request (Shell CURL)
-curl --request GET \
-  --url http://localhost:5000/api/v1/newproject/find/srid/NPR3 \
-  --header 'Accept: */*' \
-  --header 'Accept-Encoding: gzip, deflate' \
-  --header 'Cache-Control: no-cache' \
-  --header 'Connection: keep-alive' \
-  --header 'Host: localhost:5000' \
-  --header 'cache-control: no-cache'
-  
-#### Example expected response for the above query
-
-    {
-        "result": {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-02T13:06:28.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedOn": "Wed, 02 Oct 2019 13:06:28 GMT",
-                    "assignedBy": "Super Man"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d94a0d4852eed4fd4286966",
-            "SRID": "NPR4",
-            "customerName": "Google",
-            "priority": "1",
-            "createdBy": "Super Man",
-            "summary": "create a devops tool",
-            "description": "Create an end to end devops-tool for medium to large scale teams",
-            "phase": "created",
-            "__v": 0
-        }
-    }
 
 
 ### Find single record of NewProject Request using _id (NPR)
