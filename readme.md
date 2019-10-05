@@ -178,68 +178,18 @@ Request body format: <code>JSON</code>
   </tr>
 </table>
 
-####Example HTTP request
-<table>
-    <tr>
-        JAVA (OK HTTP)
-    </tr>
-     <td>
-         <code>OkHttpClient client = new OkHttpClient();
-
-MediaType mediaType = MediaType.parse("application/json");
-RequestBody body = RequestBody.create(mediaType, "{\"customerName\":\"Tesla\", \"product\":\"car infotainment tool\", \"priority\":\"2\", \"summary\":\"another example summary\", \"description\":\"another example long description\"\r\n ,\"assignedTo\":\"SpiderMan\", \"repoLink\":\"https://github.com/shivtu/DO-Mgmt\"}");
-Request request = new Request.Builder()
-  .url("http://localhost:5000/api/v1/newproject/create/")
-  .post(body)
-  .addHeader("Content-Type", "application/json")
-  .addHeader("User-Agent", "PostmanRuntime/7.17.1")
-  .addHeader("Accept", "*/*")
-  .addHeader("Cache-Control", "no-cache")
-  .addHeader("Postman-Token", "95e2e8ee-07c5-4fe9-bef9-1c67c69d16b5,35418cde-f117-47eb-918f-0e77b2779ded")
-  .addHeader("Host", "localhost:5000")
-  .addHeader("Accept-Encoding", "gzip, deflate")
-  .addHeader("Content-Length", "238")
-  .addHeader("Connection", "keep-alive")
-  .addHeader("cache-control", "no-cache")
-  .build();
-
-Response response = client.newCall(request).execute();</code>
-    </td>
-     <tr>
-        JavaScript (XHR)
-    </tr>
-     <td>
-        <code>var data = JSON.stringify({
-  "customerName": "Tesla",
-  "product": "car infotainment tool",
-  "priority": "2",
-  "summary": "another example summary",
-  "description": "another example long description",
-  "assignedTo": "SpiderMan",
-  "repoLink": "https://github.com/shivtu/DO-Mgmt"
-});
-
-var xhr = new XMLHttpRequest();
-xhr.withCredentials = true;
-
-xhr.addEventListener("readystatechange", function () {
-  if (this.readyState === 4) {
-    console.log(this.responseText);
-  }
-});
-
-xhr.open("POST", "http://localhost:5000/api/v1/newproject/create/");
-xhr.setRequestHeader("Content-Type", "application/json");
-xhr.setRequestHeader("User-Agent", "PostmanRuntime/7.17.1");
-xhr.setRequestHeader("Accept", "*/*");
-xhr.setRequestHeader("Cache-Control", "no-cache");
-xhr.setRequestHeader("Postman-Token", "95e2e8ee-07c5-4fe9-bef9-1c67c69d16b5,98ecfcf5-7bb9-4360-b748-3c5da98350ec");
-xhr.setRequestHeader("Host", "localhost:5000");
-xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
-xhr.setRequestHeader("Content-Length", "238");
-xhr.setRequestHeader("Connection", "keep-alive");
-xhr.setRequestHeader("cache-control", "no-cache");
-
-xhr.send(data);</code>
-    </td>
-</table>
+#### Example HTTP request (CURL)
+curl -X POST \
+  http://localhost:5000/api/v1/newproject/create/ \
+  -H 'Accept: */*' \
+  -H 'Accept-Encoding: gzip, deflate' \
+  -H 'Cache-Control: no-cache' \
+  -H 'Connection: keep-alive' \
+  -H 'Content-Length: 238' \
+  -H 'Content-Type: application/json' \
+  -H 'Host: localhost:5000' \
+  -H 'Postman-Token: 95e2e8ee-07c5-4fe9-bef9-1c67c69d16b5,1b063312-75bc-424b-88c7-b340da578122' \
+  -H 'User-Agent: PostmanRuntime/7.17.1' \
+  -H 'cache-control: no-cache' \
+  -d '{"customerName":"Tesla", "product":"car infotainment tool", "priority":"2", "summary":"another example summary", "description":"another example long description"
+ ,"assignedTo":"SpiderMan", "repoLink":"https://github.com/shivtu/DO-Mgmt"}'
