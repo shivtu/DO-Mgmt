@@ -21,6 +21,7 @@ Devops Management Tool
 <h4>Dependencies</h4>
 <ul>
     <li>Built using nodeJS</li>
+    <li>DataBase Mongo DB</li>
     <li>REST Framework : <a href="https://expressjs.com/">ExpressJS</a>
     <li>Packages used : 
         <ol>
@@ -36,6 +37,20 @@ Devops Management Tool
         <ol>
     </li>
 </ul>
+ 
+## Running and testing the project locally
+<strong>Prerequisites</strong>
+<ul>
+    <li>MongoDB - version 4.2 or above</li>
+    <li>NodeJs - version 10.16 or above</li>
+</ul>
+
+--> Clone the project or download the zipped file
+--> navigate to project directory using cmd/terminal
+--> Run <code>npm install</code> Once all packages get downloaded
+--> Run <code>npm start</code>
+--> The project by default will run on port 5000, make sure that port is not being used by other apps 
+
 
 ## REST Web-Services Usage
 ### Create a New Project Request (NPR)
