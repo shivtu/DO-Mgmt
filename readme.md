@@ -180,9 +180,9 @@ Request body format: <code>JSON</code>
 
 ####Example HTTP request
 <table>
-    <td>
+    <tr>
         JAVA (OK HTTP)
-    </td>
+    </tr>
      <td>
          <code>OkHttpClient client = new OkHttpClient();
 
@@ -205,9 +205,9 @@ Request request = new Request.Builder()
 
 Response response = client.newCall(request).execute();</code>
     </td>
-     <td>
+     <tr>
         JavaScript (XHR)
-    </td>
+    </tr>
      <td>
         <code>var data = JSON.stringify({
   "customerName": "Tesla",
