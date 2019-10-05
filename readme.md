@@ -278,6 +278,7 @@ curl --request GET \
   --header 'cache-control: no-cache'
   
   #### Example expected response for the above query
+  
   {
     "result": [
         {
@@ -307,5 +308,3 @@ curl --request GET \
         }
     ]
 }
-
- 
