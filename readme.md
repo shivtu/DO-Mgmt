@@ -180,7 +180,7 @@ Request body format: <code>JSON</code>
 
 #### Example HTTP request (CURL)
 curl -X POST \
-  http://localhost:5000/api/v1/newproject/create/ \
+  http://domain/api/v1/newproject/create/ \
   -H 'Accept: */*' \
   -H 'Accept-Encoding: gzip, deflate' \
   -H 'Cache-Control: no-cache' \
