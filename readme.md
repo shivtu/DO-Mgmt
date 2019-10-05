@@ -258,3 +258,54 @@ curl --request GET \
   --header 'cache-control: no-cache'
  
  
+ ### Find NewProject Requests using filters (NPR)
+HTTP Request Type: <code>GET</code>
+<br/>
+Resource URI: <code>http://domain.com/api/v1/newproject/find/filter?<field name>="<field value>"&<field name>=<field value</code>
+<br/>
+Request URI params: None
+
+#### Example HTTP request (Shell CURL)
+curl --request GET \
+  --url 'http://localhost:5000/api/v1/newproject/find/filter?SRID=NPR3&customerName=Google' \
+  --header 'Accept: */*' \
+  --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Cache-Control: no-cache' \
+  --header 'Connection: keep-alive' \
+  --header 'Host: localhost:5000' \
+  --header 'Postman-Token: 23480450-79f9-442f-8458-407eab023bdf,16a91d82-4c1e-4281-a8ed-9733ddec3b95' \
+  --header 'User-Agent: PostmanRuntime/7.17.1' \
+  --header 'cache-control: no-cache'
+  
+  #### Example expected response for the above query
+  {
+    "result": [
+        {
+            "productVersion": [],
+            "releases": [],
+            "serviceType": "New Project Request",
+            "createdOn": "2019-10-02T13:05:34.000Z",
+            "epics": [],
+            "updateNotes": [],
+            "lifeCycle": [
+                {
+                    "assignedOn": "Wed, 02 Oct 2019 13:05:34 GMT",
+                    "assignedBy": "Super Man"
+                }
+            ],
+            "files": [],
+            "sprints": [],
+            "_id": "5d94a09e85e71a3784bb833a",
+            "SRID": "NPR3",
+            "customerName": "Google",
+            "priority": "1",
+            "createdBy": "Super Man",
+            "summary": "create a devops tool",
+            "description": "Create an end to end devops-tool for medium to large scale teams",
+            "phase": "created",
+            "__v": 0
+        }
+    ]
+}
+
+ 
