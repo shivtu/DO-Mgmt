@@ -170,8 +170,8 @@ Request body format: <code>JSON</code>
   <tr>
     <td>updateNotes</td>
     <td>Array</td>
-    <td><address><code>{"updateBy": any string, "updatedOn": Date Time, "updateSummary": any string, "updateDescription": any string}</code></address></td>
-    <td>N/A</td>
+    <td><address>Array of length 2 only</address></td>
+    <td>updateNotes accepts a string array<br/> Furst string in the array is the summary of the update, second string is the long description of the update </td>
   </tr>
   <tr>
     <td>files</td>
