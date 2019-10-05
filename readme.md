@@ -193,21 +193,20 @@ Request body format: <code>JSON</code>
   </tr>
 </table>
 
-#### Example HTTP request (CURL)
-curl -X POST \
-  http://domain/api/v1/newproject/create/ \
-  -H 'Accept: */*' \
-  -H 'Accept-Encoding: gzip, deflate' \
-  -H 'Cache-Control: no-cache' \
-  -H 'Connection: keep-alive' \
-  -H 'Content-Length: 238' \
-  -H 'Content-Type: application/json' \
-  -H 'Host: localhost:5000' \
-  -H 'Postman-Token: 95e2e8ee-07c5-4fe9-bef9-1c67c69d16b5,1b063312-75bc-424b-88c7-b340da578122' \
-  -H 'User-Agent: PostmanRuntime/7.17.1' \
-  -H 'cache-control: no-cache' \
-  -d '{"customerName":"Tesla", "product":"car infotainment tool", "priority":"2", "summary":"another example summary", "description":"another example long description"
- ,"assignedTo":"SpiderMan", "repoLink":"https://github.com/shivtu/DO-Mgmt"}'
+#### Example HTTP request (Shell CURL)
+curl --request POST \
+  --url http://localhost:5000/api/v1/newproject/create/ \
+  --header 'Accept: */*' \
+  --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Cache-Control: no-cache' \
+  --header 'Connection: keep-alive' \
+  --header 'Content-Length: 238' \
+  --header 'Content-Type: application/json' \
+  --header 'Host: localhost:5000' \
+  --header 'Postman-Token: 95e2e8ee-07c5-4fe9-bef9-1c67c69d16b5,b8551ecf-d0a1-470c-bc8b-6942b76fec09' \
+  --header 'User-Agent: PostmanRuntime/7.17.1' \
+  --header 'cache-control: no-cache' \
+  --data '{"customerName":"Tesla", "product":"car infotainment tool", "priority":"2", "summary":"another example summary", "description":"another example long description"\r\n ,"assignedTo":"SpiderMan", "repoLink":"https://github.com/shivtu/DO-Mgmt"}'
  
  #### Example response for the above query
 
@@ -250,252 +249,16 @@ Resource URI: <code>http://domain/api/v1/newproject/find/findall</code>
 <br/>
 Request URI params: None
 
-#### Example HTTP request (CURL)
-curl -X GET \
-  http://localhost:5000/api/v1/newproject/find/findall \
-  -H 'Accept: */*' \
-  -H 'Accept-Encoding: gzip, deflate' \
-  -H 'Cache-Control: no-cache' \
-  -H 'Connection: keep-alive' \
-  -H 'Host: localhost:5000' \
-  -H 'Postman-Token: cd2389d4-09c9-4c87-b6c2-1656f6e54b01,54a82ac2-4844-41eb-a395-fe987e011200' \
-  -H 'User-Agent: PostmanRuntime/7.17.1' \
-  -H 'cache-control: no-cache'
+#### Example HTTP request (Shell CURL)
+curl --request GET \
+  --url http://localhost:5000/api/v1/newproject/find/findall \
+  --header 'Accept: */*' \
+  --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Cache-Control: no-cache' \
+  --header 'Connection: keep-alive' \
+  --header 'Host: localhost:5000' \
+  --header 'Postman-Token: cd2389d4-09c9-4c87-b6c2-1656f6e54b01,4c2791c0-2a7e-4798-8153-dd8856d71ee4' \
+  --header 'User-Agent: PostmanRuntime/7.17.1' \
+  --header 'cache-control: no-cache'
  
- #### Example response for the above query
-
-    {
-    "result": [
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-02T13:05:34.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedOn": "Wed, 02 Oct 2019 13:05:34 GMT",
-                    "assignedBy": "Super Man"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d94a09e85e71a3784bb833a",
-            "SRID": "NPR3",
-            "customerName": "Google",
-            "priority": "1",
-            "createdBy": "Super Man",
-            "summary": "create a devops tool",
-            "description": "Create an end to end devops-tool for medium to large scale teams",
-            "phase": "created",
-            "__v": 0
-        },
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-02T13:06:28.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedOn": "Wed, 02 Oct 2019 13:06:28 GMT",
-                    "assignedBy": "Super Man"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d94a0d4852eed4fd4286966",
-            "SRID": "NPR4",
-            "customerName": "Google",
-            "priority": "1",
-            "createdBy": "Super Man",
-            "summary": "create a devops tool",
-            "description": "Create an end to end devops-tool for medium to large scale teams",
-            "phase": "created",
-            "__v": 0
-        },
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-02T13:07:45.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedOn": "Wed, 02 Oct 2019 13:07:45 GMT",
-                    "assignedBy": "Super Man"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d94a121da0e0a52b03b00fd",
-            "SRID": "NPR5",
-            "customerName": "Google",
-            "priority": "1",
-            "createdBy": "Super Man",
-            "summary": "create a devops tool",
-            "description": "Create an end to end devops-tool for medium to large scale teams",
-            "phase": "created",
-            "__v": 0
-        },
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-02T13:11:33.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedOn": "Wed, 02 Oct 2019 13:11:33 GMT",
-                    "assignedBy": "Super Man"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d94a20500f7075990ac7d09",
-            "SRID": "NPR6",
-            "customerName": "Google",
-            "priority": "1",
-            "createdBy": "Super Man",
-            "summary": "create a devops tool",
-            "description": "Create an end to end devops-tool for medium to large scale teams",
-            "phase": "created",
-            "__v": 0
-        },
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-02T13:14:45.000Z",
-            "epics": [
-                "EPC7"
-            ],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedOn": "Wed, 02 Oct 2019 13:14:45 GMT",
-                    "assignedBy": "Super Man"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d94a2c565c59b4af42493e1",
-            "SRID": "NPR8",
-            "customerName": "Google",
-            "priority": "1",
-            "createdBy": "Super Man",
-            "summary": "create a devops tool",
-            "description": "Create an end to end devops-tool for medium to large scale teams",
-            "phase": "created",
-            "__v": 0
-        },
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-02T13:26:42.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedOn": "Wed, 02 Oct 2019 13:26:42 GMT"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d94a5923f92ff53b84ba74d",
-            "SRID": "NPR10",
-            "customerName": "Google",
-            "priority": "1",
-            "createdBy": "Super Man",
-            "summary": "create a devops tool",
-            "description": "Create an end to end devops-tool for medium to large scale teams",
-            "phase": "created",
-            "__v": 0
-        },
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-02T13:32:21.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedOn": "Wed, 02 Oct 2019 13:32:21 GMT"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d94a6e59cde10277c3b5f21",
-            "SRID": "NPR11",
-            "customerName": "Google",
-            "priority": "1",
-            "createdBy": "Super Man",
-            "summary": "create a devops tool",
-            "description": "Create an end to end devops-tool for medium to large scale teams",
-            "phase": "created",
-            "__v": 0
-        },
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-05T06:46:53.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedTo": "BatMan",
-                    "assignedOn": "Sat, 05 Oct 2019 06:46:53 GMT"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d983c5d1b378e08606dd81c",
-            "SRID": "NPR14",
-            "customerName": "Google",
-            "product": "devops tool",
-            "priority": "1",
-            "createdBy": "Super Man",
-            "summary": "example summary",
-            "description": "example long description",
-            "assignedTo": "BatMan",
-            "phase": "created",
-            "repoLink": "https://github.com/shivtu/DO-Mgmt",
-            "__v": 0
-        },
-        {
-            "productVersion": [],
-            "releases": [],
-            "serviceType": "New Project Request",
-            "createdOn": "2019-10-05T06:56:14.000Z",
-            "epics": [],
-            "updateNotes": [],
-            "lifeCycle": [
-                {
-                    "assignedTo": "SpiderMan",
-                    "assignedOn": "Sat, 05 Oct 2019 06:56:14 GMT"
-                }
-            ],
-            "files": [],
-            "sprints": [],
-            "_id": "5d983e8e1b378e08606dd81d",
-            "SRID": "NPR15",
-            "customerName": "Tesla",
-            "product": "car infotainment tool",
-            "priority": "2",
-            "createdBy": "Super Man",
-            "summary": "another example summary",
-            "description": "another example long description",
-            "assignedTo": "SpiderMan",
-            "phase": "created",
-            "repoLink": "https://github.com/shivtu/DO-Mgmt",
-            "__v": 0
-            }
-        ]
-    }
+ 
