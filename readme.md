@@ -95,6 +95,14 @@ Resource URI: <code>http://domain/api/v1/counters/addCounter/USER</code>
 <br/>
 Request URI params: None
 
+#### To view all the created counters
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/counters/all</code>
+<br/>
+Request URI params: None
+
+
 
 ## REST Web-Services Usage
 ### Create a New Project Request (NPR)
