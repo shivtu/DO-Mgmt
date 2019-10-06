@@ -50,7 +50,7 @@ Devops Management Tool
 --> Run <code>npm install</code> Once all packages get downloaded
 --> Run <code>npm start</code>
 --> The project by default will run on port 5000, make sure that port is not being used by other apps
-<h4 style="color: red;">Make the following API calls once and only once for the webservices to execute as expected</h4>
+<h4>**** Make the following API calls once and only once for the webservices to execute as expected</h4>
 <b>Since MongoDB does not provide increamental sequence numbers as opposed to SQL DBs, the below queries create separate docs to keep track and update sequence numbers for NPR, BFR, EPC, SPR, Users and FFR</b>
 
 #### To create increamental sequence number for NPR
