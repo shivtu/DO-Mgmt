@@ -49,7 +49,51 @@ Devops Management Tool
 --> navigate to project directory using cmd/terminal
 --> Run <code>npm install</code> Once all packages get downloaded
 --> Run <code>npm start</code>
---> The project by default will run on port 5000, make sure that port is not being used by other apps 
+--> The project by default will run on port 5000, make sure that port is not being used by other apps
+<h4 style="color: red;">Make the following API calls once and only once for the webservices to execute as expected</h4>
+<b>Since MongoDB does not provide increamental sequence numbers as opposed to SQL DBs, the below queries create separate docs to keep track and update sequence numbers for NPR, BFR, EPC, SPR, Users and FFR</b>
+
+#### To create increamental sequence number for NPR
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/counters/addCounter/NPR</code>
+<br/>
+Request URI params: None
+
+#### To create increamental sequence number for BFR
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/counters/addCounter/BFR</code>
+<br/>
+Request URI params: None
+
+#### To create increamental sequence number for FFR
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/counters/addCounter/FFR</code>
+<br/>
+Request URI params: None
+
+#### To create increamental sequence number for EPC
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/counters/addCounter/EPC</code>
+<br/>
+Request URI params: None
+
+#### To create increamental sequence number for SPR
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/counters/addCounter/SPR</code>
+<br/>
+Request URI params: None
+
+#### To create increamental sequence number for User
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/counters/addCounter/USER</code>
+<br/>
+Request URI params: None
 
 
 ## REST Web-Services Usage
