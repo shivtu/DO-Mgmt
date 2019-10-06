@@ -21,7 +21,8 @@ router.post("/addCounter/FFR", (req, res, next) => {
   });
   CTR.save().then((result) =>{
     res.status(201).json({
-      result: result
+      result: result,
+      warning: "This query must be executed strictly once and only once while initial setup"
     });
   })
   .catch((err) =>{
@@ -39,7 +40,8 @@ router.post("/addCounter/BFR", (req, res, next) => {
   });
   BFR.save().then((result) =>{
     res.status(201).json({
-      result: result
+      result: result,
+      warning: "This query must be executed strictly once and only once while initial setup"
     });
   })
   .catch((err) =>{
@@ -57,7 +59,8 @@ router.post("/addCounter/NPR", (req, res, next) => {
   });
   NPR.save().then((result) =>{
     res.status(201).json({
-      result: result
+      result: result,
+      warning: "This query must be executed strictly once and only once while initial setup"
     });
   })
   .catch((err) =>{
@@ -75,7 +78,8 @@ router.post("/addCounter/SPR", (req, res, next) => {
   });
   SPR.save().then((result) =>{
     res.status(201).json({
-      result: result
+      result: result,
+      warning: "This query must be executed strictly once and only once while initial setup"
     });
   })
   .catch((err) =>{
@@ -85,6 +89,7 @@ router.post("/addCounter/SPR", (req, res, next) => {
   });
 });
 
+
 router.post("/addCounter/EPC", (req, res, next) => {
   const EPC = new Counters({
     _id: new mongoose.Types.ObjectId(),
@@ -93,7 +98,28 @@ router.post("/addCounter/EPC", (req, res, next) => {
   });
   EPC.save().then((result) =>{
     res.status(201).json({
-      result: result
+      result: result,
+      warning: "This query must be executed strictly once and only once while initial setup"
+    });
+  })
+  .catch((err) =>{
+    res.status(500).json({
+      result: err
+    });
+  });
+});
+
+
+router.post("/addCounter/USER", (req, res, next) => {
+  const USER = new Counters({
+    _id: new mongoose.Types.ObjectId(),
+    modelType: "FFR",
+    sequence_value: 1,
+  });
+  USER.save().then((result) =>{
+    res.status(201).json({
+      result: result,
+      warning: "This query must be executed strictly once and only once while initial setup"
     });
   })
   .catch((err) =>{
@@ -104,7 +130,7 @@ router.post("/addCounter/EPC", (req, res, next) => {
 });
 
 router.delete("/delete/:_id", (req, res, next) =>{
-  
+
 });
 
 module.exports = router;
