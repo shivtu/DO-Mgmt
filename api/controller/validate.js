@@ -5,6 +5,19 @@ const fs = require("fs");
 
 validateMethods = {
 
+isUpdatingExceptions: (req, res, nex) =>{
+  if(req.body.updatedOn !== undefined || req.body.createdBy !== undefined || req.body.SRID !== undefined
+    || req.body._id !== undefined || req.body._id !== lifeCycle || req.body.epics !== lifeCycle
+    || req.body.createdOn !== lifeCycle || req.body.serviceType !== lifeCycle ) {
+      res.status(400).json({
+        result: "Some of the field values in the body cannot be updated",
+        message: "https://github.com/shivtu/DO-Mgmt"
+      });
+  } else {
+    next();
+  }
+},
+
   getEpicSprints: (req, res, next) => { /**Get Epic then find the existing sprints field in the Epic
                                         and pass it to original request with sprint array attached to req body */
     NewEpic.findOne({ SRID: req.params.SRID })
