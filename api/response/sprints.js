@@ -91,6 +91,25 @@ router.get("/find/filter", (req, res, next) => {
   });
 
 
+/* Find SPRINT using SRID*/
+router.get("/find/srid/:SRID", (req, res, next) => {
+    NewSprint.findOne({"SRID":req.params.SRID})
+      .then(result => {
+        res.status(200).json({ result: result });
+      })
+      .catch(e => res.status(500).json({ result: e.message }));
+  });
+
+/* Find all instances conditionally*/
+router.get("/find/filter", (req, res, next) => {
+    NewSprint.find(req.query)
+      .then(result => {
+        res.status(200).json({ result: result });
+      })
+      .catch(e => res.status(500).json({ result: e.message }));
+  });
+
+
 /**Update sequence number to create NPRID */
 const SPRSequence = Counters.findOneAndUpdate(
     { modelType: "SPR" },

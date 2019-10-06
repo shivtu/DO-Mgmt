@@ -105,7 +105,7 @@ router.post(
 );
 
 /**Experimental route */
-router.delete("/experiment/:_id", auth.authenticationMethod.authCheck, (req, res, next) => {
+router.delete("/experiment/:_id", (req, res, next) => {
 
   res.status(200).json({
     auth: 'auth success'

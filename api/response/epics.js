@@ -62,7 +62,7 @@ router.post(
 
 /**Find Epic using SRID */
 router.get("/find/SRID/:SRID", (req, res, next) => {
-  NewEpic.findOne({ SRID: req.params.SRID }).exec()
+  NewEpic.findOne({ "SRID": req.params.SRID }).exec()
     .then(result => {
       console.log(result);
       if (result === null) {
