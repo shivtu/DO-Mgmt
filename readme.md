@@ -102,6 +102,8 @@ Resource URI: <code>http://domain/api/v1/counters/all</code>
 <br/>
 Request URI params: None
 
+#### ****In case you find more than one counter for a table it must be deleted
+
 
 
 ## REST Web-Services Usage
