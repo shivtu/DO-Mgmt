@@ -132,6 +132,7 @@ router.patch(
   Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isAssigningRequest,
   Validate.validationMethod.isUploadingfile,
+  Validate.validationMethod.isUpdatingNPRExceptions,
   (req, res, next) => {
     Newproject.findByIdAndUpdate({ _id: req.params._id }, req.body, {
       new: true

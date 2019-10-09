@@ -5,14 +5,17 @@ const fs = require("fs");
 
 validateMethods = {
 
-isUpdatingExceptions: (req, res, nex) =>{
+  /**Restrict user updating certain fields */
+isUpdatingNPRExceptions: (req, res, next) =>{
   if(req.body.updatedOn !== undefined || req.body.createdBy !== undefined || req.body.SRID !== undefined
-    || req.body._id !== undefined || req.body.lifeCycle  !== undefined || req.body.epics !== undefined
+    || req.body._id !== undefined || req.body.epics !== undefined
     || req.body.createdOn !== undefined || req.body.serviceType !== undefined ) {
       res.status(400).json({
-        result: "Some of the field values in the body cannot be updated",
+        result: "Some of the field values in the request body cannot be updated",
         message: "https://github.com/shivtu/DO-Mgmt"
       });
+      console.log(req.body.updatedOn, req.body.createdBy, req.body.SRID, req.body._id, req.body.lifeCycle,
+        req.body.epics, req.body.createdOn, req.body.serviceType);
   } else {
     next();
   }
