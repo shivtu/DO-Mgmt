@@ -111,6 +111,7 @@ router.delete("/delete/:_id", (req, res, next) =>{
 /**update NPR, request body to be plain JSON object (Nested JSON not allowed) */
 router.patch(
   "/update/:_id",
+  Validate.validationMethod.getTheRecordById,
   Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isAssigningRequest,
   Validate.validationMethod.isUploadingfile,

@@ -5,6 +5,29 @@ const fs = require("fs");
 
 validateMethods = {
 
+  extractedResults: '',
+
+  getTheRecordById: (req, res, next) =>{
+    const originalUrlContent = req.originalUrl.split('/');
+    console.log(originalUrlContent[3]);
+    switch(originalUrlContent[3]) {
+      case 'newproject':
+        Newproject.findById({'_id': req.params._id}).exec()
+        .then((result) =>{
+          this.extractedResults = result;
+          console.log(this.extractedResults);
+        })
+        .catch((err) =>{
+          res.status(404).json({
+            result: 'Record not found'
+          });
+          return;
+        });
+    }
+  },
+
+
+
   /**Restrict user updating certain fields */
 isUpdatingNPRExceptions: (req, res, next) =>{
   if(req.body.updatedOn !== undefined || req.body.createdBy !== undefined || req.body.SRID !== undefined
@@ -20,6 +43,7 @@ isUpdatingNPRExceptions: (req, res, next) =>{
     next();
   }
 },
+
 
   getEpicSprints: (req, res, next) => { /**Get Epic then find the existing sprints field in the Epic
                                         and pass it to original request with sprint array attached to req body */
@@ -102,21 +126,27 @@ isUpdatingNPRExceptions: (req, res, next) =>{
       /**Always put request to in-progress state if the request is being assigned to another user*/
      req.body.phase = "in-progress";
       
-        Newproject.findById({ _id: req.params._id })
-        .then(result => {
-          result.lifeCycle.push({ /**Update the lifeCycle */
-            assignedTo: req.body.assignedTo,
-            assignedBy: req.body.currentUser,
-            assignedOn: utcDate.toUTCString()
-          });
-          req.body["lifeCycle"] = result.lifeCycle;
-          next();
-        })
-        .catch(err => {
-          res.status(500).json({
-            result: err.message
-          });
-        });
+        // Newproject.findById({ _id: req.params._id })
+        // .then(result => {
+        //   result.lifeCycle.push({ /**Update the lifeCycle */
+        //     assignedTo: req.body.assignedTo,
+        //     assignedBy: req.body.currentUser,
+        //     assignedOn: utcDate.toUTCString()
+        //   });
+        //   req.body["lifeCycle"] = result.lifeCycle;
+        //   next();
+        // })
+        // .catch(err => {
+        //   res.status(500).json({
+        //     result: err.message
+        //   });
+        // });
+        extractedResults.lifeCycle.push({ /**Update the lifeCycle */
+              assignedTo: req.body.assignedTo,
+              assignedBy: req.body.currentUser,
+              assignedOn: utcDate.toUTCString()
+            });
+
       } else if(req.body.assignedTo !== undefined && (originalUrlContent[4] === 'create')) { /**If user is creating new reecord 
                                                                                               and assign it simoultaneously */
         lifeCycle = [];
