@@ -7,6 +7,7 @@ validateMethods = {
 
   extractedResults: '',
 
+  /**Find the records and assing the result to extractedResults for consumption by other methods */
   getTheRecordById: (req, res, next) => {
     const originalUrlContent = req.originalUrl.split('/');
     switch (originalUrlContent[3]) {
