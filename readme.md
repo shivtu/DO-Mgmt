@@ -471,4 +471,78 @@ curl --request GET \
             "__v": 0
         }
     }
+    
+    
+
+### Updating an existing record (NPR)
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/newproject/update/_id/<record ObjectID></code>
+<br/>
+Request body format: <code>JSON</code>
+    
+#### Fields that can be updated
+<ul>
+    <li>productVersion</li>
+    <li>releases</li>
+    <li>updateNotes</li>
+    <li>files</li>
+    <li>priority</li>
+    <li>phase</li>
+    <li>repoLink</li>
+    <li>assignedTo</li>
+</ul>
+
+#### Example HTTP request (Shell CURL)
+curl --request PATCH \
+  --url http://localhost:5000/api/v1/newproject/update/5d9e9007a24fa12c0845cb61 \
+  --header 'Accept: */*' \
+  --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Cache-Control: no-cache' \
+  --header 'Connection: keep-alive' \
+  --header 'Content-Length: 85' \
+  --header 'Content-Type: application/json' \
+  --header 'Host: localhost:5000' \
+  --header 'cache-control: no-cache' \
+  --data '{"updateNotes":["update summary", "update long description"], "assignedTo":"ironMan"}'
+  
+#### Example expected response for the above query
+
+    {
+    "result": {
+        "productVersion": [],
+        "releases": [],
+        "serviceType": "New Project Request",
+        "createdOn": "2019-10-10T01:57:27.000Z",
+        "epics": [],
+        "updateNotes": [
+            {
+                "summary": "update summary",
+                "description": "update long description",
+                "updatedBy": "SuperMan"
+            }
+        ],
+        "lifeCycle": [
+            {
+                "assignedTo": "ironMan",
+                "assignedBy": "SuperMan",
+                "assignedOn": "Thu, 10 Oct 2019 02:08:39 GMT"
+            }
+        ],
+        "files": [],
+        "sprints": [],
+        "_id": "5d9e9007a24fa12c0845cb61",
+        "SRID": "NPR21",
+        "customerName": "Tesla",
+        "product": "car infotainment tool",
+        "priority": "2",
+        "createdBy": "SuperMan",
+        "summary": "another example summary",
+        "description": "another example long description",
+        "phase": "in-progress",
+        "repoLink": "https://github.com/shivtu/DO-Mgmt",
+        "__v": 0,
+        "assignedTo": "ironMan"
+        }
+    }
 
