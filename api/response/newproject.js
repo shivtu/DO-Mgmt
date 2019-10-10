@@ -112,6 +112,7 @@ router.delete("/delete/:_id", (req, res, next) =>{
 router.patch(
   "/update/:_id",
   Validate.validationMethod.getTheRecordById,
+  Validate.validationMethod.getTheRecordById,
   Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isAssigningRequest,
   Validate.validationMethod.isUploadingfile,

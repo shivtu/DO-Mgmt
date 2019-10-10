@@ -7,42 +7,40 @@ validateMethods = {
 
   extractedResults: '',
 
-  getTheRecordById: (req, res, next) =>{
+  getTheRecordById: (req, res, next) => {
     const originalUrlContent = req.originalUrl.split('/');
-    console.log(originalUrlContent[3]);
-    switch(originalUrlContent[3]) {
+    switch (originalUrlContent[3]) {
       case 'newproject':
-        Newproject.findById({'_id': req.params._id}).exec()
-        .then((result) =>{
-          this.extractedResults = result;
-          console.log(this.extractedResults);
-        })
-        .catch((err) =>{
-          res.status(404).json({
-            result: 'Record not found'
+        Newproject.findById({ '_id': req.params._id }).exec()
+          .then((result) => {
+            this.extractedResults = result;
+            // console.log(this.extractedResults);
+            next();
+          })
+          .catch((err) => {
+            res.status(404).json({
+              result: 'Record not found'
+            });
+            return;
           });
-          return;
-        });
     }
   },
 
 
 
   /**Restrict user updating certain fields */
-isUpdatingNPRExceptions: (req, res, next) =>{
-  if(req.body.updatedOn !== undefined || req.body.createdBy !== undefined || req.body.SRID !== undefined
-    || req.body._id !== undefined || req.body.epics !== undefined
-    || req.body.createdOn !== undefined || req.body.serviceType !== undefined ) {
+  isUpdatingNPRExceptions: (req, res, next) => {
+    if (req.body.updatedOn !== undefined || req.body.createdBy !== undefined || req.body.SRID !== undefined
+      || req.body._id !== undefined || req.body.epics !== undefined
+      || req.body.createdOn !== undefined || req.body.serviceType !== undefined) {
       res.status(400).json({
         result: "Some of the field values in the request body cannot be updated",
         message: "https://github.com/shivtu/DO-Mgmt"
       });
-      console.log(req.body.updatedOn, req.body.createdBy, req.body.SRID, req.body._id, req.body.lifeCycle,
-        req.body.epics, req.body.createdOn, req.body.serviceType);
-  } else {
-    next();
-  }
-},
+    } else {
+      next();
+    }
+  },
 
 
   getEpicSprints: (req, res, next) => { /**Get Epic then find the existing sprints field in the Epic
@@ -67,11 +65,11 @@ isUpdatingNPRExceptions: (req, res, next) =>{
   },
 
 
-  isEpicBackLogOk: (req, res, next) =>{
-    if(req.body.backLogs !== undefined && Array.isArray(req.body.backLogs)) {
+  isEpicBackLogOk: (req, res, next) => {
+    if (req.body.backLogs !== undefined && Array.isArray(req.body.backLogs)) {
       (req.body.backLogs).forEach(eachBackLog => {
-        Object.keys(eachBackLog).forEach(key =>{
-          if(key === "feature" || key === "points") {
+        Object.keys(eachBackLog).forEach(key => {
+          if (key === "feature" || key === "points") {
           } else {
             res.status(400).json({
               result: "Ill formated request body, see docs to format backLogs Array",
@@ -81,7 +79,7 @@ isUpdatingNPRExceptions: (req, res, next) =>{
         });
       });
       next();
-    } else if(req.body.backLogs !== undefined && !Array.isArray(req.body.backLogs)){
+    } else if (req.body.backLogs !== undefined && !Array.isArray(req.body.backLogs)) {
       res.status(400).json({
         result: "backLogs field must be an array",
         message: "https://github.com/shivtu/DO-Mgmt"
@@ -95,7 +93,6 @@ isUpdatingNPRExceptions: (req, res, next) =>{
       .then((result) => {
         if (result.SRID === req.params.SRID) {
           req.body['currentNPREpicsArray'] = result.epics;
-          console.log('findOne', req.body.currentNPREpicsArray);
           next();
         } else {
           res.status(400).json({
@@ -120,46 +117,32 @@ isUpdatingNPRExceptions: (req, res, next) =>{
 
     const utcDate = new Date();
     const originalUrlContent = req.originalUrl.split('/');
-    
+
     if (req.body.assignedTo !== undefined && (originalUrlContent[4] === 'update')) { /**User is assigning an existing record  */
 
       /**Always put request to in-progress state if the request is being assigned to another user*/
-     req.body.phase = "in-progress";
-      
-        // Newproject.findById({ _id: req.params._id })
-        // .then(result => {
-        //   result.lifeCycle.push({ /**Update the lifeCycle */
-        //     assignedTo: req.body.assignedTo,
-        //     assignedBy: req.body.currentUser,
-        //     assignedOn: utcDate.toUTCString()
-        //   });
-        //   req.body["lifeCycle"] = result.lifeCycle;
-        //   next();
-        // })
-        // .catch(err => {
-        //   res.status(500).json({
-        //     result: err.message
-        //   });
-        // });
-        extractedResults.lifeCycle.push({ /**Update the lifeCycle */
-              assignedTo: req.body.assignedTo,
-              assignedBy: req.body.currentUser,
-              assignedOn: utcDate.toUTCString()
-            });
+      req.body.phase = "in-progress";
 
-      } else if(req.body.assignedTo !== undefined && (originalUrlContent[4] === 'create')) { /**If user is creating new reecord 
+      this.extractedResults.lifeCycle.push({ /**Update the lifeCycle */
+        assignedTo: req.body.assignedTo,
+        assignedBy: req.body.currentUser,
+        assignedOn: utcDate.toUTCString()
+      });
+      req.body["lifeCycle"] = this.extractedResults.lifeCycle;
+      next();
+    } else if (req.body.assignedTo !== undefined && (originalUrlContent[4] === 'create')) { /**If user is creating new reecord 
                                                                                               and assign it simoultaneously */
-        lifeCycle = [];
-        lifeCycle.push({
-          assignedTo: req.body.assignedTo,
-          assignedBy: req.body.currentUser,
-          assignedOn: utcDate.toUTCString()
-        });
-        req.body['lifeCycle'] = lifeCycle;
-        next(); 
-      } else if(req.body.assignedTo === undefined) { /**User is not assigning record to anyone, continue with request */
-        next();
-      }
+      lifeCycle = [];
+      lifeCycle.push({
+        assignedTo: req.body.assignedTo,
+        assignedBy: req.body.currentUser,
+        assignedOn: utcDate.toUTCString()
+      });
+      req.body['lifeCycle'] = lifeCycle;
+      next();
+    } else if (req.body.assignedTo === undefined) { /**User is not assigning record to anyone, continue with request */
+      next();
+    }
   },
 
 
@@ -177,7 +160,7 @@ isUpdatingNPRExceptions: (req, res, next) =>{
 
   /**Check if user is providing update notes */
   isProvidingUpdates: (req, res, next) => {
-    
+
     const originalUrlContent = req.originalUrl.split('/');
     if (originalUrlContent[4] === 'create' && req.body.updateNotes !== undefined) { /**User is trying to provide update to a new request */
       console.log("User is trying to provide update to a new request");
@@ -200,11 +183,11 @@ isUpdatingNPRExceptions: (req, res, next) =>{
             message: 'was the web service recently upgraded?'
           });
       }
-    } else if ((originalUrlContent[4] === 'update') 
-    && (req.body.updateNotes !== undefined) 
-    && (Array.isArray(req.body.updateNotes))) {
+    } else if ((originalUrlContent[4] === 'update')
+      && (req.body.updateNotes !== undefined)
+      && (Array.isArray(req.body.updateNotes))) {
       console.log("User is trying to insert updateNotes on existing record");
-      if((req.body.updateNotes).length !== 2) {
+      if ((req.body.updateNotes).length !== 2) {
         console.log("User is trying to insert ill formatted updateNotes on existing record");
         res.status(400).json({
           result: "updateNotes can be of length 2 only",
@@ -212,50 +195,26 @@ isUpdatingNPRExceptions: (req, res, next) =>{
         });
         return;
       }
-      const baseUrlContent = req.baseUrl.split("/");
-      let requestType = baseUrlContent[baseUrlContent.length - 1];
 
-      switch (requestType) {
-        case 'newproject':
-          requestType = Newproject
-          break;
-        case 'bugfix':
-          requestType = Bugfix
-          break;
-        default:
-          break;
-      }
+      /**Format updateNotes field with fields : "summary", "description", "updatedBy"
+       * field: "updatedBy" is managed @authentication.js
+       */
+      const newNote = { summary: req.body.updateNotes[0], description: req.body.updateNotes[1], updatedBy: req.body.currentUser }
+      /**Push the newly formated updateNotes field to existing array */
+      this.extractedResults.updateNotes.push(newNote);
+      req.body.updateNotes = this.extractedResults.updateNotes;
+      next();
 
-      requestType.findById(req.params._id)
-        .then((result) => {
-          if(result === null) { /**If there are no records for _id return 400 */
-            res.status(400).json({
-              result: req.params._id + ' does not represent any record'
-            });
-            return;
-          }
-          /**Format updateNotes field with fields : "summary", "description", "updatedBy"
-           * field: "updatedBy" is managed @authentication.js
-           */
-          const newNote = { summary: req.body.updateNotes[0], description: req.body.updateNotes[1], updatedBy: req.body.currentUser }
-          /**Push the newly formated updateNotes field to existing array */
-          result.updateNotes.push(newNote);
-          req.body.updateNotes = result.updateNotes;
-          next();
-        })
-        .catch((error) => {
-          result.status(500).json({
-            result: error.message
-          });
-        });
-    } else if((originalUrlContent[4] !== 'update') && (req.body.updateNotes === undefined)) {
+    } else if ((originalUrlContent[4] !== 'update') && (req.body.updateNotes === undefined)) {
       console.log("User is trying to update new record without inserting updateNotes");
       next();
-    } else if((originalUrlContent[4] === 'update') && !(Array.isArray(req.body.updateNotes))) {
-      res.status(400).json({
-        result: 'Ill formated update notes',
-        message: 'https://github.com/shivtu/DO-Mgmt'
-      });
+    } else if ((originalUrlContent[4] === 'update') && (req.body.updateNotes !== undefined) && (!Array.isArray(req.body.updateNotes))) {
+        res.status(400).json({
+          result: 'Ill formated update notes',
+          message: 'https://github.com/shivtu/DO-Mgmt'
+        });
+    } else {
+      next();
     }
   },
 
@@ -288,52 +247,27 @@ isUpdatingNPRExceptions: (req, res, next) =>{
       array of file field and push new JSON 
       object to existing array of file field */
 
-      const baseUrlContent = req.baseUrl.split("/");
-      let requestType = baseUrlContent[baseUrlContent.length - 1];
-      switch (
-      requestType /**switch between service request type to search existing array of file field
-                             depending upon the request made by the user */
-      ) {
-        case "newproject":
-          requestType = Newproject;
-          break;
-        case "bugfix":
-          requestType = Bugfix;
-          break;
-        default:
-          break;
-      }
-      requestType
-        .findById(req.params._id)
-        .then(result => {
-          this.validationMethod
-            .saveFile(req, res, next)
-            .then(savedFilePaths => {
-              result.files.push(
-                savedFilePaths
-              ); /**search for existing files array 
+      this.validationMethod
+        .saveFile(req, res, next)
+        .then(savedFilePaths => {
+          this.extractedResults.files.push(
+            savedFilePaths
+          ); /**search for existing files array 
                   in the record and push the new files 
                   object into the retrieved array */
-              req.body.files = result.files;
-              next();
-            })
-            .catch(err => {
-              res.status(500).json({
-                result: err.message
-              });
-            });
+          req.body.files = this.extractedResults.files;
+          next();
         })
         .catch(err => {
           res.status(500).json({
             result: err.message
           });
         });
+
     } else if (req.body.files === undefined && req.params._id !== undefined) {
       next();
     }
   },
-
-
 
 
 
