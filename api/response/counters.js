@@ -129,8 +129,36 @@ router.post("/addCounter/USER", (req, res, next) => {
   });
 });
 
-router.delete("/delete/:_id", (req, res, next) =>{
 
+/**Reset Counter */
+router.put("/reset/:_id", (req, res, next) =>{
+  Counters.findOneAndUpdate().exec()
+  .then((result) =>{
+    res.status(200).json({
+      result: result
+    });
+  })
+  .catch((err) =>{
+    res.status(500).json({
+      result: err
+    });
+  });
+});
+
+
+/**Delete a counter */
+router.delete("/delete/:_id", (req, res, next) =>{
+  Counters.findByIdAndDelete({'_id': _id}).exec()
+  .then((result) =>{
+    res.status(200).json({
+      result: result
+    });
+  })
+  .catch((err) =>{
+    res.status(500).json({
+      result: err
+    });
+  });
 });
 
 module.exports = router;

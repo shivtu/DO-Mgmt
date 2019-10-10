@@ -51,13 +51,8 @@ router.post(
   Validate.validationMethod.isUploadingfile,
   Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isClosingRequest,
+  Validate.validationMethod.isAssigningRequest,
   (req, res, next) => {
-    // if(!productVersion.isArray() || productVersion[0] === undefined) {
-    //   res.status(400).json({
-    //     result: 'Product version is required'
-    //   });
-    //   return;
-    // }
     NPRSequence.exec() /**Increament NPR sequence number */
       .then(seq => {
         const utcDate = new Date();
@@ -77,12 +72,7 @@ router.post(
           repoLink: req.body.repoLink,
           childTasks: [],
           files: req.body.files,
-          lifeCycle: [
-            {
-              assignedTo: req.body.assignedTo,
-              assignedOn: utcDate.toUTCString()
-            }
-          ]
+          lifeCycle: req.body.lifeCycle
         });
         NPR.save()
           .then(result => {
@@ -104,18 +94,10 @@ router.post(
   }
 );
 
-/**Experimental route */
-router.delete("/experiment/:_id", (req, res, next) => {
-
-  res.status(200).json({
-    auth: 'auth success'
-  });
-  
-});
 
 /**Delete request IDs */
 router.delete("/delete/:_id", (req, res, next) =>{
-  Newproject.findByIdAndRemove({ _id: req.params._id })
+  Newproject.findByIdAndDelete({ _id: req.params._id })
     .then(result => {
       res.status(200).json({
         result: result

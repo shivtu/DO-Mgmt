@@ -90,26 +90,24 @@ isUpdatingNPRExceptions: (req, res, next) =>{
 
 
   /**Check if user is assigning the request to other user
-   * If true, add/overwrite status = in-progress
+   * If true, add/overwrite phase = in-progress and add/overwrite lifeCycle
    */
   isAssigningRequest: (req, res, next) => {
 
     const utcDate = new Date();
     const originalUrlContent = req.originalUrl.split('/');
     
-    if (req.body.assignedTo !== undefined) {
+    if (req.body.assignedTo !== undefined && (originalUrlContent[4] === 'update')) { /**User is assigning an existing record  */
 
       /**Always put request to in-progress state if the request is being assigned to another user*/
      req.body.phase = "in-progress";
-
-      /**User is assigning an existing record  */
-      if(originalUrlContent[4] === 'update'){
+      
         Newproject.findById({ _id: req.params._id })
         .then(result => {
-          result.lifeCycle.push({
+          result.lifeCycle.push({ /**Update the lifeCycle */
             assignedTo: req.body.assignedTo,
-            assignedOn: utcDate.toUTCString(),
-            assignedBy: req.body.currentUser
+            assignedBy: req.body.currentUser,
+            assignedOn: utcDate.toUTCString()
           });
           req.body["lifeCycle"] = result.lifeCycle;
           next();
@@ -119,19 +117,20 @@ isUpdatingNPRExceptions: (req, res, next) =>{
             result: err.message
           });
         });
-      } else {
-        next(); /**If user is creating new reecord and assign it simoultaneously continue with request */
+      } else if(req.body.assignedTo !== undefined && (originalUrlContent[4] === 'create')) { /**If user is creating new reecord 
+                                                                                              and assign it simoultaneously */
+        lifeCycle = [];
+        lifeCycle.push({
+          assignedTo: req.body.assignedTo,
+          assignedBy: req.body.currentUser,
+          assignedOn: utcDate.toUTCString()
+        });
+        req.body['lifeCycle'] = lifeCycle;
+        next(); 
+      } else if(req.body.assignedTo === undefined) { /**User is not assigning record to anyone, continue with request */
+        next();
       }
-    } else {
-      req.body.lifeCycle = {
-        assignedTo: requestAnimationFrame.body.currentUser,
-        assignedOn: utcDate.toUTCString(),
-        assignedBy: 'auto-assigned'
-      };
-      next();
-    }
   },
-
 
 
 
@@ -222,6 +221,11 @@ isUpdatingNPRExceptions: (req, res, next) =>{
     } else if((originalUrlContent[4] !== 'update') && (req.body.updateNotes === undefined)) {
       console.log("User is trying to update new record without inserting updateNotes");
       next();
+    } else if((originalUrlContent[4] === 'update') && !(Array.isArray(req.body.updateNotes))) {
+      res.status(400).json({
+        result: 'Ill formated update notes',
+        message: 'https://github.com/shivtu/DO-Mgmt'
+      });
     }
   },
 
