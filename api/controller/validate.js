@@ -6,6 +6,7 @@ const fs = require("fs");
 validateMethods = {
 
   extractedResults__id: '',
+  extractedResults_SRID: '',
 
   /**Find the records and assing the result to extractedResults__id for consumption by other methods */
   getRecordById: (req, res, next) => {
@@ -24,6 +25,25 @@ validateMethods = {
             });
             return;
           });
+    }
+  },
+
+
+  getRecordBySRID: (req, res, next) =>{
+    const originalUrlContent = req.originalUrl.split('/');
+    switch (originalUrlContent[3]) {
+      case 'newproject':
+        Newproject.findOneAndUpdate({'SRID': req.params.SRID}).exec()
+        .then((result) =>{
+          this.extractedResults_SRID = result;
+          next();
+        })
+        .catch((err) =>{
+          res.status(404).json({
+            result: 'Record not found'
+          });
+          return;
+        })
     }
   },
 
