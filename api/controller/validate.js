@@ -5,17 +5,17 @@ const fs = require("fs");
 
 validateMethods = {
 
-  extractedResults: '',
+  extractedResults__id: '',
 
-  /**Find the records and assing the result to extractedResults for consumption by other methods */
-  getTheRecordById: (req, res, next) => {
+  /**Find the records and assing the result to extractedResults__id for consumption by other methods */
+  getRecordById: (req, res, next) => {
     const originalUrlContent = req.originalUrl.split('/');
     switch (originalUrlContent[3]) {
       case 'newproject':
         Newproject.findById({ '_id': req.params._id }).exec()
           .then((result) => {
-            this.extractedResults = result;
-            // console.log(this.extractedResults);
+            this.extractedResults__id = result;
+            // console.log(this.extractedResults__id);
             next();
           })
           .catch((err) => {
@@ -124,12 +124,12 @@ validateMethods = {
       /**Always put request to in-progress state if the request is being assigned to another user*/
       req.body.phase = "in-progress";
 
-      this.extractedResults.lifeCycle.push({ /**Update the lifeCycle */
+      this.extractedResults__id.lifeCycle.push({ /**Update the lifeCycle */
         assignedTo: req.body.assignedTo,
         assignedBy: req.body.currentUser,
         assignedOn: utcDate.toUTCString()
       });
-      req.body["lifeCycle"] = this.extractedResults.lifeCycle;
+      req.body["lifeCycle"] = this.extractedResults__id.lifeCycle;
       next();
     } else if (req.body.assignedTo !== undefined && (originalUrlContent[4] === 'create')) { /**If user is creating new reecord 
                                                                                               and assign it simoultaneously */
@@ -202,8 +202,8 @@ validateMethods = {
        */
       const newNote = { summary: req.body.updateNotes[0], description: req.body.updateNotes[1], updatedBy: req.body.currentUser }
       /**Push the newly formated updateNotes field to existing array */
-      this.extractedResults.updateNotes.push(newNote);
-      req.body.updateNotes = this.extractedResults.updateNotes;
+      this.extractedResults__id.updateNotes.push(newNote);
+      req.body.updateNotes = this.extractedResults__id.updateNotes;
       next();
 
     } else if ((originalUrlContent[4] !== 'update') && (req.body.updateNotes === undefined)) {
@@ -251,12 +251,12 @@ validateMethods = {
       this.validationMethod
         .saveFile(req, res, next)
         .then(savedFilePaths => {
-          this.extractedResults.files.push(
+          this.extractedResults__id.files.push(
             savedFilePaths
           ); /**search for existing files array 
                   in the record and push the new files 
                   object into the retrieved array */
-          req.body.files = this.extractedResults.files;
+          req.body.files = this.extractedResults__id.files;
           next();
         })
         .catch(err => {
