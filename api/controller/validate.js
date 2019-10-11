@@ -33,7 +33,7 @@ validateMethods = {
     const originalUrlContent = req.originalUrl.split('/');
     switch (originalUrlContent[3]) {
       case 'newproject':
-        Newproject.findOneAndUpdate({'SRID': req.params.SRID}).exec()
+        Newproject.findOne({'SRID': req.params.SRID}).exec()
         .then((result) =>{
           this.extractedResults_SRID = result;
           next();
