@@ -28,7 +28,16 @@ router.get("/find/_id/:_id", (req, res, next) => {
 
 /* Find all instances*/
 router.get("/find/findAll", (req, res, next) => {
-  Newproject.find()
+  Newproject.find().limit(2).exec()
+    .then(result => {
+      res.status(200).json({ result: result });
+    })
+    .catch(e => res.status(500).json({ result: e.message }));
+});
+
+/* Find all instances with a limit to response*/
+router.get("/find/findAll/limit/:limit", (req, res, next) => {
+  Newproject.find().limit(req.params.limit|0).exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -39,6 +48,16 @@ router.get("/find/findAll", (req, res, next) => {
 router.get("/find/filter", (req, res, next) => {
   // console.log('params',req.query);
   Newproject.find(req.query)
+    .then(result => {
+      res.status(200).json({ result: result });
+    })
+    .catch(e => res.status(500).json({ result: e.message }));
+});
+
+/* Find all instances conditionally*/
+router.get("/find/filter/limit/:limit", (req, res, next) => {
+  // console.log('params',req.query);
+  Newproject.find(req.query).limit(req.params.limit|0).exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -111,8 +130,7 @@ router.delete("/delete/:_id", (req, res, next) =>{
 /**update NPR, request body to be plain JSON object (Nested JSON not allowed) */
 router.patch(
   "/update/:_id",
-  Validate.validationMethod.getTheRecordById,
-  Validate.validationMethod.getTheRecordById,
+  Validate.validationMethod.getRecordById,
   Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isAssigningRequest,
   Validate.validationMethod.isUploadingfile,

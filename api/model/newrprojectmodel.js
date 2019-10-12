@@ -45,7 +45,7 @@ const newProjectRequestSchema = mongoose.Schema({
   updateNotes: { type: Array, default: [] },
   lifeCycle: {
     type: Array, default: []
-  } /**{assignedUser: userName, assignedOn: Date} */,
+  } /**{assignedUser: userName, assignedOn: Date, assignedBy: currentUser} */,
   files: { type: Array, default: [] },
   deliveredOn: { type: Date },
   sprints: {type: Array, default: [] }

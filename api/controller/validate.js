@@ -29,6 +29,7 @@ validateMethods = {
   },
 
 
+  /**Find the records and assing the result to extractedResults_SRID for consumption by other methods */
   getRecordBySRID: (req, res, next) =>{
     const originalUrlContent = req.originalUrl.split('/');
     switch (originalUrlContent[3]) {
@@ -66,7 +67,7 @@ validateMethods = {
 
   getEpicSprints: (req, res, next) => { /**Get Epic then find the existing sprints field in the Epic
                                         and pass it to original request with sprint array attached to req body */
-    NewEpic.findOne({ SRID: req.params.SRID })
+    NewEpic.findOne({ 'SRID': req.params.SRID })
       .then((result) => {
         if (result.SRID === req.params.SRID) {
           req.body['NPRID'] = result.NPRID;
