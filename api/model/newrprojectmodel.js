@@ -6,7 +6,8 @@ const phases = [
   "on-hold",
   "delivered",
   "maintenance",
-  "support"
+  "support",
+  "updateReleased"
 ]; /**While ammending this array,
 make sure no methods in Vlidate.js gets affected  */
 
@@ -30,7 +31,7 @@ const newProjectRequestSchema = mongoose.Schema({
   } /* Set index to true for faster search on DB. This field is auto generated */,
   customerName: { type: String, required: true },
   product: { type: String, required: true},
-  productVersion: { type: Array, required: true },
+  productVersion: { type: Array },
   releases: { type: Array, default: [] },
   serviceType: { type: String, default: "New Project Request" },
   priority: { type: String, required: true, enum: priorityTypes },

@@ -477,7 +477,7 @@ curl --request GET \
 ### Updating an existing record (NPR)
 HTTP Request Type: <code>PATCH</code>
 <br/>
-Resource URI: <code>http://domain/api/v1/newproject/update/_id/<record ObjectID></code>
+Resource URI: <code>http://domain/api/v1/newproject/update/< _id ></code>
 <br/>
 Request body format: <code>JSON</code>
     
@@ -545,4 +545,28 @@ curl --request PATCH \
         "assignedTo": "ironMan"
         }
     }
+
+##### Consider separate routes for updating different fields instead of using the above generalized update method<br/>This has performance benifits
+
+Updating updateNotes
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/newproject/update/updateNotes/< _id ></code>
+<br/>
+Request body format: <code>Array of length 2 only</code>
+
+Updating files
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/newproject/update/files/< _id ></code>
+<br/>
+Request body format: <code>Array of length 2 only</code>
+
+
+Updating assignedTo
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/newproject/update/assignedTo/< _id ></code>
+<br/>
+Request body format: <code>String</code>
 

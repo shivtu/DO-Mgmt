@@ -50,6 +50,31 @@ validateMethods = {
 
 
 
+  /**Check to see if project is completed and entering release/support/maintenance phase */
+  isReleasingProject: (req, res, next) =>{
+    if(req.body.phase === 'delivered' || req.body.phase === 'maintenance' || req.body.phase === 'support' 
+    || req.body.phase === 'updateReleased') {
+
+      if(req.body.productVersion !== undefined) { /**If product version number is not provided by user throw error */
+        const utcDate = new Date();
+        this.extractedResults__id.releases.push({
+          releaseUpdatedBy: req.body.currentUser,
+          releaseUpdatedOn: utcDate.toUTCString(),
+          latestVersion: req.body.productVersion
+        });
+        req.body['releases'] = this.extractedResults__id.releases;
+        next();
+      }
+    } else {
+      res.status(400).json({
+        result: 'product version is required'
+      });
+      return;
+    }
+  },
+
+
+
   /**Restrict user updating certain fields */
   isUpdatingNPRExceptions: (req, res, next) => {
     if (req.body.updatedOn !== undefined || req.body.createdBy !== undefined || req.body.SRID !== undefined
@@ -295,10 +320,11 @@ validateMethods = {
 
   /**isFileSaved promise wrapped in saveFile function that returns the promise for cunsmption by other methods  */
   saveFile: (req, res, next) => {
-    if (req.body.files.length !== 2) {
+    if (req.body.files.length !== 2 && Array.isArray(req.body.files)) {
       res.status(400).json({
         result: "request body files array can be of length 2 only"
       });
+      return;
     }
     isFileSaved = new Promise((resolve, reject) => {
       const originalFileName = req.body.files[0];
@@ -328,8 +354,6 @@ validateMethods = {
     });
     return isFileSaved;
   },
-
-  _promise: new Promise((resolve, reject) => { })
 };
 
 exports.validationMethod = validateMethods;
