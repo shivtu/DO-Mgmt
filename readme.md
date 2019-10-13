@@ -558,14 +558,14 @@ HTTP Request Type: <code>PATCH</code>
 <br/>
 Resource URI: <code>http://domain/api/v1/newproject/update/updateNotes/< _id ></code>
 <br/>
-Request body format: <code>Array of length 2 only</code>
+Request body format: <code>{updateNotes: ["summary", "Long Description"]}</code>
 
 Updating files:<br/>
 HTTP Request Type: <code>PATCH</code>
 <br/>
 Resource URI: <code>http://domain/api/v1/newproject/update/files/< _id ></code>
 <br/>
-Request body format: <code>Array of length 2 only</code>
+Request body format: <code>{updateNotes: ["Original file name", "File content in Base64 string"]}</code>
 
 
 Updating assignedTo:<br/>
@@ -573,5 +573,5 @@ HTTP Request Type: <code>PATCH</code>
 <br/>
 Resource URI: <code>http://domain/api/v1/newproject/update/assignedTo/< _id ></code>
 <br/>
-Request body format: <code>String</code>
+Request body format: <code>{"assignedTo": "user name"}</code>
 
