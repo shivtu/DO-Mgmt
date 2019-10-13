@@ -311,7 +311,10 @@ curl --request GET \
   --header 'Host: localhost:5000' \
   --header 'cache-control: no-cache'
  
- 
+##### To limit the number of records in the response body, append the URI with /limit/< limit value >
+Example:  <code>http://domain/api/v1/newproject/find/findall/limit/5</code>
+
+
 ### Find NewProject Requests using filters (NPR)
 HTTP Request Type: <code>GET</code>
 <br/>
@@ -361,7 +364,8 @@ curl --request GET \
     ]
     }
 
-
+##### To limit the number of records in the response body, append the URI with /limit/< limit value >
+Example:  <code>http://domain.com/api/v1/newproject/find/filter/limit/5?< field name >=<  field value >&< field name >=< field value ></code>
 
 ### Find single record of NewProject Request using SRID (NPR)
 HTTP Request Type: <code>GET</code>
