@@ -53,7 +53,7 @@ validateMethods = {
   /**Check to see if project is completed and entering release/support/maintenance phase */
   isReleasingProject: (req, res, next) =>{
     if(req.body.phase === 'delivered' || req.body.phase === 'maintenance' || req.body.phase === 'support' 
-    || req.body.phase === 'updateReleased') {
+    || req.body.phase === 'release') {
 
       if(req.body.productVersion !== undefined) { /**If product version number is not provided by user throw error */
         const utcDate = new Date();

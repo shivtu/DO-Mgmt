@@ -7,7 +7,7 @@ const phases = [
   "delivered",
   "maintenance",
   "support",
-  "updateReleased"
+  "release"
 ]; /**While ammending this array,
 make sure no methods in Vlidate.js gets affected  */
 
