@@ -293,6 +293,7 @@ curl --request POST \
         }
     }
     
+<hr/>    
     
 ### Find all NewProject Requests (NPR)
 HTTP Request Type: <code>GET</code>
@@ -311,7 +312,8 @@ curl --request GET \
   --header 'Host: localhost:5000' \
   --header 'cache-control: no-cache'
  
- 
+<hr/> 
+
 ### Find NewProject Requests using filters (NPR)
 HTTP Request Type: <code>GET</code>
 <br/>
@@ -361,7 +363,7 @@ curl --request GET \
     ]
     }
 
-
+<hr/>
 
 ### Find single record of NewProject Request using SRID (NPR)
 HTTP Request Type: <code>GET</code>
@@ -423,7 +425,7 @@ curl --request GET \
         ]
     }
 
-
+<hr/>
 
 ### Find single record of NewProject Request using _id (NPR)
 HTTP Request Type: <code>GET</code>
@@ -473,6 +475,7 @@ curl --request GET \
     }
     
     
+<hr/>
 
 ### Updating an existing record (NPR)
 HTTP Request Type: <code>PATCH</code>
@@ -546,6 +549,7 @@ curl --request PATCH \
         }
     }
 
+<hr/>
 ##### Consider separate routes for updating different fields instead of using the above generalized update method<br/>This has performance benifits
 
 Updating updateNotes
