@@ -44,10 +44,10 @@
     <li>NodeJs - version 10.16 or above</li>
 </ul>
 
---> Clone the project or download the zipped file
---> navigate to project directory using cmd/terminal
---> Run <code>npm install</code> Once all packages get downloaded
---> Run <code>npm start</code>
+--> Clone the project or download the zipped file<br/>
+--> navigate to project directory using cmd/terminal<br/>
+--> Run <code>npm install</code> Once all packages get downloaded<br/>
+--> Run <code>npm start</code><br/>
 --> The project by default will run on port 5000, make sure that port is not being used by other apps
 <h4>**** Make the following API calls once and only once for the webservices to execute as expected</h4>
 <b>Since MongoDB does not provide increamental sequence numbers as opposed to SQL DBs, the below queries create separate docs to keep track and update sequence numbers for NPR, BFR, EPC, SPR, Users and FFR</b>
