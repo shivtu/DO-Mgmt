@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const Users = require('../model/usermodel');
-const authCheck = require('../auth/authentication');
 
 router.get('/find/findAll', (req, res, next) =>{
     Users.find().then((result) =>{

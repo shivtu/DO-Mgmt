@@ -7,7 +7,7 @@ const statusTypes = [
   "fixed",
   "canceled"
 ];
-const priorityTypes = [
+const impactTypes = [
   "critical",
   "high",
   "medium",
@@ -28,15 +28,17 @@ const bugFixSchema = mongoose.Schema({
   product: { type: String, required: true },
   affectedVersions: { type: Array, required: true },
   serviceType: { type: String, default: "Bug Fix Request" },
-  impact: { type: String, required: true, enum: priorityTypes },
+  impact: { type: String, required: true, enum: impactTypes },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
+  priority: { type: String, required: true },
   createdBy: { type: String, required: true },
   assignedTo: { type: String },
   summary: { type: String, required: true },
   description: { type: String, required: true },
-  stepsToReproduce: { type: Array },
+  recreationSteps: { type: Array, required: true },
   status: { type: String, required: true, enum: statusTypes },
-  endDate: { type: Date, required: true, min: Date.now() },
+  closedOn: { type: Date, required: true, min: Date.now() },
+  resolutionNotes: { type: String },
   updateNotes: { type: Array, default: [] },
   NPRId: { type: String },
   files: { type: Array }

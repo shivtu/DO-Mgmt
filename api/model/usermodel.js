@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
   group: { type: Number, required: true },
   userId: { type: Number, required: true },
   password: { type: String, required: true },
+  role: { type: String, require: true, default: "X" },
   Gender: {
     type: String,
     required: true,

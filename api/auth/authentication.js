@@ -1,14 +1,25 @@
+const exec = require('child_process').exec;
 /* Dummy module for authentication and authorization
  call next() after third party auth,
  setTimeout function mocks the delay created in calling a third party authentication service */
 
 authMethods = {
-
+  /**Example of promises within auth module */
   promise2 :new Promise((resolve, reject) =>{
   setTimeout(() => {
       resolve({auth: true, role: 'admin'});
   }, 3000);
 }),
+
+exlcludedAuthProcess: (res, req, next) =>{
+  exec('C:\\Users\\fit\\Desktop\\NodeJs\\DO-Mgmt\\api\\auth\\hello.bat', (err, stdout, stderr) =>{
+    if(err) {
+        console.log(err);
+    } else {
+      console.log(stdout) ;
+    }
+});
+},
 
 dummyAuth: (req, res, next) =>{
   console.log('auth success');
