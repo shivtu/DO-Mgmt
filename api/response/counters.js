@@ -93,7 +93,7 @@ router.post("/addCounter/SPR", (req, res, next) => {
 router.post("/addCounter/EPC", (req, res, next) => {
   const EPC = new Counters({
     _id: new mongoose.Types.ObjectId(),
-    modelType: "FFR",
+    modelType: "EPC",
     sequence_value: 1,
   });
   EPC.save().then((result) =>{
@@ -113,7 +113,7 @@ router.post("/addCounter/EPC", (req, res, next) => {
 router.post("/addCounter/USER", (req, res, next) => {
   const USER = new Counters({
     _id: new mongoose.Types.ObjectId(),
-    modelType: "FFR",
+    modelType: "USR",
     sequence_value: 1,
   });
   USER.save().then((result) =>{

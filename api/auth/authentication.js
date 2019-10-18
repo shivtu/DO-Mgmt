@@ -11,14 +11,15 @@ authMethods = {
   }, 3000);
 }),
 
+/**Experimental */
 exlcludedAuthProcess: (res, req, next) =>{
   exec('C:\\Users\\fit\\Desktop\\NodeJs\\DO-Mgmt\\api\\auth\\hello.bat', (err, stdout, stderr) =>{
     if(err) {
         console.log(err);
     } else {
       console.log(stdout) ;
-    }
-});
+      }
+  });
 },
 
 dummyAuth: (req, res, next) =>{
@@ -27,17 +28,8 @@ dummyAuth: (req, res, next) =>{
   req.body['currentUser'] = "SuperMan"; /**Add current user to request body */
   req.body['currentUserRole'] = "admin"; /**Add current user role to request body */
   next();
-},
+  },
 
-userRole: (req, res, next) =>{
-  setTimeout(() => {
-    if(req.headers.authorization === 'admin') {
-      next();
-    }else {
-      return 'non-admin';
-      }
-    }, 3000);  
-  }
 };
 
 exports.authenticationMethod = authMethods;
