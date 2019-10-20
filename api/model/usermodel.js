@@ -3,23 +3,16 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   firstName: { type: String, required: true },
-  middleName: { type: String, default: "NA" },
+  middleName: { type: String, default: "N/A" },
   lastName: { type: String, required: true },
-  email: { type: String, unique : true, required : true, dropDups: true },
-  group: { type: Number, required: true },
+  phone: {type: String, index: true, unique : true, dropDups: true },
+  email: { type: String, unique : true, required : true, dropDups: true, index: true },
+  group: { type: String, required: true, enum: ["customer", "internal", "vendor"] },
   userId: { type: String, unique : true, required : true, dropDups: true },
   initPwd: { type: String, required: true },
-  role: { type: String, require: true, default: "RO" },
-  status: { type: String, required: true, default: "Active" },
-  security: { type: Array, required: true,
-    default: [
-              {"question": "", "answer":""},
-              {"question": "", "answer":""},
-              {"question": "", "answer":""},
-              {"question": "", "answer":""},
-              {"question": "", "answer":""}
-            ]
-      },
+  role: { type: String, require: true, enum: ["admin", "dev", "dev-ops", "product-owner", "project-manager", "sales"] },
+  status: { type: String, required: true, enum: ["Active", "In-Active"], default: "Active" },
+  security: { type: Array },
   gender: {
     type: String,
     required: true,

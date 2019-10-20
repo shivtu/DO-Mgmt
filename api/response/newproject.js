@@ -9,7 +9,7 @@ const fs = require("fs");
 /*Find instance using service ID*/
 router.get("/find/srid/:serviceId", (req, res, next) => {
   const serviceId = req.params.serviceId.toUpperCase();
-  Newproject.findOne({ SRID: serviceId }).exec()
+  Newproject.findOne({ 'SRID': serviceId }).exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -18,8 +18,7 @@ router.get("/find/srid/:serviceId", (req, res, next) => {
 
 /*Find instance using service ID*/
 router.get("/find/_id/:_id", (req, res, next) => {
-  const objectID = req.params._id.toUpperCase();
-  Newproject.findById({ _id: objectID }).exec()
+  Newproject.findById({ '_id': req.params._id }).exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -28,7 +27,7 @@ router.get("/find/_id/:_id", (req, res, next) => {
 
 /* Find all instances*/
 router.get("/find/findAll", (req, res, next) => {
-  Newproject.find().limit(2).exec()
+  Newproject.find().exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -36,8 +35,8 @@ router.get("/find/findAll", (req, res, next) => {
 });
 
 /* Find all instances with a limit to response*/
-router.get("/find/findAll/limit/:limit", (req, res, next) => {
-  Newproject.find().limit(req.params.limit|0).exec()
+router.get("/find/findAll/limit/:_limit", (req, res, next) => {
+  Newproject.find().limit(req.params._limit|0).exec()
     .then(result => {
       res.status(200).json({ result: result });
     })
@@ -55,7 +54,7 @@ router.get("/find/filter", (req, res, next) => {
 });
 
 /* Find all instances conditionally*/
-router.get("/find/filter/limit/:limit", (req, res, next) => {
+router.get("/find/filter/limit/:_limit", (req, res, next) => {
   // console.log('params',req.query);
   Newproject.find(req.query).limit(req.params.limit|0).exec()
     .then(result => {
@@ -114,7 +113,6 @@ router.post(
       });
   }
 );
-
 
 /**Delete request IDs */
 router.delete("/delete/:_id", (req, res, next) =>{

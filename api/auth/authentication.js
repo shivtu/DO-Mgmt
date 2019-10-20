@@ -11,7 +11,9 @@ authMethods = {
   }, 3000);
 }),
 
-/**Experimental */
+/**Experimental
+ * Execute an external process to verify user auth
+*/
 exlcludedAuthProcess: (res, req, next) =>{
   exec('C:\\Users\\fit\\Desktop\\NodeJs\\DO-Mgmt\\api\\auth\\hello.bat', (err, stdout, stderr) =>{
     if(err) {
@@ -30,6 +32,15 @@ dummyAuth: (req, res, next) =>{
   next();
   },
 
+  /**Verify JSON Web Token */
+  verifyToken: (req, res, next) =>{
+
+  },
+
+  /**Create user Token */
+  createToken: (req, res, next) =>{
+
+  }
 };
 
 exports.authenticationMethod = authMethods;

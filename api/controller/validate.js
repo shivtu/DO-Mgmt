@@ -1,6 +1,5 @@
 const Newproject = require("../model/newrprojectmodel");
 const NewEpic = require("../model/epicsmodel");
-const Bugfix = require("../model/bugfixmodel");
 const fs = require("fs");
 
 validateMethods = {
@@ -314,6 +313,30 @@ validateMethods = {
     } else if (req.body.files === undefined && req.params._id !== undefined) {
       next();
     }
+  },
+
+
+
+  /**Validate security questions */
+  areSecurityQuestionsValid: (req, res, next) =>{
+    const securityQuestions = req.body.security;
+    if (Array.isArray(securityQuestions) || securityQuestions.length > 2) { //check if the security field in request body is an array and minimum 3 question answers
+      securityQuestions.forEach((securityQuestion) =>{ // check if any of the question or answer is blank
+        if ((typeof securityQuestion.question === 'undefined' || securityQuestion.question === "")
+        || (typeof securityQuestion.answer === 'undefined' || securityQuestion.answer === "")) {
+          res.status(400).json({
+            result: 'Ill formated security question and answer',
+            message: 'https://github.com/shivtu/DO-Mgmt'
+          });
+        }
+      });
+    } else {
+      res.status(400).json({
+        result: 'Ill formated security question and answer',
+        message: 'https://github.com/shivtu/DO-Mgmt'
+      });
+    }
+    next(); // If all checks are ok proceed with request
   },
 
 
