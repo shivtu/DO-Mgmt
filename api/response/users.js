@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Users = require('../model/usermodel');
 const Counters = require("../model/countersmodel");
-const crypto = require('crypto');
 const mongoose = require("mongoose");
 
 router.get('/find/findAll', (req, res, next) =>{

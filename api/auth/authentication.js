@@ -17,7 +17,7 @@ exlcludedAuthProcess: (res, req, next) =>{
     if(err) {
         console.log(err);
     } else {
-      console.log(stdout) ;
+      console.log(stdout);
       }
   });
 },
@@ -26,7 +26,7 @@ dummyAuth: (req, res, next) =>{
   console.log('auth success');
   // execute function to authenticate/authorize the user
   req.body['currentUser'] = "SuperMan"; /**Add current user to request body */
-  req.body['currentUserRole'] = "admin"; /**Add current user role to request body */
+  req.body['currentUserRole'] = "CRUD"; /**Add current user role to request body */
   next();
   },
 

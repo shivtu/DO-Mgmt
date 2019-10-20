@@ -9,8 +9,17 @@ const userSchema = mongoose.Schema({
   group: { type: Number, required: true },
   userId: { type: String, unique : true, required : true, dropDups: true },
   initPwd: { type: String, required: true },
-  role: { type: String, require: true, default: "X" },
+  role: { type: String, require: true, default: "RO" },
   status: { type: String, required: true, default: "Active" },
+  security: { type: Array, required: true,
+    default: [
+              {"question": "", "answer":""},
+              {"question": "", "answer":""},
+              {"question": "", "answer":""},
+              {"question": "", "answer":""},
+              {"question": "", "answer":""}
+            ]
+      },
   gender: {
     type: String,
     required: true,
