@@ -34,7 +34,7 @@ const sprintsSchema = mongoose.Schema({
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
   createdBy: { type: JSON, required: true },
   summary: { type: String, required: true },
-  toDo: { type:Array },
+  toDo: { type:Array, required: true },
   doing: { type:Array },
   done: { type:Array },
   labels: { type: String },

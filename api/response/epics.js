@@ -5,7 +5,6 @@ const NewEpic = require("../model/epicsmodel");
 const NewProject = require("../model/newrprojectmodel");
 const Validate = require("../controller/validate");
 const Counters = require("../model/countersmodel");
-const auth = require("../auth/authentication");
 
 router.post(
   "/create/:SRID",
@@ -102,6 +101,22 @@ router.get("/find/filter", (req, res, next) => {
       }
     })
     .catch(e => res.status(500).json({ result: e.message }));
+});
+
+/* Delete an Epic */
+router.delete('/delete/:_id', (req, res, next) =>{
+  NewEpic.findByIdAndDelete({'_id': req.params._id}).exec()
+  .then((deletedEpic) =>{
+    res.status(200).json({
+      result: deletedEpic.SRID + ' Delted successfully'
+    });
+  })
+  .catch((err) =>{
+    console.log(Date.now(), err);
+    res.status(404).json({
+      result: 'Record not found'
+    });
+  });
 });
 
 /**Update sequence number to create NPRID */

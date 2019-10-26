@@ -116,14 +116,17 @@ router.post(
 
 /**Delete request IDs */
 router.delete("/delete/:_id", (req, res, next) =>{
-  Newproject.findByIdAndDelete({ _id: req.params._id })
+  Newproject.findByIdAndDelete({ '_id': req.params._id })
     .then(result => {
       res.status(200).json({
-        result: result
+        result: result.SRID + ' Deleted permanently'
       });
     })
     .catch(err => {
-      next();
+      console.log(Date.now(), err);
+      res.status(404).json({
+        result: 'Record not found'
+      });
     });
 });
 

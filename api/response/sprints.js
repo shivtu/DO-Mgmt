@@ -5,7 +5,6 @@ const NewSprint = require("../model/sprintsmodel");
 const NewEpic = require("../model/epicsmodel");
 const Validate = require("../controller/validate");
 const Counters = require("../model/countersmodel");
-const auth = require("../auth/authentication");
 
 router.post("/create/:SRID", Validate.validationMethod.getEpicSprints,
 (req, res, next) =>{
@@ -58,14 +57,33 @@ router.post("/create/:SRID", Validate.validationMethod.getEpicSprints,
     });
 });
 
-router.patch("/update/:SRID",(req, res, next) =>{
-    NewSprint.findOneAndUpdate({SRID: req.params.SRID, }, req.body, { new: true })
+router.patch("/update/toDoItems/:SRID",
+Validate.validationMethod.isUpdatingtoDoSprints,
+(req, res, next) =>{
+    NewSprint.findOneAndUpdate({'SRID': req.params.SRID, }, req.body, { new: true })
     .then((result) =>{
         res.status(201).json({
             result: result
         });
     })
     .catch((error) =>{
+        res.status(500).json({
+            result: 'internal server error'
+        });
+    });
+});
+
+router.patch("/update/doingItems/:SRID",
+Validate.validationMethod.isUpdatingDoingSprints,
+(req, res, next) =>{
+    NewSprint.findOneAndUpdate({'SRID': req.params.SRID, }, req.body, { new: true })
+    .then((result) =>{
+        res.status(201).json({
+            result: result
+        });
+    })
+    .catch((error) =>{
+        console.log(Date.now(), error);
         res.status(500).json({
             result: 'internal server error'
         });
@@ -100,14 +118,20 @@ router.get("/find/srid/:SRID", (req, res, next) => {
       .catch(e => res.status(500).json({ result: e.message }));
   });
 
-/* Find all instances conditionally*/
-router.get("/find/filter", (req, res, next) => {
-    NewSprint.find(req.query)
-      .then(result => {
-        res.status(200).json({ result: result });
-      })
-      .catch(e => res.status(500).json({ result: e.message }));
-  });
+router.delete('/delete/:_id', (req, res, next) =>{
+    NewSprint.findByIdAndDelete({'_id': req.params._id}).exec()
+    .then((result) =>{
+        res.status(200).json({
+            result: result.SRID + ' Deleted'
+        });
+    })
+    .catch((err) =>{
+        console.log(Date.now(), err);
+        res.status(404).json({
+            result: 'Sprint not found'
+        });
+    });
+});
 
 
 /**Update sequence number to create NPRID */

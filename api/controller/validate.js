@@ -1,6 +1,7 @@
 const Newproject = require("../model/newrprojectmodel");
 const NewEpic = require("../model/epicsmodel");
 const Users = require('../model/usermodel');
+const Sprints = require('../model/sprintsmodel');
 const fs = require("fs");
 const bcrypt = require('bcryptjs');
 
@@ -94,7 +95,12 @@ validateMethods = {
 
   getEpicSprints: (req, res, next) => { /**Get Epic then find the existing sprints field in the Epic
                                         and pass it to original request with sprint array attached to req body */
-    NewEpic.findOne({ 'SRID': req.params.SRID })
+    if (typeof req.body.toDo === 'undefined' || (req.body.toDo).length === 0) {
+      res.status(400).json({
+        result: 'Sprints should have atleast one to-do item'
+      });
+    } else {
+      NewEpic.findOne({ 'SRID': req.params.SRID })
       .then((result) => {
         if (result.SRID === req.params.SRID) {
           req.body['NPRID'] = result.NPRID;
@@ -111,6 +117,7 @@ validateMethods = {
           result: 'Could not find EPIC'
         });
       });
+    }
   },
 
 
@@ -155,7 +162,6 @@ validateMethods = {
         });
       });
   },
-
 
 
 
@@ -269,7 +275,6 @@ validateMethods = {
 
 
 
-
   /**Check if user is trying to upload file */
   isUploadingfile: (req, res, next) => {
     if (req.body.files === undefined && req.params._id === undefined) {
@@ -379,6 +384,7 @@ validateMethods = {
   },
 
 
+
   checkUserAns: (req, res, next) =>{
     _user = (req.body.userId).toUpperCase();
     Users.findOne({'userId': _user}).exec()
@@ -415,7 +421,6 @@ validateMethods = {
   },
 
 
-
   /**Check for req body if user is changing password */
   isUpdatingPassword: (req, res, next) =>{
     _newPassword = req.body.newPassword;
@@ -427,7 +432,104 @@ validateMethods = {
     } else {
       next();
     }
-  }
+  },
+
+
+  isUpdatingtoDoSprints: (req, res, next) =>{
+    const to_do = req.body.toDo;
+    if (typeof to_do !== 'undefined' && Array.isArray(to_do) && (to_do).length > 0) {
+      Sprints.findOne({'SRID': req.params.SRID}).exec()
+      .then((result) =>{
+        currentToDoArray = result.toDo;
+        toDoArray = req.body.toDo;
+        let DuplicateFlag = true;
+          currentToDoArray.forEach((currentToDoItem) =>{
+            if (toDoArray.includes(currentToDoItem)) {
+              DuplicateFlag = false;
+            }
+          });
+
+          if (DuplicateFlag) {
+            toDoArray.forEach((toDoItem) =>{
+              currentToDoArray.push(toDoItem);
+            });
+            req.body['toDo'] = currentToDoArray;
+            next();
+          } else {
+            res.status(400).json({
+              result: 'Some to-do items already exist'
+            });
+          }
+      })
+      .catch((err) =>{
+        res.status(404).json({
+          result: 'Cannot find Sprint'
+        });
+      });
+    } else {
+      res.status(400).json({
+        result: 'Ill formated request body',
+        message: 'https://github.com/shivtu/DO-Mgmt/'
+      });
+    }
+  },
+
+  isUpdatingDoingSprints: (req, res, next) =>{
+    // Check if user is updating the doing sprints
+    const _doing = req.body.doing;
+    if (typeof _doing !== 'undefined' && Array.isArray(_doing) && (_doing).length > 0) {
+      Sprints.findOne({'SRID': req.params.SRID}).exec()
+      .then((foundSprint) =>{
+        currentToDoArray = foundSprint.toDo; // toDo array in the record
+        currentDoingArray = foundSprint.doing;
+        doingArray = req.body.doing; // doing items requested by the user
+
+        // Declare a flag to set to true or false when checking if requested doing array is subset of existing toDo array
+        let validateDoingItems = true;
+        
+        /** Check if req.body.doing Array is a subset of existing toDo array */
+        doingArray.forEach((doingArrayItem) =>{
+          if (!currentToDoArray.includes(doingArrayItem)) {
+            validateDoingItems = false;
+          } else { // splice the current toDo array for values existing in req.body.doing array
+            index = currentToDoArray.indexOf(doingArrayItem);
+            currentToDoArray.splice(index, 1);
+          }
+        });
+
+        if (validateDoingItems) { // req.body.doing array is a subset of current toDo array
+
+          // push req.body.doing to current doing array
+          doingArray.forEach((doingItem) =>{
+            currentDoingArray.push(doingItem);
+          });
+    
+          /* Update the request body with newly formed toDo and doing array */
+          req.body['doing'] = currentDoingArray;
+          req.body['toDo'] = currentToDoArray;
+          next();
+        } else {
+          res.status(400).json({
+            result: 'doing items must be from toDo list'
+          });
+        }
+      })
+      .catch((err) =>{
+        console.log(err);
+        res.status(404).json({
+          result: 'Sprint not found'
+        });
+      });
+    } else {
+      res.status(400).json({
+        result: 'Ill formated request body',
+        message: 'https://github.com/shivtu/DO-Mgmt/'
+      });
+    }
+    
+  },
+
+  isUpdatingDoneSprints: (req, res, next) =>{}
 
 
 };

@@ -4,7 +4,6 @@ const Users = require('../model/usermodel');
 const UserAuth = require('../model/userauthmodel');
 const Counters = require("../model/countersmodel");
 const mongoose = require("mongoose");
-const Validate = require("../controller/validate");
 const authUtil = require("../auth/authutil");
 
 router.post('/create', authUtil.authUtilMethod.generateSecurityQues,
@@ -26,9 +25,8 @@ authUtil.authUtilMethod.encryptData, (req, res, next) =>{
             status: req.body.status,
             security: req.body.security,
             gender: req.body.gender,
-            bio: req.body.bio,
-            // createdBy: req.body.currentUser,
-            createdBy: 'SuperMan',
+            bio: req.body.bio, //This may contain user's attributes such as language, region, locale etc
+            createdBy: req.body.currentUser, //This will contain an object with userId, email, role and group props assigned by the accessToken
             createdOn: utcDate.toUTCString(),
             displayPicture: req.body.displayPicture
         });

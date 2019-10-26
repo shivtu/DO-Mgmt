@@ -19,7 +19,7 @@ const userSchema = mongoose.Schema({
     enum: ["male", "female", "unspecified"]
   },
   bio: { type: JSON },
-  createdBy: { type: String, required: true },
+  createdBy: { type: JSON, required: true },
   createdOn: { type: Date, required: true, default: Date.now() },
   displayPicture: { type: Array }
 });

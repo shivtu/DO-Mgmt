@@ -129,7 +129,11 @@ authUtilMethods = {
         if (typeof token !== 'undefined') {
             jwt.verify(token, 'secretKey', (jwtErr, decode) =>{
                 if (typeof decode !== 'undefined' && !jwtErr) {
-                    req.body['currentUser'] = decode; //paste current user properties to request body
+                    req.body['currentUser'] = {
+                        'userId': decode.userId,
+                        'email': decode.email,
+                        'group': decode.group
+                    }; //paste current user properties to request body
                     next();
                 } else {
                     res.status(403).json({
