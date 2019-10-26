@@ -8,11 +8,13 @@ const services = require("../response/services");
 const bugfix = require("../response/bugfix");
 const failfix = require("../response/failfix");
 const users = require("../response/users");
+const userauth = require("../response/userauth");
 const newproject = require("../response/newproject");
 const counters = require("../response/counters");
 const epic = require("../response/epics");
 const sprint = require("../response/sprints");
 const Auth = require("../auth/authentication");
+const authUtil = require("../auth/authutil");
 
 /*Connect to mongoDB using Mongoose*/
 mongoose.connect(
@@ -56,13 +58,14 @@ app.use((req, res, next) => {
 
 //Handle routes
 app.use("/api/v1/services", Auth.authenticationMethod.dummyAuth, services);
-app.use("/api/v1/bugfix", Auth.authenticationMethod.dummyAuth, bugfix);
-app.use("/api/v1/failfix", Auth.authenticationMethod.dummyAuth, failfix);
-app.use("/api/v1/users", Auth.authenticationMethod.dummyAuth, users);
-app.use("/api/v1/newproject", Auth.authenticationMethod.dummyAuth, newproject);
-app.use("/api/v1/epic", Auth.authenticationMethod.dummyAuth, epic);
-app.use("/api/v1/sprint", Auth.authenticationMethod.dummyAuth, sprint);
-app.use("/api/v1/counters", Auth.authenticationMethod.dummyAuth, counters);
+app.use("/api/v1/bugfix", authUtil.authUtilMethod.verifyToken, bugfix);
+app.use("/api/v1/failfix", authUtil.authUtilMethod.verifyToken, failfix);
+app.use("/api/v1/users", authUtil.authUtilMethod.verifyToken, users);
+app.use("/api/v1/userauth", userauth);
+app.use("/api/v1/newproject", authUtil.authUtilMethod.verifyToken, newproject);
+app.use("/api/v1/epic", authUtil.authUtilMethod.verifyToken, epic);
+app.use("/api/v1/sprint", authUtil.authUtilMethod.verifyToken, sprint);
+app.use("/api/v1/counters", authUtil.authUtilMethod.verifyToken, counters);
 
 // Handle all errors
 app.use((req, res, next) => {

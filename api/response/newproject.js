@@ -84,7 +84,7 @@ router.post(
           serviceType: "New Project Request",
           priority: req.body.priority,
           createdOn: utcDate.toUTCString(),
-          createdBy: req.body.currentUser,
+          createdBy: req.body.currentUser, //This will contain an object with userId, email, role and group props assigned by the accessToken
           summary: req.body.summary,
           description: req.body.description,
           assignedTo: req.body.assignedTo,

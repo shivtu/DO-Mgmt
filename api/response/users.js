@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const Users = require('../model/usermodel');
+const UserAuth = require('../model/userauthmodel');
 const Counters = require("../model/countersmodel");
 const mongoose = require("mongoose");
 const Validate = require("../controller/validate");
 const authUtil = require("../auth/authutil");
 
-router.post('/create', Validate.validationMethod.areSecurityQuestionsValid, authUtil.authUtilMethod.encryptData, (req, res, next) =>{
+router.post('/create', authUtil.authUtilMethod.generateSecurityQues,
+authUtil.authUtilMethod.encryptData, (req, res, next) =>{
     UserSequence.exec() /**wrap post request with user counter increament */
     .then((seq) =>{
         const utcDate = new Date();
@@ -16,6 +18,7 @@ router.post('/create', Validate.validationMethod.areSecurityQuestionsValid, auth
             firstName: req.body.firstName,
             middleName: req.body.middleName,
             lastName: req.body.lastName,
+            phone: req.body.phone,
             email: req.body.email,
             group: req.body.group,
             initPwd: req.body.initPwd,
@@ -24,7 +27,8 @@ router.post('/create', Validate.validationMethod.areSecurityQuestionsValid, auth
             security: req.body.security,
             gender: req.body.gender,
             bio: req.body.bio,
-            createdBy: req.body.currentUser,
+            // createdBy: req.body.currentUser,
+            createdBy: 'SuperMan',
             createdOn: utcDate.toUTCString(),
             displayPicture: req.body.displayPicture
         });
@@ -43,7 +47,9 @@ router.post('/create', Validate.validationMethod.areSecurityQuestionsValid, auth
                 status: result.status,
                 gender: result.gender,
                 bio: result.bio
-            }
+            },
+            setup: 'http://localhost:5000/api/v1/userauth/firstLogin',
+            security: 'http://localhost:5000/api/v1/userauth/security/questions'
           });
         })
         .catch(e => {
@@ -161,11 +167,57 @@ router.get('/find/filter/limit/:_limit', (req, res, next) =>{
 });
 
 
-router.delete('/delte/:_id', (req, res, next) =>{
-  Users.findByIdAndDelete({ "_id": req.params._id }, { new: true }).exec()
-  .then()
-  .catch();
-})
+router.delete('/delete/:_id/keepFootprints', (req, res, next) =>{
+  Users.findByIdAndUpdate({ '_id': req.params._id }, { 'status': 'In-Active' }, { new: true }).exec()
+  .then((foundUser) =>{
+    UserAuth.findOneAndDelete({'userId': foundUser.userId}).exec()
+    .then((userDeleted) =>{
+      res.status(200).json({
+        result: foundUser.userId + ' deleted',
+        footprints: 'http://localhost:5000/api/v1/users/find/_id/'+req.params._id
+      });
+    })
+    .catch(userDelError =>{
+      res.status(500).json({
+        result: 'Could not delete user'
+      });
+    });
+  }).catch((userSearchErr) =>{
+    res.status(404).json({
+      result: req.params._id + ' not found'
+    });
+  });
+});
+
+
+router.delete('/delete/:_id', (req, res, next) =>{
+  Users.findByIdAndDelete({ '_id': req.params._id }).exec()
+  .then((deletedUser) =>{
+    userToDel = deletedUser.userId;
+    if (deletedUser.status === "Active") {
+      UserAuth.findOneAndDelete({'userId': userToDel}).exec()
+      .then((wipeOut) =>{
+        res.send(200).json({
+          result: userToDel + ' deleted permanently'
+        });
+      })
+      .catch((wipeOutErr) =>{
+        res.status(500).json({
+          result: 'Cannot delete user',
+          message: wipeOutErr.message
+        });
+      });
+    } else {
+      res.status(200).json({
+        result: userToDel + ' deleted permanently'
+      });
+    }
+  }).catch((userSearchErr) =>{
+    res.status(404).json({
+      result: req.params._id + ' not found'
+    });
+  });
+});
 
 
 /**Update sequence number to create USRID */

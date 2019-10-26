@@ -18,7 +18,7 @@ router.post("/create/:SRID", Validate.validationMethod.getEpicSprints,
             NPRID: req.body.NPRID,
             serviceType: 'Sprint',
             createdOn: utcDate.toUTCString(),
-            createdBy: req.body.currentUser,
+            createdBy: req.body.currentUser, //This will contain an object with userId, email, role and group props assigned by the accessToken
             summary: req.body.summary,
             toDo: req.body.toDo,
             doing: req.body.doing,

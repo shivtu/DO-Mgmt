@@ -22,7 +22,7 @@ router.post(
           NPRID: req.params.SRID,
           serviceType: "Epic",
           createdOn: utcDate.toUTCString(),
-          createdBy: req.body.currentUser,
+          createdBy: req.body.currentUser, //This will contain an object with userId, email, role and group props assigned by the accessToken
           summary: req.body.summary,
           backLogs: req.body.backLogs,
           files: [],

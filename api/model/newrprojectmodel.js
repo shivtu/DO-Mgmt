@@ -36,7 +36,7 @@ const newProjectRequestSchema = mongoose.Schema({
   serviceType: { type: String, default: "New Project Request" },
   priority: { type: String, required: true, enum: priorityTypes },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
-  createdBy: { type: String, required: true },
+  createdBy: { type: JSON, required: true },
   summary: { type: String, required: true },
   description: { type: String, required: true },
   assignedTo: { type: String },

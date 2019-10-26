@@ -1,11 +1,14 @@
 const Newproject = require("../model/newrprojectmodel");
 const NewEpic = require("../model/epicsmodel");
+const Users = require('../model/usermodel');
 const fs = require("fs");
+const bcrypt = require('bcryptjs');
 
 validateMethods = {
 
   extractedResults__id: '',
   extractedResults_SRID: '',
+  validateSecurityAns: true,
 
   /**Find the records and assing the result to extractedResults__id for consumption by other methods */
   getRecordById: (req, res, next) => {
@@ -317,30 +320,6 @@ validateMethods = {
 
 
 
-  /**Validate security questions */
-  areSecurityQuestionsValid: (req, res, next) =>{
-    const securityQuestions = req.body.security;
-    if (Array.isArray(securityQuestions) || securityQuestions.length > 2) { //check if the security field in request body is an array and minimum 3 question answers
-      securityQuestions.forEach((securityQuestion) =>{ // check if any of the question or answer is blank
-        if ((typeof securityQuestion.question === 'undefined' || securityQuestion.question === "")
-        || (typeof securityQuestion.answer === 'undefined' || securityQuestion.answer === "")) {
-          res.status(400).json({
-            result: 'Ill formated security question and answer',
-            message: 'https://github.com/shivtu/DO-Mgmt'
-          });
-        }
-      });
-    } else {
-      res.status(400).json({
-        result: 'Ill formated security question and answer',
-        message: 'https://github.com/shivtu/DO-Mgmt'
-      });
-    }
-    next(); // If all checks are ok proceed with request
-  },
-
-
-
   /**isFileSaved promise wrapped in saveFile function that returns the promise for cunsmption by other methods  */
   saveFile: (req, res, next) => {
     if (req.body.files.length !== 2 && Array.isArray(req.body.files)) {
@@ -377,6 +356,80 @@ validateMethods = {
     });
     return isFileSaved;
   },
+
+
+
+  /**Validate security questions */
+  areSecurityAnswersValid: (req, res, next) =>{
+    const securityQuestions = req.body.security;
+    let checkFlag = true;
+    if (Array.isArray(securityQuestions) && securityQuestions.length > 2) {
+      securityQuestions.forEach((questions) =>{
+        usersAnswer = questions.question;
+        if (usersAnswer === '' || typeof usersAnswer === 'undefined' || usersAnswer === null) {
+          checkFlag = false;
+        }
+      });
+    } else {
+      res.status(400).json({
+        result: 'Ill formated request body',
+        message: 'https://github.com/shivtu/DO-Mgmt'
+      });
+    }
+  },
+
+
+  checkUserAns: (req, res, next) =>{
+    _user = (req.body.userId).toUpperCase();
+    Users.findOne({'userId': _user}).exec()
+    .then((foundUser) =>{
+      const providedQandA = req.body.security;
+      const securityQuesLength = foundUser.security.length;
+      req.body['areAnsValid'] = true;
+      _areAnsValid = req.body.areAnsValid;
+      for (let i = 0; i < securityQuesLength; i++) {
+        for (let j = 0; j < securityQuesLength; j++) {
+          if (foundUser.security[i].question === providedQandA[j].question) {
+            bcrypt.compare(providedQandA[j].answer, foundUser.security[i].answer, (compareErr, compareSuccess) =>{
+              if (!compareSuccess) {
+                _areAnsValid = false;
+                console.log('_areAnsValid', _areAnsValid); 
+              }
+            });
+            if (!_areAnsValid) {
+              break;
+            }
+          }
+        }
+        if (!_areAnsValid) {
+          break;
+        }
+      }
+      next();
+    })
+    .catch((err) =>{
+       res.status(404).json({
+         result: 'User ' + req.body.userId + 'not found'
+       });
+    });
+  },
+
+
+
+  /**Check for req body if user is changing password */
+  isUpdatingPassword: (req, res, next) =>{
+    _newPassword = req.body.newPassword;
+    if (typeof _newPassword === 'undefined' || _newPassword === null || _newPassword === '') {
+      res.status(400).json({
+        result: 'Ill formated request body',
+        message: 'https://github.com/shivtu/DO-Mgmt/'
+      });
+    } else {
+      next();
+    }
+  }
+
+
 };
 
 exports.validationMethod = validateMethods;

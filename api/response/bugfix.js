@@ -41,7 +41,7 @@ router.post("/create", (req, res, next) => {
     serviceType: "Bug Fix Request",
     impact: req.body.impact,
     createdOn: new Date().toUTCString(),
-    createdBy: req.body.createdBy,
+    createdBy: req.body.currentUser, //This will contain an object with userId, email, role and group props assigned by the accessToken
     summary: req.body.summary,
     description: req.body.description,
     status: "created",

@@ -31,7 +31,7 @@ const bugFixSchema = mongoose.Schema({
   impact: { type: String, required: true, enum: impactTypes },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
   priority: { type: String, required: true },
-  createdBy: { type: String, required: true },
+  createdBy: { type: JSON, required: true },
   assignedTo: { type: String },
   summary: { type: String, required: true },
   description: { type: String, required: true },

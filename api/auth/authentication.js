@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const exec = require('child_process').exec;
 /* Dummy module for authentication and authorization
  call next() after third party auth,
@@ -30,17 +32,8 @@ dummyAuth: (req, res, next) =>{
   req.body['currentUser'] = "SuperMan"; /**Add current user to request body */
   req.body['currentUserRole'] = "CRUD"; /**Add current user role to request body */
   next();
-  },
-
-  /**Verify JSON Web Token */
-  verifyToken: (req, res, next) =>{
-
-  },
-
-  /**Create user Token */
-  createToken: (req, res, next) =>{
-
   }
+  
 };
 
 exports.authenticationMethod = authMethods;
