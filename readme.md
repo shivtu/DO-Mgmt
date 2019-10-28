@@ -125,7 +125,8 @@ Request URI params: None
 -- This will setup credentials for user USR0
 
 ### If you are wondering why did we setup user with two different routes?<br/>This is for security reasons
--- <code>http://localhost:5000/api/v1/services/createUser</code> setups the profile of the user that can be viewed by others/admins
+-- <code>http://localhost:5000/api/v1/services/createUser</code> setup the profile of the user that can be viewed by others/admins
+<br/>
 -- <code>http://localhost:5000/api/v1/services/createCreds</code> setups the crendentials that is never exposed by the middleware
 
 
