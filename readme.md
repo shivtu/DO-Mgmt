@@ -192,6 +192,7 @@ HTTP Request Type: <code>POST</code>
 Resource URI: <code>http://localhost:5000/api/v1/userauth/firstLogin</code>
 <br/>
 Request URI params: None
+<br/>
 Example Request body:
         <code>{
           <br/>"userId":"USR64",
