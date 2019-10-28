@@ -136,6 +136,7 @@ HTTP Request Type: <code>POST</code>
 Resource URI: <code>http://localhost:5000/api/v1/userauth/getToken</code>
 <br/>
 Request URI params: None
+<br/>
 Example request body: {"userId":"USR0", "password": "< This will be the password you created while setting up the credentials in the above step" >}
 
 ### Example CURL request Shell(CURL) to get the access token
