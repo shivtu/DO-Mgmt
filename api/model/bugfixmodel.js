@@ -7,7 +7,7 @@ const statusTypes = [
   "fixed",
   "canceled"
 ];
-const priorityTypes = [
+const impactTypes = [
   "critical",
   "high",
   "medium",
@@ -26,18 +26,21 @@ const bugFixSchema = mongoose.Schema({
   } /* Set index to true for faster search on DB */,
   customerName: { type: String, required: true },
   product: { type: String, required: true },
-  affectedVersions: { type: Array, required: true },
+  affectedVersions: { type: JSON, required: true },
   serviceType: { type: String, default: "Bug Fix Request" },
-  impact: { type: String, required: true, enum: priorityTypes },
+  impact: { type: String, required: true, enum: impactTypes },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
-  createdBy: { type: String, required: true },
+  priority: { type: String, required: true },
+  tag: { type: String, enum: ["server-side", "web-ui", "web-app", "desktop-app", "desktop-ui"]},
+  createdBy: { type: JSON, required: true },
   assignedTo: { type: String },
   summary: { type: String, required: true },
   description: { type: String, required: true },
-  stepsToReproduce: { type: Array },
+  recreationSteps: { type: JSON, required: true },
   status: { type: String, required: true, enum: statusTypes },
-  endDate: { type: Date, required: true, min: Date.now() },
-  updateNotes: { type: Array, default: [] },
+  closedOn: { type: Date, min: Date.now() },
+  resolutionNotes: { type: String },
+  updateNotes: { type: JSON, default: [] },
   NPRId: { type: String },
   files: { type: Array }
 });

@@ -31,7 +31,7 @@ router.post("/create", (req, res, next) => {
       serviceType: "Fail Fix Request",
       priority: req.body.Priority,
       createdOn: utcDate.toUTCString(),
-      CreatedBy: req.body.CreatedBy,
+      CreatedBy: req.body.currentUser, //This will contain an object with userId, email, role and group props assigned by the accessToken
       summary: req.body.summary,
       description: req.body.description,
       status: "created",

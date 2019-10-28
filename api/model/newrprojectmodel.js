@@ -6,7 +6,8 @@ const phases = [
   "on-hold",
   "delivered",
   "maintenance",
-  "support"
+  "support",
+  "release"
 ]; /**While ammending this array,
 make sure no methods in Vlidate.js gets affected  */
 
@@ -30,22 +31,22 @@ const newProjectRequestSchema = mongoose.Schema({
   } /* Set index to true for faster search on DB. This field is auto generated */,
   customerName: { type: String, required: true },
   product: { type: String, required: true},
-  productVersion: { type: Array, required: true },
+  productVersion: { type: Array },
   releases: { type: Array, default: [] },
   serviceType: { type: String, default: "New Project Request" },
   priority: { type: String, required: true, enum: priorityTypes },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
-  createdBy: { type: String, required: true },
+  createdBy: { type: JSON, required: true },
   summary: { type: String, required: true },
   description: { type: String, required: true },
   assignedTo: { type: String },
-  phase: { type: String, required: true, enum: phases },
+  phase: { type: String, required: true, enum: phases, default: "created" },
   repoLink: { type: String },
   epics: { type: Array, default: [] },
   updateNotes: { type: Array, default: [] },
   lifeCycle: {
     type: Array, default: []
-  } /**{assignedUser: userName, assignedOn: Date} */,
+  } /**{assignedUser: userName, assignedOn: Date, assignedBy: currentUser} */,
   files: { type: Array, default: [] },
   deliveredOn: { type: Date },
   sprints: {type: Array, default: [] }

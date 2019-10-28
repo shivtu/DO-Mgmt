@@ -32,22 +32,16 @@ const sprintsSchema = mongoose.Schema({
   productVersion: { type: Array, require: true, default: [] },
   serviceType: { type: String, default: "Epic" },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
-  createdBy: { type: String, required: true },
+  createdBy: { type: JSON, required: true },
   summary: { type: String, required: true },
-  toDo: { type:Array },
+  toDo: { type:Array, required: true },
   doing: { type:Array },
   done: { type:Array },
   labels: { type: String },
+  memberList: { type: JSON, required:  true },
   files: { type: Array, default: [] },
 });
 
-/**backLog structure:
- * backLogs: [
- *  { "to-do": [],
- *    "doing": [],  
- *    "done": [],  
- *  }
- * ]
- */
+
 
 module.exports = mongoose.model("Sprints", sprintsSchema);

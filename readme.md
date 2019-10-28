@@ -1,5 +1,9 @@
 # Devops Management Tool
+<<<<<<< HEAD
 ### Gist
+=======
+#### Gist
+>>>>>>> optimizeValidation
 #### A comprehensive dev-ops tool
 #### Ticketing based system crafted specifically for dev-ops/developer teams
 #### Built as a light weight blazing fast service for medium to large teams
@@ -44,10 +48,10 @@
     <li>NodeJs - version 10.16 or above</li>
 </ul>
 
---> Clone the project or download the zipped file
---> navigate to project directory using cmd/terminal
---> Run <code>npm install</code> Once all packages get downloaded
---> Run <code>npm start</code>
+--> Clone the project or download the zipped file<br/>
+--> navigate to project directory using cmd/terminal<br/>
+--> Run <code>npm install</code> Once all packages get downloaded<br/>
+--> Run <code>npm start</code><br/>
 --> The project by default will run on port 5000, make sure that port is not being used by other apps
 <h4>**** Make the following API calls once and only once for the webservices to execute as expected</h4>
 <b>Since MongoDB does not provide increamental sequence numbers as opposed to SQL DBs, the below queries create separate docs to keep track and update sequence numbers for NPR, BFR, EPC, SPR, Users and FFR</b>
@@ -292,6 +296,7 @@ curl --request POST \
         }
     }
     
+<hr/>    
     
 ### Find all NewProject Requests (NPR)
 HTTP Request Type: <code>GET</code>
@@ -310,9 +315,13 @@ curl --request GET \
   --header 'Host: localhost:5000' \
   --header 'cache-control: no-cache'
  
+<<<<<<< HEAD
 ##### To limit the number of records in the response body, append the URI with /limit/< limit value >
 Example:  <code>http://domain/api/v1/newproject/find/findall/limit/5</code>
 
+=======
+<hr/> 
+>>>>>>> optimizeValidation
 
 ### Find NewProject Requests using filters (NPR)
 HTTP Request Type: <code>GET</code>
@@ -363,8 +372,12 @@ curl --request GET \
     ]
     }
 
+<<<<<<< HEAD
 ##### To limit the number of records in the response body, append the URI with /limit/< limit value >
 Example:  <code>http://domain.com/api/v1/newproject/find/filter/limit/5?< field name >=<  field value >&< field name >=< field value ></code>
+=======
+<hr/>
+>>>>>>> optimizeValidation
 
 ### Find single record of NewProject Request using SRID (NPR)
 HTTP Request Type: <code>GET</code>
@@ -426,7 +439,7 @@ curl --request GET \
         ]
     }
 
-
+<hr/>
 
 ### Find single record of NewProject Request using _id (NPR)
 HTTP Request Type: <code>GET</code>
@@ -476,11 +489,12 @@ curl --request GET \
     }
     
     
+<hr/>
 
 ### Updating an existing record (NPR)
 HTTP Request Type: <code>PATCH</code>
 <br/>
-Resource URI: <code>http://domain/api/v1/newproject/update/_id/<record ObjectID></code>
+Resource URI: <code>http://domain/api/v1/newproject/update/< _id ></code>
 <br/>
 Request body format: <code>JSON</code>
     
@@ -548,4 +562,30 @@ curl --request PATCH \
         "assignedTo": "ironMan"
         }
     }
+
+<hr/>
+
+##### Consider separate routes for updating different fields instead of using the above generalized update method<br/>This has performance benifits
+
+Updating updateNotes:<br/>
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/newproject/update/updateNotes/< _id ></code>
+<br/>
+Request body format: <code>{updateNotes: ["summary", "Long Description"]}</code>
+
+Updating files:<br/>
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/newproject/update/files/< _id ></code>
+<br/>
+Request body format: <code>{updateNotes: ["Original file name", "File content in Base64 string"]}</code>
+
+
+Updating assignedTo:<br/>
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/newproject/update/assignedTo/< _id ></code>
+<br/>
+Request body format: <code>{"assignedTo": "user name"}</code>
 

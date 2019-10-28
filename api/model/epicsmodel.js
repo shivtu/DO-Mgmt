@@ -13,20 +13,18 @@ priorities are not related/coupled with time lines (end date, start date) */
 const epicsSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   NPRID: {type: String, required: true, index: true },
-  SRID: {
+  SRID: {/* Set index to true for faster search on DB. This field is auto generated */
     type: String,
     required: true,
     index: true,
     unique: true
-  } /* Set index to true for faster search on DB. This field is auto generated */,
-  customerName: { type: String },
-  product: { type: String, require: true, index: true },
-  productVersion: { type: Array },
+  },
+  productVersion: { type: String, required: true },
   serviceType: { type: String, default: "Epic" },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
-  createdBy: { type: String, required: true },
+  createdBy: { type: JSON, required: true },
   summary: { type: String, required: true },
-  backLogs: { type: Array, required: true },
+  backLogs: { type: JSON, required: true },
   priority: { type: Number, enum: priorityTypes},
   files: { type: Array, default: [] },
   sprints: { type: Array }
