@@ -173,9 +173,9 @@ Request body format: <code>JSON</code>
   </tr>
   <tr>
     <td>createdBy</td>
-    <td>String</td>
+    <td>JSON</td>
     <td>any string</td>
-    <td>This field can be customized to retrieve users from table (currently a dummy auth module executes)</td>
+    <td>This field can be customized (currently updates from the authentication token received by the user)</td>
   </tr>
   <tr>
     <td>summary</td>
@@ -193,7 +193,7 @@ Request body format: <code>JSON</code>
     <td>phase</td>
     <td>String</td>
     <td>created, in-progress, on-hold, completed, canceled</td>
-    <td>To customize status types edit newprojectmodel.js</td>
+    <td>Automatically updates the releases in NPR when set to delivered, maintenance, support or release</td>
   </tr>
 </table>
 <b>Additional Parameters:</b>
@@ -270,6 +270,12 @@ Request body format: <code>JSON</code>
     <td><address>< Auto-Generated ></address></td>
     <td>Auto generated UTC date string as per server local time</code></td>
   </tr>
+  <tr>
+    <td>Releases</td>
+    <td>Array of Objects</td>
+    <td><address>< Auto-Generated ></address></td>
+    <td>Auto generated when phase of the project is set to delivered, maintenance, support or release</td>
+  </tr>
 </table>
 
 #### Example HTTP request (Shell CURL)
@@ -277,6 +283,7 @@ curl --request POST \
   --url http://localhost:5000/api/v1/newproject/create/ \
   --header 'Accept: */*' \
   --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Authorization: < authToken >' \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Content-Length: 238' \
@@ -332,6 +339,7 @@ curl --request GET \
   --url http://localhost:5000/api/v1/newproject/find/findall \
   --header 'Accept: */*' \
   --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Authorization: < authToken >' \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Host: localhost:5000' \
@@ -354,6 +362,7 @@ curl --request GET \
   --url 'http://localhost:5000/api/v1/newproject/find/filter?SRID=NPR3&customerName=Google' \
   --header 'Accept: */*' \
   --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Authorization: < authToken >' \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Host: localhost:5000' \
@@ -407,6 +416,7 @@ curl --request GET \
   --url http://localhost:5000/api/v1/newproject/find/srid/NPR3 \
   --header 'Accept: */*' \
   --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Authorization: < authToken >' \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Host: localhost:5000' \
@@ -469,6 +479,7 @@ curl --request GET \
   --url http://localhost:5000/api/v1/newproject/find/srid/5d94a0d4852eed4fd4286966 \
   --header 'Accept: */*' \
   --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Authorization: < authToken >' \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Host: localhost:5000' \
@@ -531,6 +542,7 @@ curl --request PATCH \
   --url http://localhost:5000/api/v1/newproject/update/5d9e9007a24fa12c0845cb61 \
   --header 'Accept: */*' \
   --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Authorization: < authToken >' \
   --header 'Cache-Control: no-cache' \
   --header 'Connection: keep-alive' \
   --header 'Content-Length: 85' \
@@ -620,7 +632,7 @@ Request URI params: SRID of NPR
     <li>productVersion: Type: Array of strings</li>
 </ul>
 
-#### Example HTTP CURL reques
+#### Example HTTP CURL request Shell(CURL)
 curl --request POST \
   --url http://domain.com/api/v1/epic/create/NPR39 \
   --header 'Accept: */*' \
@@ -747,5 +759,51 @@ xhr.setRequestHeader("cache-control", "no-cache");
 xhr.send(data);
 
 
+### Creating a Sprint for your Epics
 
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/epic/sprint/< SRID ></code>
+<br/>
+Request URI params: _id (Epic's SRID)
+Request body type: JSON
+
+### Mandatory fields
+<ul>
+  <li>_id: Auto generated</li>
+  <li>NPRID: Picked from the parent record<br/> Type: String</li>
+  <li>EPCID: Picked from the parent record<br/> Type: String</li>
+  <li>SRID: Auto Generated<br/> Type: String</li>
+  <li>productVersion: Picked from the request body<br/> Type: String Array<br/> Mandatory field: Yes</li>
+  <li>serviceType: Auto Generated<br/> Type: String</li>
+  <li>createdOn: Auto Generated <br/> Type: UTC Date</li>
+  <li>createdBy: Picked from the auth token<br/> Type: JSON Object</li>
+  <li>summary: Picked from the request body<br/> Type: String<br/> Mandatory field: Yes</li>
+  <li>toDo: Picked from the request body<br/> Type: String Array<br/> Mandatory field: Yes</li>
+  <li>memberList: Picked from the request body<br/> Type: String Array<br/> Mandatory field: Yes</li>
+</ul>
+
+### Other Eligible fields
+<ul>
+  <li>customerName: Picked from the request body<br/> Type: String<br/> Mandatory field: No</li>
+  <li>product: Picked from the request body<br/> Type: String<br/> Mandatory field: No</li>
+  <li>doing: Picked from the request body<br/> Type: String Array<br/> Mandatory field: No</li>
+  <li>done: Picked from the request body<br/> Type: String Array<br/> Mandatory field: No</li>
+  <li>labels: Picked from the request body<br/> Type: String<br/> Mandatory field: No</li>
+  <li>files: Picked from the request body<br/> Type: String Array<br/> Mandatory field: No</li>
+</ul>
+
+### Example XHR Request
+curl --request POST \
+  --url http://localhost:5000/api/v1/sprint/create/EPC31 \
+  --header 'Accept: */*' \
+  --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Authorization: < authToken >' \
+  --header 'Cache-Control: no-cache' \
+  --header 'Connection: keep-alive' \
+  --header 'Content-Length: 142' \
+  --header 'Content-Type: application/json' \
+  --header 'Host: localhost:5000' \
+  --header 'cache-control: no-cache' \
+  --data '{"summary":"Random SPRINT summary", "toDo":["task0", "task1", "task2", "task3", "task4", "task5", "task6", "task7"], "memberList":["someone"]}'
 
