@@ -102,8 +102,6 @@ Resource URI: <code>http://domain/api/v1/counters/all</code>
 <br/>
 Request URI params: None
 
-#### ****In case you find more than one counter for a table it must be deleted
-
 
 
 ## REST Web-Services Usage
@@ -315,7 +313,6 @@ curl --request GET \
 #### To limit the number of records in the response body, append the URI with /limit/< limit value >
 Example:  <code>http://domain/api/v1/newproject/find/findall/limit/5</code>
 
-=======
 <hr/> 
 
 #### Find NewProject Requests using filters (NPR)
@@ -369,7 +366,6 @@ curl --request GET \
 
 #### To limit the number of records in the response body, append the URI with /limit/< limit value >
 Example:  <code>http://domain.com/api/v1/newproject/find/filter/limit/5?< field name >=<  field value >&< field name >=< field value ></code>
-=======
 <hr/>
 
 ### Find single record of NewProject Request using SRID (NPR)
