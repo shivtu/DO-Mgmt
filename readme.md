@@ -633,10 +633,119 @@ curl --request POST \
   
 
 ### Updating an Epic
-HTTP Request Type: <code>POST</code>
+HTTP Request Type: <code>PATCH</code>
 <br/>
-Resource URI: <code>http://domain/api/v1/epic/create/< SRID ></code>
+Resource URI: <code>http://domain/api/v1/epic/create/< _id_ ></code>
+<br/>
+Request URI params: _id (Epic's resource Id)_
+Request body type: JSON
+
+### Example XHR request
+var data = JSON.stringify({
+  "summary": "changed Epic story2"
+});
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("PATCH", "http://localhost:5000/api/v1/epic/update/5db6923b2fcae624e8c5122f");
+xhr.setRequestHeader("Authorization", "tokenValue");
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.setRequestHeader("Accept", "*/*");
+xhr.setRequestHeader("Cache-Control", "no-cache");
+xhr.setRequestHeader("Host", "localhost:5000");
+xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
+xhr.setRequestHeader("Content-Length", "33");
+xhr.setRequestHeader("Connection", "keep-alive");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.send(data);
+
+
+### Finding all Epics
+HTTP Request Type: <code>GET</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/epic/find/findAll</code>
 <br/>
 Request URI params: None
-Request body type: JSON
+
+
+### Finding all Epics with a limit
+HTTP Request Type: <code>GET</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/epic/find/findAll/ < limit ></code>
+<br/>
+Request URI params: an intiger to limit the number of records retrieved
+
+
+### Finding an Epics with a filters
+HTTP Request Type: <code>GET</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/epic/find/filter? < query filter ></code>
+<br/>
+Request URI params: qury filter
+Example filter query: <code>http://domain/api/v1/epic/find/filter?priority=1&NPRID=NPR10</code>
+
+### Example XHR request
+var data = null;
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("GET", "http://localhost:5000/api/v1/epic/find/filter?SRID=EPC10&NPRID=NPR3");
+xhr.setRequestHeader("Accept", "*/*");
+xhr.setRequestHeader("Cache-Control", "no-cache");
+xhr.setRequestHeader("Host", "localhost:5000");
+xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
+xhr.setRequestHeader("Connection", "keep-alive");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.send(data);
+
+
+### To limit the number of records retrived in the above request add the limit param
+### Example 
+<code>http://localhost:5000/api/v1/epic/find/filter/limit/2?SRID=EPC10&NPRID=NPR3</code>
+
+
+### Searching a single record using the Epic's SRID
+### Example
+http://localhost:5000/api/v1/epic/find/srid/EPC10
+### Example XHR request
+
+var data = null;
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("GET", "http://localhost:5000/api/v1/epic/find/srid/EPC10");
+xhr.setRequestHeader("Accept", "*/*");
+xhr.setRequestHeader("Cache-Control", "no-cache");
+xhr.setRequestHeader("Host", "localhost:5000");
+xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
+xhr.setRequestHeader("Connection", "keep-alive");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.send(data);
+
+
+
 
