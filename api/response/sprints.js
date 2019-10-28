@@ -43,7 +43,6 @@ router.post("/create/:SRID", Validate.validationMethod.getEpicSprints,
                     message: error.message
                 });
             });
-            console.log(req.body.currentSprintArrayinEpic);
         })
         .catch((error) =>{
             res.status(500).json({
@@ -53,6 +52,9 @@ router.post("/create/:SRID", Validate.validationMethod.getEpicSprints,
         });
     })
     .catch((e) =>{
+        res.status(500).json({
+            result: 'Internal server error'
+        });
         console.log('cannot create sequence', e);
     });
 });

@@ -53,7 +53,10 @@ router.post(
             });
           });
       })
-      .catch(e => {
+      .catch((e) => {
+        res.status(500).json({
+          result: 'Internal server error'
+        });
         console.log("cannot create sequence", e);
       });
   }

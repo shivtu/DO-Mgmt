@@ -26,7 +26,7 @@ const epicsSchema = mongoose.Schema({
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
   createdBy: { type: JSON, required: true },
   summary: { type: String, required: true },
-  backLogs: { type: Array, required: true },
+  backLogs: { type: JSON, required: true },
   priority: { type: Number, enum: priorityTypes},
   files: { type: Array, default: [] },
   sprints: { type: Array }

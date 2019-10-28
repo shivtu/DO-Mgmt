@@ -6,6 +6,58 @@ const Validate = require("../controller/validate");
 const Counters = require("../model/countersmodel");
 const fs = require("fs");
 
+
+/**Create a NPR - New Project Request */
+router.post(
+  "/create",
+  Validate.validationMethod.isUploadingfile,
+  Validate.validationMethod.isProvidingUpdates,
+  Validate.validationMethod.isClosingRequest,
+  Validate.validationMethod.isAssigningRequest,
+  (req, res, next) => {
+    NPRSequence.exec() /**Increament NPR sequence number */
+      .then(seq => {
+        const utcDate = new Date();
+        const NPR = new Newproject({
+          _id: new mongoose.Types.ObjectId(),
+          SRID: "NPR" + seq.sequence_value,
+          customerName: req.body.customerName,
+          product: req.body.product,
+          productVersion: req.body.productVersion,
+          releases: req.body.releases,
+          serviceType: "New Project Request",
+          priority: req.body.priority,
+          createdOn: utcDate.toUTCString(),
+          createdBy: req.body.currentUser, //This will contain an object with userId, email, role and group props assigned by the accessToken
+          summary: req.body.summary,
+          description: req.body.description,
+          assignedTo: req.body.assignedTo,
+          phase: "created",
+          repoLink: req.body.repoLink,
+          childTasks: [],
+          files: req.body.files,
+          lifeCycle: req.body.lifeCycle
+        });
+        NPR.save()
+          .then(result => {
+            res.status(201).json({
+              result: result
+            });
+          })
+          .catch(e => {
+            res.status(400).json({
+              result: e.message
+            });
+          });
+      })
+      .catch(seqErr => {
+        res.status(500).json({
+          result: seqErr
+        });
+      });
+  });
+
+
 /*Find instance using service ID*/
 router.get("/find/srid/:serviceId", (req, res, next) => {
   const serviceId = req.params.serviceId.toUpperCase();
@@ -63,56 +115,6 @@ router.get("/find/filter/limit/:_limit", (req, res, next) => {
     .catch(e => res.status(500).json({ result: e.message }));
 });
 
-/**Create a NPR - New Project Request */
-router.post(
-  "/create",
-  Validate.validationMethod.isUploadingfile,
-  Validate.validationMethod.isProvidingUpdates,
-  Validate.validationMethod.isClosingRequest,
-  Validate.validationMethod.isAssigningRequest,
-  (req, res, next) => {
-    NPRSequence.exec() /**Increament NPR sequence number */
-      .then(seq => {
-        const utcDate = new Date();
-        const NPR = new Newproject({
-          _id: new mongoose.Types.ObjectId(),
-          SRID: "NPR" + seq.sequence_value,
-          customerName: req.body.customerName,
-          product: req.body.product,
-          productVersion: req.body.productVersion,
-          releases: req.body.releases,
-          serviceType: "New Project Request",
-          priority: req.body.priority,
-          createdOn: utcDate.toUTCString(),
-          createdBy: req.body.currentUser, //This will contain an object with userId, email, role and group props assigned by the accessToken
-          summary: req.body.summary,
-          description: req.body.description,
-          assignedTo: req.body.assignedTo,
-          phase: "created",
-          repoLink: req.body.repoLink,
-          childTasks: [],
-          files: req.body.files,
-          lifeCycle: req.body.lifeCycle
-        });
-        NPR.save()
-          .then(result => {
-            res.status(201).json({
-              result: result
-            });
-          })
-          .catch(e => {
-            res.status(400).json({
-              result: e.message
-            });
-          });
-      })
-      .catch(seqErr => {
-        res.status(500).json({
-          result: seqErr
-        });
-      });
-  }
-);
 
 /**Delete request IDs */
 router.delete("/delete/:_id", (req, res, next) =>{
@@ -133,7 +135,7 @@ router.delete("/delete/:_id", (req, res, next) =>{
 /**update NPR, request body to be plain JSON object (Nested JSON not allowed) */
 router.patch(
   "/update/:_id",
-  Validate.validationMethod.getRecordById,
+  Validate.validationMethod.getRecordById, // This methods sticks the result extracted from DB to request body "extractedResults__id" for consumption by other methods
   Validate.validationMethod.isProvidingUpdates,
   Validate.validationMethod.isAssigningRequest,
   Validate.validationMethod.isUploadingfile,

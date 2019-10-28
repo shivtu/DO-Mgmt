@@ -137,7 +137,7 @@ authUtilMethods = {
                     next();
                 } else {
                     res.status(403).json({
-                        result: 'Cannot verify token'
+                        result: 'Authentication failed'
                     });
                 }
             });

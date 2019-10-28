@@ -1,15 +1,16 @@
 const Newproject = require("../model/newrprojectmodel");
 const NewEpic = require("../model/epicsmodel");
 const Users = require('../model/usermodel');
+const Bugfix = require("../model/bugfixmodel");
 const Sprints = require('../model/sprintsmodel');
+
 const fs = require("fs");
 const bcrypt = require('bcryptjs');
 
 validateMethods = {
 
-  extractedResults__id: '',
-  extractedResults_SRID: '',
-  validateSecurityAns: true,
+  // extractedResults__id: '',
+  // extractedResults_SRID: '',
 
   /**Find the records and assing the result to extractedResults__id for consumption by other methods */
   getRecordById: (req, res, next) => {
@@ -18,16 +19,37 @@ validateMethods = {
       case 'newproject':
         Newproject.findById({ '_id': req.params._id }).exec()
           .then((result) => {
-            this.extractedResults__id = result;
-            // console.log(this.extractedResults__id);
+            // this.extractedResults__id = result;
+            req.body['extractedResults__id'] = result;
             next();
           })
           .catch((err) => {
             res.status(404).json({
               result: 'Record not found'
             });
-            return;
           });
+        break;
+
+      case 'bugfix':
+        Bugfix.findById({ '_id': req.params._id }).exec()
+          .then((result) => {
+            // this.extractedResults__id = result;
+            req.body['extractedResults__id'] = result;
+            next();
+          })
+          .catch((err) => {
+            res.status(404).json({
+              result: 'Record not found'
+            });
+          });
+        break;
+
+      default:
+        res.status(500).json({
+          result: 'Internal server error'
+        });
+        console.log(originalUrlContent[3]);
+      break;
     }
   },
 
@@ -47,7 +69,7 @@ validateMethods = {
             result: 'Record not found'
           });
           return;
-        })
+        });
     }
   },
 
@@ -55,24 +77,26 @@ validateMethods = {
 
   /**Check to see if project is completed and entering release/support/maintenance phase */
   isReleasingProject: (req, res, next) =>{
-    if(req.body.phase === 'delivered' || req.body.phase === 'maintenance' || req.body.phase === 'support' 
-    || req.body.phase === 'release') {
+    const _phase = req.body.phase;
+    if(_phase === 'delivered' || _phase === 'maintenance' || _phase === 'support' 
+    || _phase === 'release') {
 
-      if(req.body.productVersion !== undefined) { /**If product version number is not provided by user throw error */
+      const _productVersion = req.body.productVersion;
+      if(typeof _productVersion !== 'undefined' && Array.isArray(_productVersion) && _productVersion.length > 0) { /**If product version number is not provided by user throw error */
         const utcDate = new Date();
-        this.extractedResults__id.releases.push({
+        req.body.extractedResults__id.releases.push({
           releaseUpdatedBy: req.body.currentUser,
           releaseUpdatedOn: utcDate.toUTCString(),
-          latestVersion: req.body.productVersion
+          latestVersion: _productVersion
         });
-        req.body['releases'] = this.extractedResults__id.releases;
+        req.body['releases'] = req.body.extractedResults__id.releases;
+        req.body['productVersion'] = _productVersion;
         next();
       }
     } else {
       res.status(400).json({
         result: 'product version is required'
       });
-      return;
     }
   },
 
@@ -95,7 +119,8 @@ validateMethods = {
 
   getEpicSprints: (req, res, next) => { /**Get Epic then find the existing sprints field in the Epic
                                         and pass it to original request with sprint array attached to req body */
-    if (typeof req.body.toDo === 'undefined' || (req.body.toDo).length === 0) {
+    const _toDo = req.body.toDo;
+    if (typeof req.body._toDo === 'undefined' || !Array.isArray(_toDo) || (_toDo).length === 0) {
       res.status(400).json({
         result: 'Sprints should have atleast one to-do item'
       });
@@ -122,28 +147,35 @@ validateMethods = {
 
 
   isEpicBackLogOk: (req, res, next) => {
-    if (req.body.backLogs !== undefined && Array.isArray(req.body.backLogs)) {
-      (req.body.backLogs).forEach(eachBackLog => {
+    const _backLogs = req.body.backLogs;
+    let validateFlag = true;
+    if (_backLogs !== undefined && Array.isArray(_backLogs) && _backLogs.length > 0) {
+      (_backLogs).forEach(eachBackLog => {
         Object.keys(eachBackLog).forEach(key => {
-          if (key === "feature" || key === "points") {
+          if (key === "feature" || key === "points") { // Do nothing
           } else {
-            res.status(400).json({
-              result: "Ill formated request body, see docs to format backLogs Array",
-              message: "https://github.com/shivtu/DO-Mgmt"
-            });
+            validateFlag = false;
           }
         });
       });
-      next();
-    } else if (req.body.backLogs !== undefined && !Array.isArray(req.body.backLogs)) {
+      if (validateFlag) {
+        next();
+      } else {
+        res.status(400).json({
+          result: "Ill formated request body",
+          message: "https://github.com/shivtu/DO-Mgmt"
+        });
+      }
+    } else if (_backLogs !== undefined && !Array.isArray(_backLogs)) {
       res.status(400).json({
-        result: "backLogs field must be an array",
+        result: "Ill formated request body",
         message: "https://github.com/shivtu/DO-Mgmt"
       });
     }
   },
 
 
+  /* Check if the NPR exists */
   doesNPRExist: (req, res, next) => {
     Newproject.findOne({ 'SRID': req.params.SRID })
       .then((result) => {
@@ -157,6 +189,7 @@ validateMethods = {
         }
       })
       .catch(err => {
+        console.log(Date.now(), 'doesNPRExist', err);
         res.status(400).json({
           result: 'NPR not found'
         });
@@ -172,30 +205,110 @@ validateMethods = {
 
     const utcDate = new Date();
     const originalUrlContent = req.originalUrl.split('/');
+    const _assignedTo = req.body.assignedTo;
+    const _typeOfRequest = originalUrlContent[4];
 
-    if (req.body.assignedTo !== undefined && (originalUrlContent[4] === 'update')) { /**User is assigning an existing record  */
+    if (typeof _assignedTo !== 'undefined') {
+      switch(_typeOfRequest) {
+        case 'update':
+          /**Always put request to in-progress state if the request is being assigned to another user*/
+          req.body.phase = "in-progress";
 
-      /**Always put request to in-progress state if the request is being assigned to another user*/
-      req.body.phase = "in-progress";
+          req.body.extractedResults__id.lifeCycle.push({ /**Update the lifeCycle */
+            assignedTo: _assignedTo,
+            assignedBy: req.body.currentUser,
+            assignedOn: utcDate.toUTCString()
+          });
+          req.body["lifeCycle"] = req.body.extractedResults__id.lifeCycle;
+          next();
+          break;
 
-      this.extractedResults__id.lifeCycle.push({ /**Update the lifeCycle */
-        assignedTo: req.body.assignedTo,
-        assignedBy: req.body.currentUser,
-        assignedOn: utcDate.toUTCString()
-      });
-      req.body["lifeCycle"] = this.extractedResults__id.lifeCycle;
+        case 'create':
+            let lifeCycle = [];
+            lifeCycle.push({
+              assignedTo: _assignedTo,
+              assignedBy: req.body.currentUser,
+              assignedOn: utcDate.toUTCString()
+            });
+            req.body['lifeCycle'] = lifeCycle;
+            next();
+          break;
+      }
+    } else {
       next();
-    } else if (req.body.assignedTo !== undefined && (originalUrlContent[4] === 'create')) { /**If user is creating new reecord 
-                                                                                              and assign it simoultaneously */
-      lifeCycle = [];
-      lifeCycle.push({
-        assignedTo: req.body.assignedTo,
-        assignedBy: req.body.currentUser,
-        assignedOn: utcDate.toUTCString()
-      });
-      req.body['lifeCycle'] = lifeCycle;
-      next();
-    } else if (req.body.assignedTo === undefined) { /**User is not assigning record to anyone, continue with request */
+    }
+
+    // if (typeof _assignedTo !== 'undefined' && (originalUrlContent[4] === 'update')) { /**User is assigning an existing record  */
+
+    //   /**Always put request to in-progress state if the request is being assigned to another user*/
+    //   req.body.phase = "in-progress";
+
+    //   req.body.extractedResults__id.lifeCycle.push({ /**Update the lifeCycle */
+    //     assignedTo: _assignedTo,
+    //     assignedBy: req.body.currentUser,
+    //     assignedOn: utcDate.toUTCString()
+    //   });
+    //   req.body["lifeCycle"] = req.body.extractedResults__id.lifeCycle;
+    //   next();
+    // } else if (typeof _assignedTo !== 'undefined' && (originalUrlContent[4] === 'create')) { /**If user is creating new reecord 
+    //                                                                                           and assign it simoultaneously */
+    //   let lifeCycle = [];
+    //   lifeCycle.push({
+    //     assignedTo: _assignedTo,
+    //     assignedBy: req.body.currentUser,
+    //     assignedOn: utcDate.toUTCString()
+    //   });
+    //   req.body['lifeCycle'] = lifeCycle;
+    //   next();
+    // } else if (typeof _assignedTo === 'undefined') { /**User is not assigning record to anyone, continue with request */
+    //   next();
+    // }
+  },
+
+
+
+  /* Check if user is assigning BFR */
+  isAssigningBFR: (req, res, next) =>{
+
+    const utcDate = new Date();
+    const originalUrlContent = req.originalUrl.split('/');
+    const _assignedTo = req.body.assignedTo;
+    
+    if (typeof _assignedTo !== 'undefined') { /* Check if user is assigning BFR to someone else */
+      requestPath = originalUrlContent[4];
+
+      switch (requestPath) {
+        case 'create':
+          req.body['status'] = 'in-progress';
+          let lifeCycle = [];
+          lifeCycle.push({
+            assignedTo: _assignedTo,
+            assignedBy: req.body.currentUser,
+            assignedOn: utcDate.toUTCString()
+          });
+          req.body['lifeCycle'] = lifeCycle;
+          next();
+        break;
+
+        case 'update':
+            req.body['status'] = 'in-progress';
+            let lifeCycle2 = [];
+            lifeCycle2.push({
+              assignedTo: _assignedTo,
+              assignedBy: req.body.currentUser,
+              assignedOn: utcDate.toUTCString()
+            });
+            req.body['lifeCycle'] = lifeCycle2;
+            next();
+          break;
+
+        default:
+          console.log('isAssigningBFR break block of switch statement');
+          res.status(500).json({
+            result: 'Unexpected server error'
+          });
+      }
+    } else { /* user is not assigning request to anyone, continue with request */
       next();
     }
   },
@@ -217,7 +330,10 @@ validateMethods = {
   isProvidingUpdates: (req, res, next) => {
 
     const originalUrlContent = req.originalUrl.split('/');
-    if (originalUrlContent[4] === 'create' && req.body.updateNotes !== undefined) { /**User is trying to provide update to a new request */
+    const _updateNotes = req.body.updateNotes;
+    const _originalUrlContent = originalUrlContent[4];
+
+    if (_originalUrlContent === 'create' && typeof _updateNotes !== 'undefined') { /**User is trying to provide update to a new request */
       console.log("User is trying to provide update to a new request");
       switch (originalUrlContent[3]) {
         case 'newproject':
@@ -238,34 +354,35 @@ validateMethods = {
             message: 'was the web service recently upgraded?'
           });
       }
-    } else if ((originalUrlContent[4] === 'update')
-      && (req.body.updateNotes !== undefined)
-      && (Array.isArray(req.body.updateNotes))) {
+    } else if ((_originalUrlContent === 'update')
+      && (typeof _updateNotes !== 'undefined')
+      && (Array.isArray(_updateNotes))) {
       console.log("User is trying to insert updateNotes on existing record");
-      if ((req.body.updateNotes).length !== 2) {
+
+      /* Check if update notes is of length 2 or not (summary and description) */
+      if ((_updateNotes).length !== 2) {
         console.log("User is trying to insert ill formatted updateNotes on existing record");
         res.status(400).json({
           result: "updateNotes can be of length 2 only",
           message: "readme file: https://github.com/shivtu/DO-Mgmt"
         });
-        return;
       }
 
       /**Format updateNotes field with fields : "summary", "description", "updatedBy"
        * field: "updatedBy" is managed @authentication.js
        */
-      const newNote = { summary: req.body.updateNotes[0], description: req.body.updateNotes[1], updatedBy: req.body.currentUser }
+      const newNote = { summary: _updateNotes[0], description: _updateNotes[1], updatedBy: req.body.currentUser }
       /**Push the newly formated updateNotes field to existing array */
-      this.extractedResults__id.updateNotes.push(newNote);
-      req.body.updateNotes = this.extractedResults__id.updateNotes;
+      req.body.extractedResults__id.updateNotes.push(newNote);
+      _updateNotes = req.body.extractedResults__id.updateNotes;
       next();
 
-    } else if ((originalUrlContent[4] !== 'update') && (req.body.updateNotes === undefined)) {
+    } else if ((_originalUrlContent !== 'update') && (typeof _updateNotes === 'undefined')) {
       console.log("User is trying to update new record without inserting updateNotes");
       next();
-    } else if ((originalUrlContent[4] === 'update') && (req.body.updateNotes !== undefined) && (!Array.isArray(req.body.updateNotes))) {
+    } else if ((_originalUrlContent === 'update') && (typeof _updateNotes !== 'undefined') && (!Array.isArray(_updateNotes))) {
         res.status(400).json({
-          result: 'Ill formated update notes',
+          result: 'Ill formated request body',
           message: 'https://github.com/shivtu/DO-Mgmt'
         });
     } else {
@@ -277,11 +394,14 @@ validateMethods = {
 
   /**Check if user is trying to upload file */
   isUploadingfile: (req, res, next) => {
-    if (req.body.files === undefined && req.params._id === undefined) {
+    const _files = req.body.files;
+    const _id = req.params._id;
+    
+    if (typeof _files === 'undefined' && typeof _id === 'undefined') {
       /**check if user is trying to upload file to new NPR */
-      req.body.files = []; /**always set initial state of files to empty array */
+      _files = []; /**always set initial state of files to empty array */
       next();
-    } else if (req.body.files !== undefined && req.params._id === undefined) {
+    } else if (typeof _files !== 'undefined' && typeof _id === 'undefined') {
       /**user is trying to upload file to new NPR */
       this.validationMethod
         .saveFile(req, res, next)
@@ -295,7 +415,7 @@ validateMethods = {
             result: err.message
           });
         });
-    } else if (req.body.files !== undefined && req.params._id !== undefined) {
+    } else if (typeof _files !== 'undefined' && typeof _id !== 'undefined') {
       /**user is trying to upload file
       to existing ticket, find existing 
       array of file field and push new JSON 
@@ -304,12 +424,12 @@ validateMethods = {
       this.validationMethod
         .saveFile(req, res, next)
         .then(savedFilePaths => {
-          this.extractedResults__id.files.push(
+          req.body.extractedResults__id.files.push(
             savedFilePaths
           ); /**search for existing files array 
                   in the record and push the new files 
                   object into the retrieved array */
-          req.body.files = this.extractedResults__id.files;
+          req.body.files = req.body.extractedResults__id.files;
           next();
         })
         .catch(err => {
@@ -318,7 +438,7 @@ validateMethods = {
           });
         });
 
-    } else if (req.body.files === undefined && req.params._id !== undefined) {
+    } else if (typeof _files === 'undefined' && typeof _id !== 'undefined') {
       next();
     }
   },
@@ -327,15 +447,17 @@ validateMethods = {
 
   /**isFileSaved promise wrapped in saveFile function that returns the promise for cunsmption by other methods  */
   saveFile: (req, res, next) => {
-    if (req.body.files.length !== 2 && Array.isArray(req.body.files)) {
+    const _files = req.body.files;
+    
+    if (Array.isArray(req.body.files) && _files.length !== 2) {
       res.status(400).json({
         result: "request body files array can be of length 2 only"
       });
       return;
     }
     isFileSaved = new Promise((resolve, reject) => {
-      const originalFileName = req.body.files[0];
-      const fileContent = req.body.files[1];
+      const originalFileName = _files[0];
+      const fileContent = _files[1];
       const rand = Math.floor(Math.random() * Math.floor(10));
       const newFileName = Date.now().toString() + rand + originalFileName;
       const uploadFolder = process.env.HOME + "\\desktop\\";
@@ -365,26 +487,6 @@ validateMethods = {
 
 
   /**Validate security questions */
-  areSecurityAnswersValid: (req, res, next) =>{
-    const securityQuestions = req.body.security;
-    let checkFlag = true;
-    if (Array.isArray(securityQuestions) && securityQuestions.length > 2) {
-      securityQuestions.forEach((questions) =>{
-        usersAnswer = questions.question;
-        if (usersAnswer === '' || typeof usersAnswer === 'undefined' || usersAnswer === null) {
-          checkFlag = false;
-        }
-      });
-    } else {
-      res.status(400).json({
-        result: 'Ill formated request body',
-        message: 'https://github.com/shivtu/DO-Mgmt'
-      });
-    }
-  },
-
-
-
   checkUserAns: (req, res, next) =>{
     _user = (req.body.userId).toUpperCase();
     Users.findOne({'userId': _user}).exec()
@@ -399,7 +501,7 @@ validateMethods = {
             bcrypt.compare(providedQandA[j].answer, foundUser.security[i].answer, (compareErr, compareSuccess) =>{
               if (!compareSuccess) {
                 _areAnsValid = false;
-                console.log('_areAnsValid', _areAnsValid); 
+                // console.log('_areAnsValid', _areAnsValid); 
               }
             });
             if (!_areAnsValid) {
