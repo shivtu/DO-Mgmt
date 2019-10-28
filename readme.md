@@ -577,4 +577,29 @@ HTTP Request Type: <code>PATCH</code>
 Resource URI: <code>http://domain/api/v1/newproject/update/assignedTo/< _id ></code>
 <br/>
 Request body format: <code>{"assignedTo": "user name"}</code>
+    
 
+### Creating an Epic(User stories) for your projects
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/epic/create/<NPRID></code>
+<br/>
+Request URI params: None
+
+#### Mandatory Fields
+<ul>
+    <li>summary: Type String</li>
+    <li>backLogs: Type: Array of Objects with keys - feature and weight</li>
+    <li>productVersion: Type: Array of strings</li>
+</ul>
+
+#### Example HTTP CURL reques
+curl --request POST \
+  --url http://domain.com/api/v1/epic/create/NPR39 \
+  --header 'Accept: */*' \
+  --header 'Authorization: < Auth Token >' \
+  --header 'Cache-Control: no-cache' \
+  --header 'Connection: keep-alive' \
+  --header 'Content-Length: 175' \
+  --header 'Content-Type: application/json' \
+  --data '{"summary":"first epic story", "backLogs":[{"feature":"feature1", "weight": "100"}], "productVersion":["1.0.0"]}'
