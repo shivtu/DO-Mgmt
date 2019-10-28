@@ -2,7 +2,7 @@
 ### Gist
 
 #### A comprehensive dev-ops tool
-#### Specifically for dev-ops/developer teams based on agile/scrum practises
+#### Specifically for dev-ops/developer teams based on agile/scrum practices
 #### Built as a light weight blazing fast service for medium to large teams
 <h4> License : <a href="https://mit-license.org/">MIT</a></h4>
 
@@ -111,7 +111,7 @@ Request URI params: None
 <code>http://localhost:5000/api/v1/services/createUser</code>
 -- in the request body provide the below fields
 <ul>
-    <li>initPwd: Rhis is the initial password</li>
+    <li>initPwd: This is the initial password</li>
 </ul>
 -- This will create a new user profile with name : Bruce Wayne and userId: USR0
 
