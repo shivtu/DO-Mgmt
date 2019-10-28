@@ -186,7 +186,7 @@ Example request body:
 #### You will now need to provide the initial password (initPwd) and the Auto Generated User ID (userId) to the user and ask him/her to make the first login using the below route
 <br/>
 (You may also use the random password generator utility built within to keep the password as random as possible)
-<br/>
+<br/><br/>
 HTTP Request Type: <code>POST</code>
 <br/>
 Resource URI: <code>http://localhost:5000/api/v1/userauth/firstLogin</code>
