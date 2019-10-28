@@ -38,16 +38,10 @@ const sprintsSchema = mongoose.Schema({
   doing: { type:Array },
   done: { type:Array },
   labels: { type: String },
+  memberList: { type: JSON, required:  true },
   files: { type: Array, default: [] },
 });
 
-/**backLog structure:
- * backLogs: [
- *  { "to-do": [],
- *    "doing": [],  
- *    "done": [],  
- *  }
- * ]
- */
+
 
 module.exports = mongoose.model("Sprints", sprintsSchema);

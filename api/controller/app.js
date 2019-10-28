@@ -81,6 +81,7 @@ app.use((error, req, res, next) => {
       message: error.message
     }
   });
+  console.log(error);
 });
 
 module.exports = app;

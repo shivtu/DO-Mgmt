@@ -32,7 +32,7 @@ router.post(
           summary: req.body.summary,
           description: req.body.description,
           assignedTo: req.body.assignedTo,
-          phase: "created",
+          phase: req.body.phase,
           repoLink: req.body.repoLink,
           childTasks: [],
           files: req.body.files,
@@ -141,12 +141,13 @@ router.patch(
   Validate.validationMethod.isUploadingfile,
   Validate.validationMethod.isUpdatingNPRExceptions,
   Validate.validationMethod.isReleasingProject,
+  Validate.validationMethod.isUpdatingProductVersion,
   (req, res, next) => {
     Newproject.findByIdAndUpdate({ _id: req.params._id }, req.body, {
       new: true
     }).exec()
       .then(result => {
-        res.status(200).json({
+        res.status(201).json({
           result: result
         });
       })

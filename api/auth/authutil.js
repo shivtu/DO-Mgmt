@@ -134,6 +134,7 @@ authUtilMethods = {
                         'email': decode.email,
                         'group': decode.group
                     }; //paste current user properties to request body
+                    Object.freeze(req.body.currentUser); // Freeze verified token to avoid any manipulation by the user
                     next();
                 } else {
                     res.status(403).json({

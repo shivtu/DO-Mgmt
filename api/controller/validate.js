@@ -19,29 +19,55 @@ validateMethods = {
       case 'newproject':
         Newproject.findById({ '_id': req.params._id }).exec()
           .then((result) => {
-            // this.extractedResults__id = result;
-            req.body['extractedResults__id'] = result;
-            next();
+            if (result !== null) {
+              req.body['extractedResults__id'] = result;
+              next();
+            } else {
+              res.status(404).json({
+                result: 'Record not found'
+              });
+            }
           })
           .catch((err) => {
             res.status(404).json({
               result: 'Record not found'
             });
+            console.log(Date.now(), 'getRecordById', err);
           });
         break;
 
       case 'bugfix':
         Bugfix.findById({ '_id': req.params._id }).exec()
           .then((result) => {
-            // this.extractedResults__id = result;
-            req.body['extractedResults__id'] = result;
-            next();
+            if (result !== null) {
+              req.body['extractedResults__id'] = result;
+              next();
+            } else {
+              res.status(404).json({
+                result: 'Record not found'
+              });
+            }
           })
           .catch((err) => {
             res.status(404).json({
               result: 'Record not found'
             });
+            console.log(err);
           });
+        break;
+
+      case 'epic':
+        NewEpic.findById({ '_id': req.params._id }).exec()
+        .then((result) => {
+          req.body['extractedResults__id'] = result;
+          next();
+        })
+        .catch((err) =>{
+          res.status(404).json({
+            result: 'Record not found'
+          });
+          console.log(err);
+        });
         break;
 
       default:
@@ -57,19 +83,52 @@ validateMethods = {
   /**Find the records and assing the result to extractedResults_SRID for consumption by other methods */
   getRecordBySRID: (req, res, next) =>{
     const originalUrlContent = req.originalUrl.split('/');
+    // console.log(originalUrlContent[3]);
     switch (originalUrlContent[3]) {
       case 'newproject':
         Newproject.findOne({'SRID': req.params.SRID}).exec()
         .then((result) =>{
-          this.extractedResults_SRID = result;
-          next();
+          if (result !== null) {
+            req.body['extractedResults_SRID'] = result;
+            next();
+          } else {
+            res.status(404).json({
+              result: 'Record not found'
+            });
+          }
         })
         .catch((err) =>{
           res.status(404).json({
             result: 'Record not found'
           });
-          return;
         });
+        break;
+
+      case 'sprint':
+        Sprints.findOne({'SRID': req.params.SRID}).exec()
+        .then((result) =>{
+          if (result !== null) {
+            req.body['extractedResults_SRID'] = result;
+            console.log(req.body.extractedResults_SRID);
+            next();
+          } else {
+            res.status(404).json({
+              result: 'Record not found'
+            });
+          }
+        })
+        .catch((err) =>{
+          res.status(404).json({
+            result: 'Record not found'
+          });
+        });
+        break;
+
+      default:
+        res.status(500).json({
+          result: 'Internal server error'
+        });
+      break;
     }
   },
 
@@ -90,29 +149,172 @@ validateMethods = {
           latestVersion: _productVersion
         });
         req.body['releases'] = req.body.extractedResults__id.releases;
-        req.body['productVersion'] = _productVersion;
+        _productVersion.forEach((item) =>{
+          req.body.extractedResults__id.productVersion.push(item);
+        });
+        req.body['productVersion'] = req.body.extractedResults__id.productVersion;
         next();
+      } else {
+        res.status(400).json({
+          result: 'product version is required'
+        });
       }
     } else {
-      res.status(400).json({
-        result: 'product version is required'
-      });
+      next();
     }
   },
+
+
+    /* Check if user is updating product version */
+    isUpdatingProductVersion: (req, res, next) =>{
+      const _phase = req.body.phase;
+
+      if (typeof req.body.productVersion === 'undefined') {
+        next();
+      } else {
+        if (typeof req.body.productVersion !== 'undefined' && (_phase === 'delivered' || _phase === 'maintenance' || _phase === 'support' 
+        || _phase === 'release')) {
+          next();
+        } else {
+          res.status(400).json({
+            result: 'Product version can be updated only with a release'
+          });
+        }
+      }
+    },
 
 
 
   /**Restrict user updating certain fields */
   isUpdatingNPRExceptions: (req, res, next) => {
-    if (req.body.updatedOn !== undefined || req.body.createdBy !== undefined || req.body.SRID !== undefined
+    if (req.body.updatedOn !== undefined || req.body.SRID !== undefined
       || req.body._id !== undefined || req.body.epics !== undefined
-      || req.body.createdOn !== undefined || req.body.serviceType !== undefined) {
+      || req.body.createdOn !== undefined || req.body.serviceType !== undefined || req.body.sprints !== undefined
+      || req.body.releases !== undefined || req.body.lifeCycle !== undefined) {
+        
       res.status(400).json({
-        result: "Some of the field values in the request body cannot be updated",
+        result: "Some of the values in the request body cannot be updated",
         message: "https://github.com/shivtu/DO-Mgmt"
       });
     } else {
+      /* Since reques.body.createdBy is an object we overide this to avoid possible conflicts */
+      req.body['createdBy'] = req.body.extractedResults__id.createdBy;
       next();
+    }
+  },
+
+
+  /**Restrict user updating certain fields */
+  isUpdatingEPCExceptions: (req, res, next) =>{
+    if (typeof req.body.sprints !== 'undefined' || typeof req.body.NPRID !== 'undefined'
+    || typeof req.body.createdBy !== 'undefined' || typeof req.body.serviceType !== 'undefined'
+    || typeof req.body.createdOn !== 'undefined') {
+      res.status(400).json({
+        result: "Some of the values in the request body cannot be updated",
+        message: "https://github.com/shivtu/DO-Mgmt"
+      });
+      console.log(req.body);
+    } else {
+       /* Since reques.body.createdBy is an object we overide this to avoid possible conflicts */
+       req.body['createdBy'] = req.body.extractedResults__id.createdBy;
+       next();
+    }
+  },
+
+
+  /* Validate SPR memberList */
+  validateSPRMemberList: (req, res, next) =>{
+    const originalUrlContent = req.originalUrl.split('/');
+    let _memberList = req.body.memberList;
+    let currentMembers = req.body.extractedResults_SRID.memberList;
+
+    let validateFlag = true;
+        if (typeof _memberList !== 'undefined' && Array.isArray(_memberList) && _memberList.length > 0) {
+          _memberList.forEach((eachMember) =>{
+            if (typeof eachMember !== 'string' || eachMember === "") {
+              validateFlag = false;
+            }
+          });
+          if (validateFlag) {
+            switch (originalUrlContent[4]) {
+
+              case 'create':
+                next();
+              break;
+        
+              case 'update':
+              /* nested switch */
+                switch(originalUrlContent[6]) {
+                  case 'add':
+                    _memberList.forEach((member) =>{
+                    currentMembers.push(member);
+                    });
+                    req.body['memberList'] = currentMembers;
+                    next();
+                  break;
+        
+                case 'remove':
+                    _memberList.forEach((member) =>{
+                      if (currentMembers.includes(member)) {
+                        index = currentMembers.indexOf(member);
+                        currentMembers.splice(index, 1);
+                      }
+                    });
+                    req.body['memberList'] = currentMembers;
+                    next();
+                  break;
+
+                case 'new':
+                  req.body['memberList'] = _memberList;
+                  next();
+                  break;
+
+                default:
+                  res.status(500).json({
+                    result: 'Internal server error',
+                    message: 'Was the web service upgraded recently'
+                  });
+                break;
+                }
+              /* Nested switch */
+              break;
+
+            default:
+                res.status(500).json({
+                  result: 'Internal server error',
+                  message: 'Was the web service upgraded recently'
+                });
+              break;
+            }
+          } else {
+            res.status(400).json({
+              result: 'Ill formated requested body',
+              message: 'https://github.com/shivtu/DO-Mgmt'
+            });
+          }
+        } else {
+          res.status(400).json({
+            result: 'Ill formated requested body',
+            message: 'https://github.com/shivtu/DO-Mgmt'
+          });
+        }
+  },
+
+
+  /**Restrict user updating certain fields */
+  isUpdatingSPRExceptions: (req, res, next) =>{
+    if (typeof req.body.sprints !== 'undefined' || typeof req.body.NPRID !== 'undefined'
+    || typeof req.body.createdBy !== 'undefined' || typeof req.body.serviceType !== 'undefined'
+    || typeof req.body.createdOn !== 'undefined') {
+      res.status(400).json({
+        result: "Some of the values in the request body cannot be updated",
+        message: "https://github.com/shivtu/DO-Mgmt"
+      });
+      console.log(req.body);
+    } else {
+       /* Since reques.body.createdBy is an object we overide this to avoid possible conflicts */
+       req.body['createdBy'] = req.body.extractedResults__id.createdBy;
+       next();
     }
   },
 
@@ -120,9 +322,10 @@ validateMethods = {
   getEpicSprints: (req, res, next) => { /**Get Epic then find the existing sprints field in the Epic
                                         and pass it to original request with sprint array attached to req body */
     const _toDo = req.body.toDo;
-    if (typeof req.body._toDo === 'undefined' || !Array.isArray(_toDo) || (_toDo).length === 0) {
+    if (typeof _toDo === 'undefined' || !Array.isArray(_toDo) || _toDo.length === 0) {
+      console.log(typeof req.body._toDo);
       res.status(400).json({
-        result: 'Sprints should have atleast one to-do item'
+        result: 'Sprints should have atleast one toDo item'
       });
     } else {
       NewEpic.findOne({ 'SRID': req.params.SRID })
@@ -141,6 +344,7 @@ validateMethods = {
         res.status(500).json({
           result: 'Could not find EPIC'
         });
+        console.log(error);
       });
     }
   },
@@ -211,7 +415,7 @@ validateMethods = {
     if (typeof _assignedTo !== 'undefined') {
       switch(_typeOfRequest) {
         case 'update':
-          /**Always put request to in-progress state if the request is being assigned to another user*/
+          /* Always put request to in-progress phase if the request is being assigned to another user */
           req.body.phase = "in-progress";
 
           req.body.extractedResults__id.lifeCycle.push({ /**Update the lifeCycle */
@@ -224,6 +428,9 @@ validateMethods = {
           break;
 
         case 'create':
+             /* Always put request to in-progress phase if the request is being assigned to another user */
+            req.body['phase'] = "in-progress";
+
             let lifeCycle = [];
             lifeCycle.push({
               assignedTo: _assignedTo,
@@ -374,7 +581,7 @@ validateMethods = {
       const newNote = { summary: _updateNotes[0], description: _updateNotes[1], updatedBy: req.body.currentUser }
       /**Push the newly formated updateNotes field to existing array */
       req.body.extractedResults__id.updateNotes.push(newNote);
-      _updateNotes = req.body.extractedResults__id.updateNotes;
+      req.body['updateNotes'] = req.body.extractedResults__id.updateNotes;
       next();
 
     } else if ((_originalUrlContent !== 'update') && (typeof _updateNotes === 'undefined')) {
@@ -399,7 +606,7 @@ validateMethods = {
     
     if (typeof _files === 'undefined' && typeof _id === 'undefined') {
       /**check if user is trying to upload file to new NPR */
-      _files = []; /**always set initial state of files to empty array */
+      req.body.files = []; /**always set initial state of files to empty array */
       next();
     } else if (typeof _files !== 'undefined' && typeof _id === 'undefined') {
       /**user is trying to upload file to new NPR */
@@ -461,6 +668,8 @@ validateMethods = {
       const rand = Math.floor(Math.random() * Math.floor(10));
       const newFileName = Date.now().toString() + rand + originalFileName;
       const uploadFolder = process.env.HOME + "\\desktop\\";
+      const utcDate = new Date();
+
       /**NodeJS file system (fs) to write Base64 string to disk as file*/
       fs.writeFile(
         uploadFolder + newFileName,
@@ -475,7 +684,9 @@ validateMethods = {
             /**return the saved file details as JSON object */
             resolve({
               originalFileName: originalFileName,
-              filePath: uploadFolder + newFileName
+              filePath: uploadFolder + newFileName,
+              uploadedBy: req.body.currentUser,
+              uploadedOn: utcDate.toUTCString()
             });
           }
         }
@@ -631,7 +842,52 @@ validateMethods = {
     
   },
 
-  isUpdatingDoneSprints: (req, res, next) =>{}
+  isUpdatingDoneSprints: (req, res, next) =>{
+    const _done = req.body.done;
+
+    if (typeof _done !== 'undefined' && Array.isArray(_done) && _done.length > 0) {
+      Sprints.findOne({'SRID': req.params.SRID}).exec()
+      .then((foundSprint) =>{
+        currentDoneArray = foundSprint.done; // Done array in the record
+        currentDoingArray = foundSprint.doing;
+        doneArray = req.body.done; // done items requested by the user
+
+        let validateDoneItems = true;
+
+        /** Check if req.body.done Array is a subset of existing toDo array */
+        doneArray.forEach((eachDoneItem) =>{
+          if (!currentDoingArray.includes(eachDoneItem)) {
+            validateDoneItems = false;
+          } else {
+            index = currentDoingArray.indexOf(eachDoneItem);
+            currentDoingArray.splice(index, 1);
+          }
+        });
+
+        if (validateDoneItems) {
+          // push req.body.done to current done array
+          doneArray.forEach((eachItem) =>{
+            currentDoneArray.push(eachItem);
+          });
+          req.body['done'] = currentDoneArray;
+          req.body['doing'] = currentDoingArray;
+          next();
+        } else {
+          res.status(400).json({
+            result: 'done items must be from doing list'
+          });
+        }
+      })
+      .catch();
+    } else {
+      res.status(400).json({
+        result: 'Ill formated request body',
+        message: 'https://github.com/shivtu/DO-Mgmt/'
+      });
+    }
+  },
+
+
 
 
 };

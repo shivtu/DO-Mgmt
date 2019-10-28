@@ -19,9 +19,7 @@ const epicsSchema = mongoose.Schema({
     index: true,
     unique: true
   },
-  customerName: { type: String },
-  product: { type: String, require: true, index: true },
-  productVersion: { type: Array },
+  productVersion: { type: String, required: true },
   serviceType: { type: String, default: "Epic" },
   createdOn: { type: Date, default: Date.now(), min: Date.now() },
   createdBy: { type: JSON, required: true },
