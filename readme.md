@@ -164,7 +164,7 @@ Example request body: {"userId":"USR0", "password": "< This will be the password
 #### Creating a new user
 HTTP Request Type: <code>POST</code>
 <br/>
-Resource URI: <code>http://localhost:5000/api/v1/userauth/getToken</code>
+Resource URI: <code>http://localhost:5000/api/v1/users/create</code>
 <br/>
 Request URI params: None
 <br/>
