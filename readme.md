@@ -103,6 +103,32 @@ Resource URI: <code>http://domain/api/v1/counters/all</code>
 Request URI params: None
 
 
+#### You will also need to create an initial user with a workaround since every route is protected by built in token based authentication system
+### To do that you can either commit changes directly to DataBase, but since you may not be aware of the user properties yet i have created few routes to just do that
+-- Go to services.js and uncomment the code from line no. 113 to line no. 218
+-- Make the following POST request to
+<code>http://localhost:5000/api/v1/services/createUser</code>
+-- in the request body provide the below fields
+<ul>
+    <li>initPwd: Rhis is the initial password</li>
+</ul>
+-- This will create a new user profile with name : Bruce Wayne and userId: USR0
+
+### Now you will need to setup credentials for the user
+-- Make the following POST request to
+<code>http://localhost:5000/api/v1/services/createCreds</code>
+-- in the request body provide the below fields
+<ul>
+    <li>Password: This is the password you (USR0) will be using to get access tokens</li>
+</ul>
+-- This will setup credentials for user USR0
+
+### If you are wondering why did we setup user with two different routes?<br/>This is for security reasons
+-- <code>http://localhost:5000/api/v1/services/createUser</code> setups the profile of the user that can be viewed by others/admins
+-- <code>http://localhost:5000/api/v1/services/createCreds</code> setups the crendentials that is never exposed by the middleware
+
+
+
 
 ## REST Web-Services Usage
 ### Create a New Project Request (NPR)
@@ -582,9 +608,9 @@ Request body format: <code>{"assignedTo": "user name"}</code>
 ### Creating an Epic(User stories) for your projects
 HTTP Request Type: <code>POST</code>
 <br/>
-Resource URI: <code>http://domain/api/v1/epic/create/<NPRID></code>
+Resource URI: <code>http://domain/api/v1/epic/create/< NPRID ></code>
 <br/>
-Request URI params: None
+Request URI params: SRID of NPR
 
 #### Mandatory Fields
 <ul>
@@ -603,3 +629,13 @@ curl --request POST \
   --header 'Content-Length: 175' \
   --header 'Content-Type: application/json' \
   --data '{"summary":"first epic story", "backLogs":[{"feature":"feature1", "weight": "100"}], "productVersion":["1.0.0"]}'
+  
+
+### Updating an Epic
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/epic/create/< SRID ></code>
+<br/>
+Request URI params: None
+Request body type: JSON
+
