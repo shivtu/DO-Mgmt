@@ -793,7 +793,7 @@ Request body type: JSON
   <li>files: Picked from the request body<br/> Type: String Array<br/> Mandatory field: No</li>
 </ul>
 
-### Example XHR Request
+### Example CURL Request Shell(CURL)
 curl --request POST \
   --url http://localhost:5000/api/v1/sprint/create/EPC31 \
   --header 'Accept: */*' \
@@ -807,3 +807,291 @@ curl --request POST \
   --header 'cache-control: no-cache' \
   --data '{"summary":"Random SPRINT summary", "toDo":["task0", "task1", "task2", "task3", "task4", "task5", "task6", "task7"], "memberList":["someone"]}'
 
+
+### Searching all Sprints
+HTTP Request Type: <code>GET</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/sprint/find/findAll</code>
+<br/>
+Request URI params: None
+Example : <code>localhost:5000/api/v1/sprint/find/findall</code>
+
+### Example CURL Request SHELL(CURL)
+curl --request GET \
+  --url http://localhost:5000/api/v1/sprint/find/findall \
+  --header 'Accept: */*' \
+  --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Authorization: < authToken >' \
+  --header 'Cache-Control: no-cache' \
+  --header 'Connection: keep-alive' \
+  --header 'Host: localhost:5000' \
+  --header 'cache-control: no-cache'
+
+
+### To limit the above search use the limit param
+  Example: <code>localhost:5000/api/v1/sprint/find/findall/limit/5</code>
+  -- Limits the retrieval of records to 5
+
+
+### Find all Sprints using filter
+  HTTP Request Type: <code>GET</code>
+<br/>
+Resource URI: <code>http://domain/api/v1/sprint/find/filter/< filter query ></code>
+<br/>
+Request URI params: < filter query >
+Example : <code>http://localhost:5000/api/v1/sprint/find/filter?EPCID=EPC10&NPRID=NPR3</code>
+
+### Example CURL request Shell(CURL)
+curl --request GET \
+  --url 'http://localhost:5000/api/v1/sprint/find/filter?EPCID=EPC10&NPRID=NPR3' \
+  --header 'Accept: */*' \
+  --header 'Accept-Encoding: gzip, deflate' \
+  --header 'Authorization: < authToken >' \
+  --header 'Cache-Control: no-cache' \
+  --header 'Connection: keep-alive' \
+  --header 'Host: localhost:5000' \
+  --header 'cache-control: no-cache'
+
+  ### To limit the above search use the limit param
+  Example: <code>http://localhost:5000/api/v1/sprint/find/filter/limit/5?EPCID=EPC10&NPRID=NPR3</code>
+  -- Limits the retrieval of records to 5
+
+### Find a single Record using Sprint SRID
+HTTP Request Type: <code>GET</code>
+<br/>
+Resource URI: <code>localhost:5000/api/v1/sprint/find/srid/< SRID ></code>
+<br/>
+Request URI params: < SRID >
+Example : <code>localhost:5000/api/v1/sprint/find/srid/SPR3</code>
+
+### Example XHR request
+var data = null;
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("GET", "http://localhost:5000/api/v1/sprint/find/srid/SPR3");
+hr.setRequestHeader("Authorization", "tokenValue");
+xhr.setRequestHeader("Accept", "*/*");
+xhr.setRequestHeader("Cache-Control", "no-cache");
+xhr.setRequestHeader("Host", "localhost:5000");
+xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
+xhr.setRequestHeader("Connection", "keep-alive");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.send(data);
+
+### Adding members to your existing Sprints
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>localhost:5000/api/v1/sprint/update/memberList/add/< SRID ></code>
+<br/>
+Request URI params: < SRID >
+Example : <code>localhost:5000/api/v1/sprint/update/memberList/add/SPR19</code>
+
+### Example XHR Request
+var data = JSON.stringify({
+  "memberList": [
+    "Mr Q"
+  ]
+});
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("PATCH", "http://localhost:5000/api/v1/sprint/update/memberList/add/SPR19");
+xhr.setRequestHeader("Authorization", "authToken");
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.setRequestHeader("Accept", "*/*");
+xhr.setRequestHeader("Cache-Control", "no-cache");
+xhr.setRequestHeader("Host", "localhost:5000");
+xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
+xhr.setRequestHeader("Content-Length", "23");
+xhr.setRequestHeader("Connection", "keep-alive");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.send(data);
+
+
+### Removing a team member from the Sprint
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>localhost:5000/api/v1/sprint/update/memberList/remove/< SRID ></code>
+<br/>
+Request URI params: < SRID >
+Example : <code>localhost:5000/api/v1/sprint/update/memberList/remove/SPR19</code>
+
+### Example XHR Request
+var data = JSON.stringify({
+  "memberList": [
+    "Mr Q"
+  ]
+});
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("PATCH", "http://localhost:5000/api/v1/sprint/update/memberList/remove/SPR19");
+xhr.setRequestHeader("Authorization", "authToken");
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.setRequestHeader("Accept", "*/*");
+xhr.setRequestHeader("Cache-Control", "no-cache");
+xhr.setRequestHeader("Host", "localhost:5000");
+xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
+xhr.setRequestHeader("Content-Length", "23");
+xhr.setRequestHeader("Connection", "keep-alive");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.send(data);
+
+
+### Overiding the current member list in the Sprint
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>localhost:5000/api/v1/sprint/update/memberList/new/< SRID ></code>
+<br/>
+Request URI params: < SRID >
+Example : <code>localhost:5000/api/v1/sprint/update/memberList/new/SPR19</code>
+-- The above URI will simply override the existing array of members in the Sprint
+-- The request body is must contain a String array with key name as "memberList" in JSON format
+
+### Moving the to-do items in Sprint to doing items
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>localhost:5000/api/v1/sprint/update/toDoItems/< SRID ></code>
+<br/>
+Request URI params: < SRID >
+Example : <code>localhost:5000/api/v1/sprint/update/toDoItems/SPR18</code>
+-- This property is Validated
+-- If the toDo items already exsit the middleware throws a 404 error
+
+### Example XHR Request
+var data = JSON.stringify({
+  "toDo": [
+    "task4",
+    "task6"
+  ]
+});
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("PATCH", "http://localhost:5000/api/v1/sprint/update/toDoItems/SPR18");
+xhr.setRequestHeader("Authorization", "authToken");
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.setRequestHeader("Accept", "*/*");
+xhr.setRequestHeader("Cache-Control", "no-cache");
+xhr.setRequestHeader("Host", "localhost:5000");
+xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
+xhr.setRequestHeader("Content-Length", "29");
+xhr.setRequestHeader("Connection", "keep-alive");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.send(data);
+
+
+### Moving your toDo items to doing in a Sprint
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>localhost:5000/api/v1/sprint/update/doingItems/< SRID ></code>
+<br/>
+Request URI params: < SRID >
+Example : <code>localhost:5000/api/v1/sprint/update/doingItems/SPR19</code>
+-- This property is Validated
+-- If the doing items Array does not contain the already existing toDo items the middleware throws a 404 error
+
+### Example XHR request
+var data = JSON.stringify({
+  "doing": [
+    "task4",
+    "task7"
+  ],
+  "summary": "changed SPR summary"
+});
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("PATCH", "http://localhost:5000/api/v1/sprint/update/doingItems/SPR19");
+xhr.setRequestHeader("Authorization", "authToken");
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.setRequestHeader("Accept", "*/*");
+xhr.setRequestHeader("Cache-Control", "no-cache");
+xhr.setRequestHeader("Host", "localhost:5000");
+xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
+xhr.setRequestHeader("Content-Length", "62");
+xhr.setRequestHeader("Connection", "keep-alive");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.send(data);
+
+
+### Moving your doing items within a Sprint to done state
+HTTP Request Type: <code>PATCH</code>
+<br/>
+Resource URI: <code>localhost:5000/api/v1/sprint/update/doneItems/< SRID ></code>
+<br/>
+Request URI params: < SRID >
+Example : <code>localhost:5000/api/v1/sprint/update/doneItems/SPR19</code>
+-- This property is Validated
+-- If the done items Array does not contain the already existing doing items the middleware throws a 404 error
+
+### Example XHR request
+var data = JSON.stringify({
+  "done": [
+    "task4",
+    "task7"
+  ]
+});
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+  }
+});
+
+xhr.open("PATCH", "http://localhost:5000/api/v1/sprint/update/doneItems/SPR19");
+xhr.setRequestHeader("Authorization", "authToken");
+xhr.setRequestHeader("Content-Type", "application/json");
+xhr.setRequestHeader("Accept", "*/*");
+xhr.setRequestHeader("Cache-Control", "no-cache");
+xhr.setRequestHeader("Host", "localhost:5000");
+xhr.setRequestHeader("Accept-Encoding", "gzip, deflate");
+xhr.setRequestHeader("Content-Length", "27");
+xhr.setRequestHeader("Connection", "keep-alive");
+xhr.setRequestHeader("cache-control", "no-cache");
+
+xhr.send(data);
