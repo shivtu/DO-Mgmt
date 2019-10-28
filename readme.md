@@ -1,11 +1,8 @@
 # Devops Management Tool
-<<<<<<< HEAD
 ### Gist
-=======
-#### Gist
->>>>>>> optimizeValidation
+
 #### A comprehensive dev-ops tool
-#### Ticketing based system crafted specifically for dev-ops/developer teams
+#### Specifically for dev-ops/developer teams
 #### Built as a light weight blazing fast service for medium to large teams
 <h4> License : <a href="https://mit-license.org/">MIT</a></h4>
 
