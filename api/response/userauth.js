@@ -46,7 +46,7 @@ router.post('/getToken', (req, res, next) =>{
    .then((result) =>{
       try {
          bcrypt.compare(req.body.password, result.password, (compareErr, compareSuccess) =>{
-            console.log('result', result);
+            // console.log('result', result);
             if (compareSuccess && result.status === "Active") {
                const accessToken = jwt.sign({
                   userId: result.userId,

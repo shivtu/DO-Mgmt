@@ -130,6 +130,35 @@ Request URI params: None
 
 
 
+### Getting your first authentication token (While you are running the project on localhost)
+HTTP Request Type: <code>POST</code>
+<br/>
+Resource URI: <code>http://localhost:5000/api/v1/userauth/getToken</code>
+<br/>
+Request URI params: None
+Example request body: {"userId":"USR0", "password": "< This will be the password you created while setting up the credentials in the above step" >}
+
+### Example CURL request Shell(CURL) to get the access token
+    curl --request POST \
+      --url http://localhost:5000/api/v1/userauth/getToken \
+      --header 'Accept: */*' \
+      --header 'Accept-Encoding: gzip, deflate' \
+      --header 'Cache-Control: no-cache' \
+      --header 'Connection: keep-alive' \
+      --header 'Content-Length: 43' \
+      --header 'Content-Type: application/json' \
+      --header 'Host: localhost:5000' \
+      --header 'cache-control: no-cache' \
+      --data '{"userId":"USR0", "password": "helloworld"}'
+### Example response from the above query
+    {
+    "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJVU1IwIiwiZW1haWwiOiJleGFtcGxlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiZ3JvdXAiOiJpbnRlcm5hbCIsImlhdCI6MTU3MjI3MDkyNywiZXhwIjoxNTcyMjc0NTI3fQ.fYwuiAWU_fm2HKdTE1HU_NW_rBtmaprSCShZ76xUh8g"
+    }
+--> You will now need to use this token in all your following requests except for password resets
+### Example of using the accessToken in the header of the HTTP request
+    Authorization:eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJVU1IwIiwiZW1haWwiOiJleGFtcGxlQGV4YW1wbGUuY29tIiwicm9sZSI6ImFkbWluIiwiZ3JvdXAiOiJpbnRlcm5hbCIsImlhdCI6MTU3MjA5OTg4NywiZXhwIjoxNTcyMTAzNDg3fQ.6noq7lPdPd5pwVmw5QrtCKVulI-4JIMGytbuWzoYnaI
+
+
 
 ## REST Web-Services Usage
 ### Create a New Project Request (NPR)
@@ -852,7 +881,7 @@ curl --request GET \
   --header 'Host: localhost:5000' \
   --header 'cache-control: no-cache'
 
-  ### To limit the above search use the limit param
+### To limit the above search use the limit param
   Example: <code>http://localhost:5000/api/v1/sprint/find/filter/limit/5?EPCID=EPC10&NPRID=NPR3</code>
   -- Limits the retrieval of records to 5
 
