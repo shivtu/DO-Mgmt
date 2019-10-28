@@ -15,6 +15,7 @@
     <li>Application Fail Fix Request (FFR)</li>
     <li>File uploads for (NPR, BFR, FFR)</li>
     <li>User profile creation</li>
+    <li>Built in nstive token based authentication</li>
     <li>Loosely coupled authentication and authorization modules for customizing and integrating third party auth services</li>
 </ul>
 
