@@ -57,7 +57,7 @@ app.use((req, res, next) => {
 });
 
 //Handle routes
-app.use("/api/v1/services", Auth.authenticationMethod.dummyAuth, services);
+app.use("/api/v1/services",  services);
 app.use("/api/v1/bugfix", authUtil.authUtilMethod.verifyToken, bugfix);
 app.use("/api/v1/failfix", authUtil.authUtilMethod.verifyToken, failfix);
 app.use("/api/v1/users", authUtil.authUtilMethod.verifyToken, users);

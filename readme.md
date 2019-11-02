@@ -12,7 +12,6 @@
     <li>Epics (User Stories) for NPR</li>
     <li>Sprints for Epic BackLogs (SPR)</li>
     <li>Bug Fix Requests (BFR)</li>
-    <li>Application Fail Fix Request (FFR)</li>
     <li>File uploads for (NPR, BFR, FFR)</li>
     <li>User profile creation</li>
     <li>Built in native token based authentication</li>
@@ -21,8 +20,8 @@
 
 <h4>Dependencies</h4>
 <ul>
-    <li>Built using nodeJS | <a href="https://nodejs.org/en/">nodeJS</a></li>
-    <li>DataBase Mongo DB | <a href="https://nodejs.org/en/">MongoDB</a></li>
+    <li>Built using nodeJS | <a href="https://nodejs.org/en/download/releases/">nodeJS</a></li>
+    <li>DataBase Mongo DB | <a href="https://www.mongodb.com/download-center/community">MongoDB</a></li>
     <li>REST Framework : <a href="https://expressjs.com/">ExpressJS</a>
     <li>Packages used : 
         <ol>
@@ -34,6 +33,12 @@
             </li>
             <li>
                 <a href="https://github.com/expressjs/body-parser">Body-Parser</a>
+            </li>
+            <li>
+                <a href="https://github.com/dcodeIO/bcrypt.js">Bcrypt</a>
+            </li>
+            <li>
+                <a href="https://github.com/auth0/node-jsonwebtoken">jsonwebtoken</a>
             </li>
         <ol>
     </li>
@@ -104,7 +109,7 @@ Resource URI: <code>http://domain/api/v1/counters/all</code>
 Request URI params: None
 
 
-#### You will also need to create an initial user with a workaround since every route is protected by built in token based authentication system
+### You will also need to create an initial user with a workaround since every route is protected by built in token based authentication system
 ### To do that you can either commit changes directly to DataBase, but since you may not be aware of the user properties yet i have created few routes to just do that
 -- Go to services.js and uncomment the code from line no. 113 to line no. 218
 -- Make the following POST request to
@@ -182,8 +187,8 @@ Example request body:
     }</code>
 *** Do not forget to use your authentication token while creating the user
 
-#### The above query will encrypt the initial password (initPwd) and save the user to DB
-#### You will now need to provide the initial password (initPwd) and the Auto Generated User ID (userId) to the user and ask him/her to make the first login using the below route
+### The above query will encrypt the initial password (initPwd) and save the user to DB
+### You will now need to provide the initial password (initPwd) and the Auto Generated User ID (userId) to the user and ask him/her to make the first login using the below route
 <br/>
 (You may also use the random password generator utility built within to keep the password as random as possible)
 <br/><br/>
@@ -242,12 +247,6 @@ Request body format: <code>JSON</code>
     <td>product</td>
     <td>String</td>
     <td>any string</td>
-    <td>N/A</td>
-  </tr>
-  <tr>
-    <td>productVersion</td>
-    <td>Array</td>
-    <td>Array Object</td>
     <td>N/A</td>
   </tr>
   <tr>
@@ -354,6 +353,12 @@ Request body format: <code>JSON</code>
     <td>Date</td>
     <td><address>< Auto-Generated ></address></td>
     <td>Auto generated UTC date string as per server local time</code></td>
+  </tr>
+  <tr>
+    <td>productVersion</td>
+    <td>Array</td>
+    <td>Array Object</td>
+    <td>N/A</td>
   </tr>
   <tr>
     <td>Releases</td>
