@@ -1,7 +1,7 @@
 # Devops Management Tool
 ### Gist
 
-<img src="../assets/DO-Mgmt.png"/>
+<img src="https://github.com/shivtu/DO-Mgmt/blob/master/assets/DO-Mgmt.png"/>
 
 #### A comprehensive dev-ops tool
 #### Specifically for dev-ops/developer teams based on agile/scrum practices
