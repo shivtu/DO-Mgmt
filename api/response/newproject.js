@@ -299,6 +299,20 @@ router.patch("/update/assignedTo/:_id", (req, res, next) => {
     });
 });
 
+// /* Delete all Epics, **You will never want this in production*** */
+// router.delete('/deleteAll', (req, res, next) =>{
+//   Newproject.deleteMany({})
+//   .then((deletedRecords) =>{
+//     res.status(200).json({
+//       result: deletedRecords
+//     });
+//   }).catch((e) =>{
+//     res.status(200).json({
+//       result: e
+//     });
+//   })
+// });
+
 
 /**Update sequence number to create NPRID */
 const NPRSequence = Counters.findOneAndUpdate(

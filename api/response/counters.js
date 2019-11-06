@@ -132,7 +132,7 @@ router.post("/addCounter/USER", (req, res, next) => {
 
 /**Reset Counter */
 router.put("/reset/:_id", (req, res, next) =>{
-  Counters.findOneAndUpdate().exec()
+  Counters.findOneAndUpdate({'_id': req.params._id}, {'sequence_value': 1}).exec()
   .then((result) =>{
     res.status(200).json({
       result: result
@@ -148,7 +148,7 @@ router.put("/reset/:_id", (req, res, next) =>{
 
 /**Delete a counter */
 router.delete("/delete/:_id", (req, res, next) =>{
-  Counters.findByIdAndDelete({'_id': _id}).exec()
+  Counters.findByIdAndDelete({'_id': req.params._id}).exec()
   .then((result) =>{
     res.status(200).json({
       result: result

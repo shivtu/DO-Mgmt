@@ -255,6 +255,20 @@ router.delete('/delete/:_id', (req, res, next) =>{
     });
 });
 
+/* Delete all Epics, **You will never want this in production*** */
+// router.delete('/deleteAll', (req, res, next) =>{
+//   NewSprint.deleteMany({})
+//   .then((deletedRecords) =>{
+//     res.status(200).json({
+//       result: deletedRecords
+//     });
+//   }).catch((e) =>{
+//     res.status(200).json({
+//       result: e
+//     });
+//   })
+// });
+
 
 /**Update sequence number to create NPRID */
 const SPRSequence = Counters.findOneAndUpdate(

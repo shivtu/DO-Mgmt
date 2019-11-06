@@ -155,7 +155,7 @@ Validate.validationMethod.isAssigningBFR,
   });
 });
 
-
+/* Delete a BFR */
 router.delete('/delete/:_id', (req, res, next) =>{
   Bugfix.findByIdAndDelete(req.params._id).exec()
   .then((result) =>{
@@ -170,6 +170,21 @@ router.delete('/delete/:_id', (req, res, next) =>{
     });
   })
 });
+
+
+// /* Delete all BFRs, **You will never want this in production*** */
+// router.delete('/deleteAll', (req, res, next) =>{
+//   Bugfix.deleteMany({})
+//   .then((deletedRecords) =>{
+//     res.status(200).json({
+//       result: deletedRecords
+//     });
+//   }).catch((e) =>{
+//     res.status(200).json({
+//       result: e
+//     });
+//   })
+// });
 
 
 /* Update sequence number to create BFRID */
