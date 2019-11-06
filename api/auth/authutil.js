@@ -151,15 +151,20 @@ authUtilMethods = {
                             });
                         }
                     })
-                    .catch()
+                    .catch((e) =>{
+                        res.status(404).json({
+                            result: 'User not found'
+                        });
+                    })
                     break;
 
                 default:
-                    console.log(Date.now(), 'Hit default in switch statement - authutil');
                     res.status(500).json({
                         result: 'something just broke',
                         message: 'was the web service recently upgraded?'
                     });
+                    console.log(Date.now(), 'Hit default in switch statement - authutil');
+                    break;
             }
         } catch {
             console.log(Date.now(), 'catch block in try statement - authutil');
@@ -181,6 +186,8 @@ authUtilMethods = {
                         'group': decode.group
                     }; //paste current user properties to request body
                     Object.freeze(req.body.currentUser); // Freeze verified token to avoid any manipulation by the user
+                    req.body['userRole'] = decode.role;
+                    Object.freeze(req.body.userRole);
                     next();
                 } else {
                     res.status(403).json({
