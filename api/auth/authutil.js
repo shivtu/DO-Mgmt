@@ -56,7 +56,8 @@ authUtilMethods = {
                 break;
                 
                 case 'firstLogin':
-                    Users.findOne({'userId': req.body.userId}).exec()
+                    // Destroy the initial password (initPwd)
+                    Users.findOneAndUpdate({'userId': req.body.userId}, {'initPwd': ''}, {new: true}).exec()
                     .then((foundUser) =>{
                         if (foundUser.status === "Active") { // If user status is inactive, user is trying to setup creds after admin has deactivated the user
                             bcrypt.compare(req.body.initPwd, foundUser.initPwd).then((comparedResult) =>{
@@ -96,16 +97,61 @@ authUtilMethods = {
                 break;
 
                 case 'passwordUpdate':
-                    /** No need to check for undefined on newPassword as that validation is bieng performed within Validate.js */
+                    /* No need to check for undefined on newPassword as that validation is bieng performed within Validate.js */
                         bcrypt.hash(req.body.newPassword, 2).then((encryptedData) =>{
                             req.body['newPassword'] = encryptedData;
                             next();
                         }).catch((bcryptErr) =>{
-                            console.log(req.body.userId, ' hash error in authutil ', bcryptErr);
                             res.status(500).json({
                                 result: 'Internal server error'
                             });
+                            console.log(req.body.userId, ' hash error in authutil ', bcryptErr);
                         });
+                    break;
+
+                case 'setTempPassword':
+                        bcrypt.hash(req.body.newPassword, 2).then((encryptedData) =>{
+                            req.body['newPassword'] = encryptedData;
+                            next();
+                        }).catch((bcryptErr) =>{
+                            res.status(500).json({
+                                result: 'Internal server error'
+                            });
+                            console.log(req.body.userId, ' hash error in authutil ', bcryptErr);
+                        });
+                    break;
+
+                case 'passwordReset':
+                    // No need to validate newPassword as that is being checked on Validate.js page with isUpdatingPassword method
+                    Users.findOne({'userId': req.body.userId}, ).exec()
+                    .then((foundUser) =>{
+                        if (foundUser.status === "Active") {
+                            bcrypt.compare(req.body.password, result.password, (compareErr, compareSuccess) =>{
+                                if (compareSuccess) {
+                                    bcrypt.hash(req.body.newPassword, 2)
+                                    .then((encryptedPassword) =>{
+                                        req.body['newPassword'] = encryptedPassword;
+                                        next();
+                                    })
+                                    .catch((encryptionErr) =>{
+                                        res.status(500).json({
+                                            result: 'Internal server error'
+                                        });
+                                        console.log('encryptionErr', encryptionErr);
+                                    });
+                                } else if (compareErr) {
+                                    res.status(403).json({
+                                        result: 'Authentication failed'
+                                    });
+                                }
+                            });
+                        } else {
+                            res.status(404).json({
+                                result: 'User not fount'
+                            });
+                        }
+                    })
+                    .catch()
                     break;
 
                 default:

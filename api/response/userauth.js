@@ -108,6 +108,53 @@ Validate.validationMethod.isUpdatingPassword, (req, res, next) =>{
 });
 
 
+/* Set temporary password for the user to allow the user to reset password */
+router.post('/setTempPassword', 
+authUtil.authUtilMethod.verifyToken,
+Validate.validationMethod.isUpdatingPassword, 
+(req, res, next) =>{
+   Users.findOneAndUpdate({'_id': req.body._id}, {'initPwd': req.body.initPwd}, {new: true})
+   .then((tempPassword) =>{
+      res.status(201).json({
+         result: tempPassword.userId + 'temporary password has been set'
+      });
+   })
+   .catch(() =>{
+      res.status(400).json({
+         result: 'Cannot set temp password'
+      });
+   });
+});
+
+
+/* User password reset */
+router.patch('/passwordReset',
+Validate.validationMethod.isUpdatingPassword, // check if new password is valid
+authUtil.authUtilMethod.encryptData, // Encrypt the newPassword
+(req, res, next) =>{
+   Users.findOneAndUpdate({'userId': req.body.userId}, {'password': req.body.newPassword}, {new: true}).exec()
+   .then((updatedPassword) =>{
+      // Destroy the initPwd
+      Uses.findOneAndUpdate({'userId': updatedPassword.userId}, {'initPwd': ''}, {new: true}).exec()
+      .then((destroyedInitPwd) =>{
+         res.status(201).json({
+            result: 'Password reset success for ' + destroyedInitPwd.userId
+         });
+      })
+      .catch((e) =>{
+         res.status(500).json({
+            result: 'Internal server error'
+         });
+      })
+   })
+   .catch((err) =>{
+      res.status(500).json({
+         result: 'Cannot update password'
+      });
+   });
+});
+
+
 router.get('/security/questions', authUtil.authUtilMethod.verifyToken, (req, res, next) =>{
    _user = (req.body.userId).toUpperCase();
    Users.findOne({'userId': _user}).exec()

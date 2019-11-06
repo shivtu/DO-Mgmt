@@ -62,7 +62,7 @@ authUtil.authUtilMethod.encryptData, (req, res, next) =>{
     });
 });
 
-
+/* Find all users */
 router.get('/find/findAll', (req, res, next) =>{
   Users.find().exec()
   .then((result) =>{
@@ -70,7 +70,30 @@ router.get('/find/findAll', (req, res, next) =>{
   }).catch((e) => res.status(404).json({status: e.message}));
 });
 
+/* Find user using userId */
+router.get('/find/:userId', (req, res, next) =>{
+  Users.findOne({'userId': req.params.userId}).exec()
+  .then((result) =>{
+    res.status(200).json({
+      result: {
+        'userId': result.userId,
+        firstName: result.firstName,
+        middleName: result.middleName,
+        lastName: result.lastName,
+        email: result.email,
+        phone: result.phone,
+        bio: result.bio,
+        status: result.status,
+        group: result.group,
+        role: result.role,
+        _id: result._id
+      }
+    });
+  })
+  .catch();
+});
 
+/* Find user by _id */
 router.get('/find/_id/:_id', (req, res, next) =>{
     Users.findById({ '_id': req.params._id }).exec()
     .then((result) =>{
@@ -96,7 +119,7 @@ router.get('/find/_id/:_id', (req, res, next) =>{
     }).catch((e) => res.status(404).json({result: e.message}));
 });
 
-
+/* Find all users with a limit */
 router.get('/find/findAll/limit/:_limit', (req, res, next) =>{
   Users.find().limit(req.params._limit | 0).exec()
   .then((result) =>{
@@ -126,7 +149,7 @@ router.get('/find/findAll/limit/:_limit', (req, res, next) =>{
   }).catch((e) => res.status(404).json({status: e.message}));
 });
 
-
+/* Find users using Filter */
 router.get('/find/filter', (req, res, next) =>{
     Users.find(req.query).exec()
     .then((result) =>{
@@ -134,7 +157,7 @@ router.get('/find/filter', (req, res, next) =>{
     }).catch((e) => res.status(404).json({status: e.message}));
 });
 
-
+/* Find users using filter with limit */
 router.get('/find/filter/limit/:_limit', (req, res, next) =>{
     Users.find(req.query).limit(req.params._limit | 0).exec()
     .then((result) =>{

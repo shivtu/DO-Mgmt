@@ -12,7 +12,7 @@ validateMethods = {
   // extractedResults__id: '',
   // extractedResults_SRID: '',
 
-  /**Find the records and assing the result to extractedResults__id for consumption by other methods */
+  /* Find the records and assing the result to extractedResults__id for consumption by other methods */
   getRecordById: (req, res, next) => {
     const originalUrlContent = req.originalUrl.split('/');
     switch (originalUrlContent[3]) {
@@ -70,6 +70,34 @@ validateMethods = {
         });
         break;
 
+      case 'sprint':
+        Sprints.findById({ '_id': req.params._id }).exec()
+          .then((result) => {
+            req.body['extractedResults__id'] = result;
+            next();
+          })
+          .catch((err) =>{
+            res.status(404).json({
+              result: 'Record not found'
+            });
+            console.log(err);
+          });
+          break;
+
+      case 'users':
+        Users.findById({ '_id': req.params._id }).exec()
+          .then((result) => {
+            req.body['extractedResults__id'] = result;
+            next();
+          })
+          .catch((err) =>{
+            res.status(404).json({
+              result: 'Record not found'
+            });
+            console.log(err);
+          });
+          break;
+
       default:
         res.status(500).json({
           result: 'Internal server error'
@@ -80,7 +108,7 @@ validateMethods = {
   },
 
 
-  /**Find the records and assing the result to extractedResults_SRID for consumption by other methods */
+  /* Find the records and assing the result to extractedResults_SRID for consumption by other methods */
   getRecordBySRID: (req, res, next) =>{
     const originalUrlContent = req.originalUrl.split('/');
     // console.log(originalUrlContent[3]);
@@ -134,7 +162,7 @@ validateMethods = {
 
 
 
-  /**Check to see if project is completed and entering release/support/maintenance phase */
+  /* Check to see if project is completed and entering release/support/maintenance phase */
   isReleasingProject: (req, res, next) =>{
     const _phase = req.body.phase;
     if(_phase === 'delivered' || _phase === 'maintenance' || _phase === 'support' 
@@ -205,7 +233,7 @@ validateMethods = {
   },
 
 
-  /**Restrict user updating certain fields */
+  /* Restrict user updating certain fields */
   isUpdatingEPCExceptions: (req, res, next) =>{
     if (typeof req.body.sprints !== 'undefined' || typeof req.body.NPRID !== 'undefined'
     || typeof req.body.createdBy !== 'undefined' || typeof req.body.serviceType !== 'undefined'
