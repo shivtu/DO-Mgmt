@@ -151,10 +151,11 @@ authUtilMethods = {
                             });
                         }
                     })
-                    .catch((e) =>{
+                    .catch((err) =>{
                         res.status(404).json({
                             result: 'User not found'
                         });
+                        console.log(err);
                     })
                     break;
 
