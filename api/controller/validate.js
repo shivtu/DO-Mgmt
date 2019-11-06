@@ -187,10 +187,11 @@ validateMethods = {
 
   /**Restrict user updating certain fields */
   isUpdatingNPRExceptions: (req, res, next) => {
-    if (req.body.updatedOn !== undefined || req.body.SRID !== undefined
-      || req.body._id !== undefined || req.body.epics !== undefined
-      || req.body.createdOn !== undefined || req.body.serviceType !== undefined || req.body.sprints !== undefined
-      || req.body.releases !== undefined || req.body.lifeCycle !== undefined) {
+    if (typeof req.body.updatedOn !== 'undefined' || typeof req.body.SRID !== 'undefined'
+      || typeof req.body._id !== 'undefined' || typeof req.body.epics !== 'undefined'
+      || typeof req.body.createdOn !== 'undefined' || typeof req.body.serviceType !== 'undefined'
+      || typeof req.body.sprints !== 'undefined'
+      || typeof req.body.releases !== 'undefined' || typeof req.body.lifeCycle !== 'undefined') {
         
       res.status(400).json({
         result: "Some of the values in the request body cannot be updated",
@@ -667,7 +668,7 @@ validateMethods = {
       const fileContent = _files[1];
       const rand = Math.floor(Math.random() * Math.floor(10));
       const newFileName = Date.now().toString() + rand + originalFileName;
-      const uploadFolder = process.env.HOME + "\\desktop\\";
+      const uploadFolder = process.env.HOME + "\\desktop\\"; // You will want to replace this path with the path of a public folder wihtin the prod env
       const utcDate = new Date();
 
       /**NodeJS file system (fs) to write Base64 string to disk as file*/
@@ -734,7 +735,7 @@ validateMethods = {
   },
 
 
-  /**Check for req body if user is changing password */
+  /* Check for req body if user is changing password */
   isUpdatingPassword: (req, res, next) =>{
     _newPassword = req.body.newPassword;
     if (typeof _newPassword === 'undefined' || _newPassword === null || _newPassword === '') {

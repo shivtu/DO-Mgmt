@@ -1,0 +1,43 @@
+POST http://localhost:5000/api/v1/counters/addCounter/USER HTTP/1.1
+Content-Type: application/json
+Accept: */*
+
+{
+    
+}
+
+
+POST http://localhost:5000/api/v1/counters/addCounter/BFR HTTP/1.1
+Content-Type: application/json
+Accept: */*
+
+{
+    
+}
+
+
+POST http://localhost:5000/api/v1/counters/addCounter/NPR HTTP/1.1
+Content-Type: application/json
+Accept: */*
+
+{
+    
+}
+
+
+POST http://localhost:5000/api/v1/counters/addCounter/SPR HTTP/1.1
+Content-Type: application/json
+Accept: */*
+
+{
+    
+}
+
+
+POST http://localhost:5000/api/v1/counters/addCounter/EPC HTTP/1.1
+Content-Type: application/json
+Accept: */*
+
+{
+    
+}

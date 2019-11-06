@@ -1,0 +1,16 @@
+PATCH http://localhost:5000/api/v1/newproject/update/files HTTP/1.1
+Content-Type: application/json
+Accept: */*
+
+{
+    
+}
+
+
+PATCH http://localhost:5000/api/v1/newproject/update/updateNotes HTTP/1.1
+Content-Type: application/json
+Accept: */*
+
+{
+    
+}

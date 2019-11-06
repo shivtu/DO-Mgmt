@@ -17,7 +17,7 @@ authMethods = {
  * Execute an external process to verify user auth
 */
 exlcludedAuthProcess: (res, req, next) =>{
-  exec('C:\\Users\\fit\\Desktop\\NodeJs\\DO-Mgmt\\api\\auth\\hello.bat', (err, stdout, stderr) =>{
+  exec(process.env.HOME + '\\hello.bat', (err, stdout, stderr) =>{
     if(err) {
         console.log(err);
     } else {

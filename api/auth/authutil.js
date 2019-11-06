@@ -21,7 +21,7 @@ authUtilMethods = {
     /** Generate random security questions for new user */
     generateSecurityQues: (req, res, next) =>{
         // Get random questions from the file
-        let securityQues = fs.readFileSync('C:\\Users\\fit\\Desktop\\NodeJs\\DO-Mgmt\\api\\auth\\securityques.json');
+        let securityQues = fs.readFileSync(process.env.HOME + '\\securityques.json'); // Replace this path with whichever path you save your security.json file
         let parsedQues = JSON.parse(securityQues);
         let quesLength = parsedQues.length;
         let userQuesArray = [];
