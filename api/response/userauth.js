@@ -229,13 +229,36 @@ router.post('/password/selfReset',
 Validate.validationMethod.areSecurityAnsSanitized,
 authUtil.authUtilMethod.checkUserAns,
 (req, res, next) =>{
-  if (!req.body.areAnsValid) {
-     res.status(403).json({
-        result: 'Authentication failed'
-     });
-  } else if (req.body.areAnsValid) {
-     console.log('success');
-  }
+   bcrypt.hash(req.body.newPassword, 2)
+   .then((encryptedPassword) =>{
+      UserAuth.findOneAndUpdate({'userId': req.body.userId}, {'password': encryptedPassword}, {new: true}).exec()
+      .then((result) =>{
+         res.status(201).json({
+            result: result
+         });
+      })
+      .catch((updateErr) =>{
+         res.status(500).json({
+            result: 'Internal server error'
+         });
+         console.log(updateErr);
+      });
+   })
+   .catch((encryptErr) =>{
+      res.status(500).json({
+         result: 'Cannot save new password',
+         message: 'Internal server error'
+      });
+      console.log(encryptErr);
+   });
 });
+
+// router.get('/allusers', (req, res, next) =>{
+//    UserAuth.find().then((result) =>{
+//       res.status(200).json({
+//          result: result
+//       });
+//    });
+// });
 
 module.exports = router;
