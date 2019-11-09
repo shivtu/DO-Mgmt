@@ -21,7 +21,7 @@ authUtilMethods = {
     /** Generate random security questions for new user */
     generateSecurityQues: (req, res, next) =>{
         // Get random questions from the file
-        let securityQues = fs.readFileSync(process.env.HOME + '\\securityques.json'); // Replace this path with whichever path you save your security.json file
+        let securityQues = fs.readFileSync(process.env.HOME + '\\desktop' + '\\securityques.json'); // Replace this path with whichever path you save your security.json file
         let parsedQues = JSON.parse(securityQues);
         let quesLength = parsedQues.length;
         let userQuesArray = [];
@@ -56,8 +56,8 @@ authUtilMethods = {
                 break;
                 
                 case 'firstLogin':
-                    // Destroy the initial password (initPwd)
-                    Users.findOneAndUpdate({'userId': req.body.userId}, {'initPwd': ''}, {new: true}).exec()
+                    // In the below DB query we do not give the Object {new: true} within the update query so that foundUser.initPwd can be preserved for bcrypt comparison
+                    Users.findOneAndUpdate({'userId': req.body.userId}, {'initPwd': ''}).exec() // Destroy the initial password (initPwd)
                     .then((foundUser) =>{
                         if (foundUser.status === "Active") { // If user status is inactive, user is trying to setup creds after admin has deactivated the user
                             bcrypt.compare(req.body.initPwd, foundUser.initPwd).then((comparedResult) =>{
@@ -72,10 +72,10 @@ authUtilMethods = {
                                         req.body['status'] = foundUser.status;
                                         next();
                                     }).catch((encryptionErr) =>{
-                                        console.log(Date.now(), 'bcrypt encryption error', encryptionErr);
                                         res.status(500).json({
                                             result: 'Internal server error'
                                         });
+                                        console.log(Date.now(), 'bcrypt encryption error', encryptionErr);
                                     });
                                 } else {
                                     res.status(403).json({
@@ -95,6 +95,36 @@ authUtilMethods = {
                         });
                     });
                 break;
+
+                case 'securityAnswers':
+                        const _security = req.body.security;
+                        if (Array.isArray(_security) && _security.length === 3) {
+                            for (let i = 0; i < 3; i++) { // Encrypt all the three answers provided by user
+                                const userAns = Object.values(_security[0])[0];
+                                bcrypt.hash(userAns, null, (bcryptErr, encryptedAns) =>{
+                                    if (bcryptErr === null) {
+                                        const userQues = Object.keys(_security[0])[0];
+                                        let newQA = {};
+                                        newQA[userQues] = encryptedAns;
+                                        _security.push(newQA);
+                                        _security.splice(0, 1);
+                                        if (i === 2) {
+                                            req.body['security'] = _security;
+                                            next();
+                                        }
+                                    } else if (bcryptErr !== null) {
+                                        res.status(500).json({result: 'Internal server error'});
+                                        i = i + 2;
+                                    }
+                                });
+                            }
+                        } else {
+                            res.status(500).json({
+                                result: 'Ill formated request body',
+                                message:'https://github.com/shivtu/DO-Mgmt'
+                            });
+                        }
+                    break;
 
                 case 'passwordUpdate':
                     /* No need to check for undefined on newPassword as that validation is bieng performed within Validate.js */
@@ -181,6 +211,33 @@ authUtilMethods = {
         if (typeof token !== 'undefined') {
             jwt.verify(token, 'secretKey', (jwtErr, decode) =>{
                 if (typeof decode !== 'undefined' && !jwtErr) {
+                    // /* Evaluate user's authorization within the switch statement */
+                    // switch (req.originalUrl) {
+                    //     case '/api/v1/newproject/create':
+                    //         if (decode.role === 'product-owner') {
+                    //             req.body['currentUser'] = {
+                    //                 'userId': decode.userId,
+                    //                 'email': decode.email,
+                    //                 'group': decode.group
+                    //             }; //paste current user properties to request body
+                    //             Object.freeze(req.body.currentUser); // Freeze verified token to avoid any manipulation by the user
+                    //             req.body['userRole'] = decode.role;
+                    //             Object.freeze(req.body.userRole);
+                    //             next();
+                    //         } else {
+                    //             res.status(403).json({
+                    //                 result: 'Unauthorized request',
+                    //                 message: 'Only product owners must create a new project request'
+                    //             });
+                    //         }
+                    //     break;
+
+                    //     default:
+                    //         res.status(403).json({'bhosdi': 'choot mara'});
+                    //     break;
+                    // }
+                    // /* End Authorization block */
+
                     req.body['currentUser'] = {
                         'userId': decode.userId,
                         'email': decode.email,

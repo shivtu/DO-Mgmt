@@ -9,9 +9,11 @@ const Validate = require("../controller/validate");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-/**User provides initial password */
-router.post('/firstLogin',Validate.validationMethod.isUpdatingPassword,
-authUtil.authUtilMethod.encryptData, (req, res, next) =>{
+/* User provides initial password */
+router.post('/firstLogin',
+Validate.validationMethod.isUpdatingPassword,
+authUtil.authUtilMethod.encryptData,
+(req, res, next) =>{
    /**Save user creds in new table */
    const user_auth = new UserAuth({
       _id: new mongoose.Types.ObjectId(),
@@ -32,14 +34,58 @@ authUtil.authUtilMethod.encryptData, (req, res, next) =>{
       });
    })
    .catch((err) =>{
-      console.log(Date.now(), 'Could not save user on firstLogin', err);
       res.status(500).json({
          result: 'Could not save user'
       });
+      console.log(Date.now(), 'Could not save user on firstLogin', err);
    })
 });
 
 
+/* Get user's security questions */
+router.post('/securityQuestions',
+authUtil.authUtilMethod.verifyToken,
+(req, res, next) =>{
+   _user = (req.body.userId).toUpperCase();
+  if (req.body.currentUser.userId === _user) { // Evaluate user authorization, check if the request is from the owner of the record
+   Users.findOne({'userId': _user})
+   .exec()
+   .then((foundUser) =>{
+      console.log(foundUser.security);
+      let securityQuestions = [];
+      (foundUser.security).forEach((securityquestion) =>{
+         securityQuestions.push(securityquestion);
+      });
+      res.status(200).json({
+         result: securityQuestions,
+         _id: foundUser._id
+      });
+   })
+   .catch((err) =>{
+      res.status(404).json({
+         result: 'Cannot find security questions'
+      });
+      console.log('Cannot find security questions', err);
+   });
+  } else { // deny displaying the security question
+   res.status(403).json({
+      result: 'Unauthorized request',
+      message: 'Security questions are viewable only by the owner'
+   });
+  }
+});
+
+
+/* Set up security answers */
+router.patch('/securityAnswers',
+authUtil.authUtilMethod.encryptData,
+(req, res, next) =>{
+   
+   console.log(req.body.security);
+});
+
+
+/* Get authentication token */
 router.post('/getToken', (req, res, next) =>{
    user_Id = (req.body.userId).toUpperCase(); // Change userId to upper case
    UserAuth.findOne({'userId': user_Id}).exec()
@@ -75,8 +121,11 @@ router.post('/getToken', (req, res, next) =>{
 });
 
 
-router.post('/passwordUpdate', authUtil.authUtilMethod.verifyToken,
-Validate.validationMethod.isUpdatingPassword, (req, res, next) =>{
+/* User updates password when he knows the current password */
+router.post('/passwordUpdate',
+authUtil.authUtilMethod.verifyToken,
+Validate.validationMethod.isUpdatingPassword,
+(req, res, next) =>{
    currentUserId = req.body.currentUser.userId;
    UserAuth.findOne({'userId': currentUserId}).exec()
    .then((result) =>{
@@ -154,27 +203,7 @@ authUtil.authUtilMethod.encryptData, // Encrypt the newPassword
    });
 });
 
-
-router.get('/security/questions', authUtil.authUtilMethod.verifyToken, (req, res, next) =>{
-   _user = (req.body.userId).toUpperCase();
-   Users.findOne({'userId': _user}).exec()
-   .then((foundUser) =>{
-      let securityQuestions = [];
-      (foundUser.security).forEach((securityquestion) =>{
-         securityQuestions.push(securityquestion);
-      });
-      res.status(200).json({
-         result: securityQuestions
-      });
-   })
-   .catch((err) =>{
-      res.status(404).json({
-         result: 'Cannot find security questions'
-      });
-   });
-});
-
-
+/* User resets password themselves using security questions */
 router.post('/password/selfReset',
 Validate.validationMethod.checkUserAns, (req, res, next) =>{
   if (!req.body.areAnsValid) {

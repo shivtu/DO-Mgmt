@@ -70,26 +70,6 @@ router.post("/addCounter/NPR", (req, res, next) => {
   });
 });
 
-router.post("/addCounter/SPR", (req, res, next) => {
-  const CTR = new Counters({
-    _id: new mongoose.Types.ObjectId(),
-    modelType: "SPR",
-    sequence_value: 1,
-  });
-  SPR.save().then((result) =>{
-    res.status(201).json({
-      result: result,
-      warning: "This query must be executed strictly once and only once while initial setup"
-    });
-  })
-  .catch((err) =>{
-    res.status(500).json({
-      result: err
-    });
-  });
-});
-
-
 router.post("/addCounter/EPC", (req, res, next) => {
   const EPC = new Counters({
     _id: new mongoose.Types.ObjectId(),
@@ -109,6 +89,24 @@ router.post("/addCounter/EPC", (req, res, next) => {
   });
 });
 
+router.post("/addCounter/SPR", (req, res, next) => {
+  const SPR = new Counters({
+    _id: new mongoose.Types.ObjectId(),
+    modelType: "SPR",
+    sequence_value: 1,
+  });
+  SPR.save().then((result) =>{
+    res.status(201).json({
+      result: result,
+      warning: "This query must be executed strictly once and only once while initial setup"
+    });
+  })
+  .catch((err) =>{
+    res.status(500).json({
+      result: err
+    });
+  });
+});
 
 router.post("/addCounter/USER", (req, res, next) => {
   const USER = new Counters({

@@ -251,6 +251,24 @@ validateMethods = {
   },
 
 
+  /**Restrict user updating certain fields */
+  isUpdatingSPRExceptions: (req, res, next) =>{
+    if (typeof req.body.sprints !== 'undefined' || typeof req.body.NPRID !== 'undefined'
+    || typeof req.body.createdBy !== 'undefined' || typeof req.body.serviceType !== 'undefined'
+    || typeof req.body.createdOn !== 'undefined') {
+      res.status(400).json({
+        result: "Some of the values in the request body cannot be updated",
+        message: "https://github.com/shivtu/DO-Mgmt"
+      });
+      console.log(req.body);
+    } else {
+       /* Since reques.body.createdBy is an object we overide this to avoid possible conflicts */
+       req.body['createdBy'] = req.body.extractedResults__id.createdBy;
+       next();
+    }
+  },
+
+
   /* Validate SPR memberList */
   validateSPRMemberList: (req, res, next) =>{
     const originalUrlContent = req.originalUrl.split('/');
@@ -327,24 +345,6 @@ validateMethods = {
             message: 'https://github.com/shivtu/DO-Mgmt'
           });
         }
-  },
-
-
-  /**Restrict user updating certain fields */
-  isUpdatingSPRExceptions: (req, res, next) =>{
-    if (typeof req.body.sprints !== 'undefined' || typeof req.body.NPRID !== 'undefined'
-    || typeof req.body.createdBy !== 'undefined' || typeof req.body.serviceType !== 'undefined'
-    || typeof req.body.createdOn !== 'undefined') {
-      res.status(400).json({
-        result: "Some of the values in the request body cannot be updated",
-        message: "https://github.com/shivtu/DO-Mgmt"
-      });
-      console.log(req.body);
-    } else {
-       /* Since reques.body.createdBy is an object we overide this to avoid possible conflicts */
-       req.body['createdBy'] = req.body.extractedResults__id.createdBy;
-       next();
-    }
   },
 
 
@@ -551,7 +551,7 @@ validateMethods = {
 
 
 
-  /**Check if user is closing/canceling the request */
+  /* Check if user is closing/canceling the request */
   isClosingRequest: (req, res, next) => {
     if (req.body.status === 'completed' || req.body.status === 'canceled') {
       const utcDate = new Date();
@@ -562,7 +562,7 @@ validateMethods = {
 
 
 
-  /**Check if user is providing update notes */
+  /* Check if user is providing update notes */
   isProvidingUpdates: (req, res, next) => {
 
     const originalUrlContent = req.originalUrl.split('/');
@@ -628,7 +628,7 @@ validateMethods = {
 
 
 
-  /**Check if user is trying to upload file */
+  /* Check if user is trying to upload file */
   isUploadingfile: (req, res, next) => {
     const _files = req.body.files;
     const _id = req.params._id;
@@ -681,7 +681,7 @@ validateMethods = {
 
 
 
-  /**isFileSaved promise wrapped in saveFile function that returns the promise for cunsmption by other methods  */
+  /* isFileSaved promise wrapped in saveFile function that returns the promise for cunsmption by other methods  */
   saveFile: (req, res, next) => {
     const _files = req.body.files;
     
@@ -726,7 +726,7 @@ validateMethods = {
 
 
 
-  /**Validate security questions */
+  /* Validate security questions */
   checkUserAns: (req, res, next) =>{
     _user = (req.body.userId).toUpperCase();
     Users.findOne({'userId': _user}).exec()

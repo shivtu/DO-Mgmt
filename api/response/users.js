@@ -6,7 +6,8 @@ const Counters = require("../model/countersmodel");
 const mongoose = require("mongoose");
 const authUtil = require("../auth/authutil");
 
-router.post('/create', authUtil.authUtilMethod.generateSecurityQues,
+router.post('/create',
+authUtil.authUtilMethod.generateSecurityQues,
 authUtil.authUtilMethod.encryptData, (req, res, next) =>{
     UserSequence.exec() /**wrap post request with user counter increament */
     .then((seq) =>{
@@ -221,6 +222,7 @@ router.delete('/delete/:_id', (req, res, next) =>{
         res.send(200).json({
           result: userToDel + ' deleted permanently'
         });
+        console.log(userToDel + ' deleted permanently');
       })
       .catch((wipeOutErr) =>{
         res.status(500).json({
@@ -232,6 +234,7 @@ router.delete('/delete/:_id', (req, res, next) =>{
       res.status(200).json({
         result: userToDel + ' deleted permanently'
       });
+      console.log(userToDel + ' deleted permanently');
     }
   }).catch((userSearchErr) =>{
     res.status(404).json({
