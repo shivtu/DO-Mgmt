@@ -199,29 +199,37 @@ Validate.validationMethod.isUpdatingPassword,
 
 /* User password reset */
 router.patch('/passwordReset',
+authUtil.authUtilMethod.verifyToken,
 Validate.validationMethod.isUpdatingPassword, // check if new password is valid
 authUtil.authUtilMethod.encryptData, // Encrypt the newPassword
 (req, res, next) =>{
-   Users.findOneAndUpdate({'userId': req.body.userId}, {'password': req.body.newPassword}, {new: true}).exec()
-   .then((updatedPassword) =>{
-      // Destroy the initPwd
-      Uses.findOneAndUpdate({'userId': updatedPassword.userId}, {'initPwd': ''}, {new: true}).exec()
-      .then((destroyedInitPwd) =>{
-         res.status(201).json({
-            result: 'Password reset success for ' + destroyedInitPwd.userId
-         });
+   if(req.body.currentUser.userId === req.body.userId) { // Check if logged in user is changing his/her own password
+      UserAuth.findOneAndUpdate({'userId': req.body.userId}, {'password': req.body.newPassword}, {new: true}).exec()
+      .then((updatedPassword) =>{
+         // Destroy the initPwd
+         Users.findOneAndUpdate({'userId': updatedPassword.userId}, {'initPwd': ''}, {new: true}).exec()
+         .then((destroyedInitPwd) =>{
+            res.status(201).json({
+               result: 'Password reset success for ' + destroyedInitPwd.userId
+            });
+         })
+         .catch((e) =>{
+            res.status(500).json({
+               result: 'Internal server error'
+            });
+         })
       })
-      .catch((e) =>{
+      .catch((err) =>{
          res.status(500).json({
-            result: 'Internal server error'
+            result: 'Cannot update password'
          });
-      })
-   })
-   .catch((err) =>{
-      res.status(500).json({
-         result: 'Cannot update password'
       });
-   });
+   } else {
+      res.status().json({
+         result: 'Unauthorized request',
+         message: 'Only owner of the record can reset password'
+      });
+   }
 });
 
 /* User resets password themselves using security questions */
@@ -234,7 +242,7 @@ authUtil.authUtilMethod.checkUserAns,
       UserAuth.findOneAndUpdate({'userId': req.body.userId}, {'password': encryptedPassword}, {new: true}).exec()
       .then((result) =>{
          res.status(201).json({
-            result: result
+            result: 'Password update success for ' + result.userId
          });
       })
       .catch((updateErr) =>{

@@ -97,25 +97,20 @@ authUtilMethods = {
 
                 case 'securityAnswers':
                         const _security = req.body.security;
-                        const userAns = JSON.stringify(_security);
-                        console.log(userAns);
                         let newArr = [];
                         for (let i = 0; i < 3; i++) {
-                            // console.log(Object.values(_security[i])[0]);
                             let userQues = Object.keys(_security[i])[0];
                             let userAns = Object.values(_security[i])[0];
                             let encryptedAns = bcrypt.hashSync(Object.values(_security[i])[0], 2);
                             if (userQues !== null && typeof userQues !== 'undefined' && userAns !== null && typeof userAns !== 'undefined') {
                                 let newObj = {};
                                 newObj[userQues] = encryptedAns;
-                                newArr.push(newObj);
-                                // console.log('compareSync', bcrypt.compareSync(userAns, encryptedAns));
+                                newArr.push(newObj); // Create a new object for req.body.security
                             } else {
                                 console.log('Something wrong');
                             }
                         }
-                        req.body['security'] = newArr;
-                        console.log(req.body.security);
+                        req.body['security'] = newArr; // Asign the encrypted Q and A to req.body.security
                         next();
                     break;
 
@@ -149,24 +144,16 @@ authUtilMethods = {
                     Users.findOne({'userId': req.body.userId}, ).exec()
                     .then((foundUser) =>{
                         if (foundUser.status === "Active") {
-                            bcrypt.compare(req.body.password, result.password, (compareErr, compareSuccess) =>{
-                                if (compareSuccess) {
-                                    bcrypt.hash(req.body.newPassword, 2)
-                                    .then((encryptedPassword) =>{
-                                        req.body['newPassword'] = encryptedPassword;
-                                        next();
-                                    })
-                                    .catch((encryptionErr) =>{
-                                        res.status(500).json({
-                                            result: 'Internal server error'
-                                        });
-                                        console.log('encryptionErr', encryptionErr);
-                                    });
-                                } else if (compareErr) {
-                                    res.status(403).json({
-                                        result: 'Authentication failed'
-                                    });
-                                }
+                            bcrypt.hash(req.body.newPassword, 2)
+                            .then((encryptedPassword) =>{
+                                req.body['newPassword'] = encryptedPassword;
+                                next();
+                            })
+                            .catch((encryptionErr) =>{
+                                res.status(500).json({
+                                    result: 'Internal server error'
+                                });
+                                console.log('encryptionErr', encryptionErr);
                             });
                         } else {
                             res.status(404).json({
