@@ -78,10 +78,30 @@ authUtil.authUtilMethod.verifyToken,
 
 /* Set up security answers */
 router.patch('/securityAnswers',
+authUtil.authUtilMethod.verifyToken,
+Validate.validationMethod.areSecurityAnsSanitized,
 authUtil.authUtilMethod.encryptData,
 (req, res, next) =>{
+   if (req.body.currentUser.userId === req.body.userId) {
+      Users.findOneAndUpdate({'userId': req.body.userId}, {'security': req.body.security}, {new: true})
+      .then((result) =>{
+         res.status(201).json({
+            result: 'Security answers set successfully for user ' + result.userId
+         });
+      })
+      .catch((err) =>{
+         res.status(500).json({
+            result: 'Cannot save security answers'
+         });
+         console.log(err);
+      });
+   } else {
+      res.status(403).json({
+         result: 'Unauthorized request',
+         message: 'Security answers can be set by the owner only'
+      });
+   }
    
-   console.log(req.body.security);
 });
 
 
@@ -107,6 +127,7 @@ router.post('/getToken', (req, res, next) =>{
                res.status(403).json({
                   result: 'Authentication failed'
                });
+               console.log(compareErr);
             }
          });
       } catch {
@@ -205,18 +226,15 @@ authUtil.authUtilMethod.encryptData, // Encrypt the newPassword
 
 /* User resets password themselves using security questions */
 router.post('/password/selfReset',
-Validate.validationMethod.checkUserAns, (req, res, next) =>{
+Validate.validationMethod.areSecurityAnsSanitized,
+authUtil.authUtilMethod.checkUserAns,
+(req, res, next) =>{
   if (!req.body.areAnsValid) {
      res.status(403).json({
         result: 'Authentication failed'
      });
   } else if (req.body.areAnsValid) {
-     
-   UserAuth.findOneAndUpdate({'userId': req.body.userId}, {'password': req.body.newPassword}, {new: true}).exec()
-   .then((result) =>{
-
-   })
-   .catch()
+     console.log('success');
   }
 });
 

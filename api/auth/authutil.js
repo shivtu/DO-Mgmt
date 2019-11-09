@@ -39,7 +39,7 @@ authUtilMethods = {
 
     /*Encrypt user data*/
     encryptData: (req, res, next) =>{
-        try {
+        // try {
             // console.log(req.originalUrl.split('/'));
             const originalUrlContent = req.originalUrl.split('/');
             switch (originalUrlContent[4]) {
@@ -101,21 +101,21 @@ authUtilMethods = {
                         if (Array.isArray(_security) && _security.length === 3) {
                             for (let i = 0; i < 3; i++) { // Encrypt all the three answers provided by user
                                 const userAns = Object.values(_security[0])[0];
-                                bcrypt.hash(userAns, null, (bcryptErr, encryptedAns) =>{
-                                    if (bcryptErr === null) {
-                                        const userQues = Object.keys(_security[0])[0];
-                                        let newQA = {};
-                                        newQA[userQues] = encryptedAns;
-                                        _security.push(newQA);
-                                        _security.splice(0, 1);
-                                        if (i === 2) {
-                                            req.body['security'] = _security;
-                                            next();
-                                        }
-                                    } else if (bcryptErr !== null) {
-                                        res.status(500).json({result: 'Internal server error'});
-                                        i = i + 2;
+                                bcrypt.hash(userAns, 2)
+                                .then((encryptedAns) =>{
+                                    const userQues = Object.keys(_security[0])[0];
+                                    let newQA = {};
+                                    newQA[userQues] = encryptedAns;
+                                    _security.push(newQA);
+                                    _security.splice(0, 1);
+                                    if (i === 2) {
+                                        req.body['security'] = _security;
+                                        next();
                                     }
+                                })
+                                .catch((err) =>{
+                                    res.status(500).end({'result': 'Internal server error'});
+                                    console.log('bcrypt error', err);
                                 });
                             }
                         } else {
@@ -197,14 +197,54 @@ authUtilMethods = {
                     console.log(Date.now(), 'Hit default in switch statement - authutil');
                     break;
             }
-        } catch {
-            console.log(Date.now(), 'catch block in try statement - authutil');
-            res.status(500).json({
-                result: 'Could not process request'
-            });
-        }
+        // } catch {
+        //     console.log(Date.now(), 'catch block in try statement - authutil');
+        //     res.status(500).json({
+        //         result: 'Could not process request'
+        //     });
+        // }
         
     },
+
+    /* Validate security questions */
+  checkUserAns: (req, res, next) =>{
+    _user = (req.body.userId).toUpperCase();
+    Users.findOne({'userId': _user}).exec()
+    .then((foundUser) =>{
+        userQandA = req.body.security;
+        foundQandA = foundUser.security;
+        
+        
+            bcrypt.compare(JSON.stringify(Object.values(userQandA[1])[0]), JSON.stringify(Object.values(foundQandA[1])[0]))
+            .then((r) =>{
+                console.log(r);
+            }).catch((e) =>{
+                console.log(e);
+            })
+        
+        
+    })
+    .catch((err) =>{
+       res.status(404).json({
+         result: 'User ' + req.body.userId + ' not found'
+       });
+       console.log(err);
+    });
+
+    function bcryptCompare(i, userQandA, foundQandA) {
+        // bcrypt.compare(Object.values(userQandA[i])[0], Object.values(foundQandA[i])[0])
+        //   .then((r) =>{
+        //       if (r) {
+        //           console.log(r);
+        //           return i;
+        //       } else {
+        //           return false;
+        //       }
+        //   })
+        //   .catch();
+        return bcrypt.compareSync(Object.values(userQandA[i])[0], Object.values(foundQandA[i])[0]);
+    }
+  },
 
     verifyToken: (req, res, next) =>{
         token = req.headers.authorization;

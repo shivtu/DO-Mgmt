@@ -726,40 +726,20 @@ validateMethods = {
 
 
 
-  /* Validate security questions */
-  checkUserAns: (req, res, next) =>{
-    _user = (req.body.userId).toUpperCase();
-    Users.findOne({'userId': _user}).exec()
-    .then((foundUser) =>{
-      const providedQandA = req.body.security;
-      const securityQuesLength = foundUser.security.length;
-      req.body['areAnsValid'] = true;
-      _areAnsValid = req.body.areAnsValid;
-      for (let i = 0; i < securityQuesLength; i++) {
-        for (let j = 0; j < securityQuesLength; j++) {
-          if (foundUser.security[i].question === providedQandA[j].question) {
-            bcrypt.compare(providedQandA[j].answer, foundUser.security[i].answer, (compareErr, compareSuccess) =>{
-              if (!compareSuccess) {
-                _areAnsValid = false;
-                // console.log('_areAnsValid', _areAnsValid); 
-              }
-            });
-            if (!_areAnsValid) {
-              break;
-            }
-          }
-        }
-        if (!_areAnsValid) {
-          break;
+  areSecurityAnsSanitized: (req, res, next) =>{
+    const _security = req.body.security;
+    if (Array.isArray(_security) && _security.length === 3) {
+      for (let i = 0; i < 3; i++) {
+        const userAns = Object.values(_security[0])[0];
+        if (userAns === null || typeof userAns === 'undefined' || userAns === '') {
+          res.status(400).end({
+            result: 'Ill formated request body',
+            message: 'https://github.com/shivtu/DO-Mgmt'
+          });
         }
       }
       next();
-    })
-    .catch((err) =>{
-       res.status(404).json({
-         result: 'User ' + req.body.userId + 'not found'
-       });
-    });
+    }
   },
 
 

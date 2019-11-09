@@ -67,7 +67,9 @@ authUtil.authUtilMethod.encryptData, (req, res, next) =>{
 router.get('/find/findAll', (req, res, next) =>{
   Users.find().exec()
   .then((result) =>{
-      res.status(200).json({result: result});
+      res.status(200).json({
+        result:result
+      });
   }).catch((e) => res.status(404).json({status: e.message}));
 });
 
