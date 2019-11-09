@@ -225,7 +225,7 @@ authUtil.authUtilMethod.encryptData, // Encrypt the newPassword
          });
       });
    } else {
-      res.status().json({
+      res.status(403).json({
          result: 'Unauthorized request',
          message: 'Only owner of the record can reset password'
       });

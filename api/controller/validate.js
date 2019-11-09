@@ -729,17 +729,40 @@ validateMethods = {
   areSecurityAnsSanitized: (req, res, next) =>{
     const _security = req.body.security;
     if (Array.isArray(_security) && _security.length === 3) {
-      for (let i = 0; i < 3; i++) {
-        const userAns = Object.values(_security[0])[0];
-        if (userAns === null || typeof userAns === 'undefined' || userAns === '') {
-          res.status(400).end({
-            result: 'Ill formated request body',
-            message: 'https://github.com/shivtu/DO-Mgmt'
-          });
+    Users.findOne({'userId': req.body.userId}).exec()
+      .then((foundUser) =>{
+        let userQues = req.body.security;
+        let foundQues = foundUser.security;
+        let flag = true;
+        for (let i=0; i<3; i++) {
+          let userAns = Object.values(_security[i])[0];
+          if ((Object.keys(userQues[i])[0] !== Object.keys(foundQues[i])[0]) || userAns === null || typeof userAns === 'undefined' || userAns === '') {
+            res.status(400).json({
+              result: 'Ill formated request body',
+              message: 'https://github.com/shivtu/DO-Mgmt'
+            });
+            flag = false;
+            break;
+          }
         }
-      }
-      next();
+        if (flag) {
+          next();
+        }
+      })
+      .catch((e) =>{
+        res.status(404).end({
+          result: 'User not found'
+        });
+        console.log(e);
+      });
+    } else {
+      res.status(400).end({
+        result: 'Ill formated request body',
+        message: 'https://github.com/shivtu/DO-Mgmt'
+      });
     }
+    // next();
+    // console.log('_security', _security);
   },
 
 
