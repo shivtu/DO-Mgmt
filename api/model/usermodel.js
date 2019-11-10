@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const userSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   firstName: { type: String, required: true },
-  middleName: { type: String, default: "N/A" },
+  middleName: { type: String, default: "N-A" },
   lastName: { type: String, required: true },
   phone: {type: String, index: true, unique : true, dropDups: true, required: true },
   email: { type: String, unique : true, required : true, dropDups: true, index: true },
