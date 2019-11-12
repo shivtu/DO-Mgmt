@@ -1,5 +1,5 @@
-# Devops Management Tool
-### Gist
+# Devops Management Middleware
+### <a href="https://github.com/shivtu/DO-Mgmt/wiki">Wiki</a>
 
 <img src="https://github.com/shivtu/DO-Mgmt/blob/master/assets/DO-Mgmt.png"/>
 
