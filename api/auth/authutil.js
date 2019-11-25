@@ -111,6 +111,8 @@ authUtilMethods = {
             res.status(404).json({
               result: "Cannot find user " + req.body.userId
             });
+
+            console.log(userSearchErr);
           });
         break;
 
@@ -138,7 +140,7 @@ authUtilMethods = {
         next();
         break;
 
-      case "passwordUpdate":
+      case "passwordReset":
         /* No need to check for undefined on newPassword as that validation is bieng performed within Validate.js */
         bcrypt
           .hash(req.body.newPassword, 2)
@@ -169,7 +171,7 @@ authUtilMethods = {
           });
         break;
 
-      case "passwordReset":
+      case "passwordUpdate":
         // No need to validate newPassword as that is being checked on Validate.js page with isUpdatingPassword method
         Users.findOne({ userId: req.body.userId })
           .exec()
@@ -243,6 +245,34 @@ authUtilMethods = {
       });
   },
 
+  /* Verify a temp password */
+  verifyTempPassword: (req, res, next) => {
+    const _initPwd = req.body.initPwd;
+    const _userId = req.body.userId;
+    Users.findOne({ userId: _userId })
+      .exec()
+      .then(foundUser => {
+        if (bcrypt.compareSync(_initPwd, foundUser.initPwd)) {
+          Users.findOneAndUpdate(
+            { userId: foundUser.userId },
+            { initPwd: "" },
+            { new: true }
+          )
+            .exec() // destroy the temp password
+            .then(() => {
+              next();
+            })
+            .catch(e => {
+              res.status(500).json({
+                result: "Internal server error"
+              });
+              console.log("authutil.js, line no. 259", e);
+            });
+        }
+      })
+      .catch();
+  },
+
   verifyToken: (req, res, next) => {
     token = req.headers.authorization;
     if (typeof token !== "undefined") {
@@ -278,8 +308,7 @@ authUtilMethods = {
           req.body["currentUser"] = {
             userId: decode.userId,
             email: decode.email,
-            group: decode.group,
-            role: decode.role
+            group: decode.group
           }; //paste current user properties to request body
           Object.freeze(req.body.currentUser); // Freeze verified token to avoid any manipulation by the user
           req.body["userRole"] = decode.role;

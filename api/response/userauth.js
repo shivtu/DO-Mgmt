@@ -50,15 +50,16 @@ router.post(
   authUtil.authUtilMethod.verifyToken,
   (req, res, next) => {
     const _user = req.body.userId.toUpperCase();
-    const _currentUser = req.body.currentUser;
-    if (_currentUser.userId === _user || _currentUser.role === "admin") {
+    const _userRole = req.body.userRole;
+    if (req.body.currentUser === _user || _userRole === "admin") {
       // Evaluate user authorization, check if the request is from the owner of the record
       Users.findOne({ userId: _user })
         .exec()
         .then(foundUser => {
+          console.log(foundUser);
           let securityQuestions = [];
           foundUser.security.forEach(securityquestion => {
-            securityQuestions.push(securityquestion);
+            securityQuestions.push(Object.keys(securityquestion)[0]);
           });
           res.status(200).json({
             result: securityQuestions
@@ -159,80 +160,70 @@ router.post("/getToken", (req, res, next) => {
     });
 });
 
-/* User updates password when he knows the current password */
-router.post(
-  "/passwordUpdate",
-  authUtil.authUtilMethod.verifyToken,
-  Validate.validationMethod.isUpdatingPassword,
-  (req, res, next) => {
-    currentUserId = req.body.currentUser.userId;
-    UserAuth.findOne({ userId: currentUserId })
-      .exec()
-      .then(result => {
-        bcrypt.compare(
-          req.body.password,
-          result.password,
-          (compareErr, compareSuccess) => {
-            if (compareSuccess) {
-              UserAuth.findOneAndUpdate(
-                { userId: currentUserId },
-                { password: req.body.newPassword },
-                { new: true }
-              )
-                .exec()
-                .then(result => {
-                  res.status(201).json({
-                    result: "Password update success for " + result.userId
-                  });
-                })
-                .catch(err => {
-                  res.status(500).json({
-                    result: "Cannot update password"
-                  });
-                });
-            } else {
-              res.status(403).json({
-                result: "Old password mismatch"
-              });
-            }
-          }
-        );
-      })
-      .catch(err => {
-        res.status(404).json({
-          result: "User not found"
-        });
-      });
-  }
-);
-
 /* Set temporary password for the user to allow the user to reset password */
 router.post(
   "/setTempPassword",
   authUtil.authUtilMethod.verifyToken,
   Validate.validationMethod.isUpdatingPassword,
+  authUtil.authUtilMethod.encryptData,
   (req, res, next) => {
-    Users.findOneAndUpdate(
-      { _id: req.body._id },
-      { initPwd: req.body.initPwd },
+    if (req.body.userRole === "admin") {
+      Users.findOneAndUpdate(
+        { userId: req.body.userId },
+        { initPwd: req.body.newPassword },
+        { new: true }
+      )
+        .then(tempPassword => {
+          res.status(201).json({
+            result: "Temp password set for " + tempPassword.userId
+          });
+        })
+        .catch(e => {
+          res.status(400).json({
+            result: "Cannot set temp password"
+          });
+          console.log("userauth.js, line no. 179", e);
+        });
+    } else {
+      res.status(403).json({
+        result: "Action forbidden"
+      });
+    }
+  }
+);
+
+/* User resets password using the temp password provided by admin */
+router.patch(
+  "/passwordReset",
+  Validate.validationMethod.isUpdatingPassword,
+  authUtil.authUtilMethod.verifyTempPassword,
+  authUtil.authUtilMethod.encryptData,
+  (req, res, next) => {
+    const _userId = req.body.userId;
+    const _newPassword = req.body.newPassword;
+    UserAuth.findOneAndUpdate(
+      { userId: _userId },
+      { password: _newPassword },
       { new: true }
     )
-      .then(tempPassword => {
+      .then(newResult => {
         res.status(201).json({
-          result: tempPassword.userId + "temporary password has been set"
+          result: "Password reset success"
         });
+        console.log(newResult);
       })
-      .catch(() => {
-        res.status(400).json({
-          result: "Cannot set temp password"
+      .catch(e => {
+        res.status(500).json({
+          result: "Internal server error"
         });
+        console.log("auerauth.js, line no. 211", e);
       });
   }
 );
 
 /* User password reset */
 router.patch(
-  "/passwordReset",
+  "/passwordUpdate",
   authUtil.authUtilMethod.verifyToken,
   Validate.validationMethod.isUpdatingPassword, // check if new password is valid
   authUtil.authUtilMethod.encryptData, // Encrypt the newPassword
