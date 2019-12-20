@@ -93,7 +93,12 @@ router.get('/find/:userId', (req, res, next) =>{
       }
     });
   })
-  .catch();
+  .catch(e =>{
+    res.status(500).json({
+      result: 'Cannot find user'
+    });
+    console.log('users.js line no. 100 \n', e);
+  });
 });
 
 /* Find user by _id */

@@ -749,14 +749,13 @@ validateMethods = {
           next();
         }
       })
-      .catch((e) =>{
-        res.status(404).end({
+      .catch(() =>{
+        res.status(404).json({
           result: 'User not found'
         });
-        console.log(e);
       });
     } else {
-      res.status(400).end({
+      res.status(400).json({
         result: 'Ill formated request body',
         message: 'https://github.com/shivtu/DO-Mgmt'
       });
