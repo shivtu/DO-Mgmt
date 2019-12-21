@@ -139,7 +139,6 @@ router.get("/find/filter/:_limit", (req, res, next) => {
 router.get("/find/SRID/:SRID", (req, res, next) => {
   NewEpic.findOne({ "SRID": req.params.SRID }).exec()
     .then(result => {
-      console.log(result);
       if (result === null) {
         res.status(404).json({ result: "no records found" });
       } else {

@@ -242,7 +242,6 @@ validateMethods = {
         result: "Some of the values in the request body cannot be updated",
         message: "https://github.com/shivtu/DO-Mgmt"
       });
-      console.log(req.body);
     } else {
        /* Since reques.body.createdBy is an object we overide this to avoid possible conflicts */
        req.body['createdBy'] = req.body.extractedResults__id.createdBy;
@@ -260,7 +259,6 @@ validateMethods = {
         result: "Some of the values in the request body cannot be updated",
         message: "https://github.com/shivtu/DO-Mgmt"
       });
-      console.log(req.body);
     } else {
        /* Since reques.body.createdBy is an object we overide this to avoid possible conflicts */
        req.body['createdBy'] = req.body.extractedResults__id.createdBy;

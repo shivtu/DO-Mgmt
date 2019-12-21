@@ -56,7 +56,6 @@ router.post(
       Users.findOne({ userId: _user })
         .exec()
         .then(foundUser => {
-          console.log(foundUser);
           let securityQuestions = [];
           foundUser.security.forEach(securityquestion => {
             securityQuestions.push(Object.keys(securityquestion)[0]);
@@ -126,7 +125,6 @@ router.post("/getToken", (req, res, next) => {
           req.body.password,
           result.password,
           (compareErr, compareSuccess) => {
-            // console.log('result', result);
             if (compareSuccess && result.status === "Active") {
               const accessToken = jwt.sign(
                 {
@@ -195,22 +193,23 @@ router.post(
 /* User resets password using the temp password provided by admin */
 router.patch(
   "/passwordReset",
+  authUtil.authUtilMethod.verifyToken,
   Validate.validationMethod.isUpdatingPassword,
   authUtil.authUtilMethod.verifyTempPassword,
   authUtil.authUtilMethod.encryptData,
   (req, res, next) => {
-    const _userId = req.body.userId;
-    const _newPassword = req.body.newPassword;
-    UserAuth.findOneAndUpdate(
-      { userId: _userId },
-      { password: _newPassword },
-      { new: true }
-    )
-      .then(newResult => {
+    if (req.body.userRole === 'admin') {
+      const _userId = req.body.userId;
+      const _newPassword = req.body.newPassword;
+      UserAuth.findOneAndUpdate(
+        { userId: _userId },
+        { password: _newPassword },
+        { new: true }
+      )
+      .then(() => {
         res.status(201).json({
           result: "Password reset success"
         });
-        console.log(newResult);
       })
       .catch(e => {
         res.status(500).json({
@@ -218,6 +217,11 @@ router.patch(
         });
         console.log("auerauth.js, line no. 211", e);
       });
+    } else {
+      res.status(403).json({
+        result: 'Authorization failure'
+      });
+    }
   }
 );
 

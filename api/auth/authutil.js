@@ -65,7 +65,6 @@ authUtilMethods = {
           .then(foundUser => {
             if (foundUser.status === "Active") {
               // If user status is inactive, user is trying to setup creds after admin has deactivated the user
-              // console.log(foundUser.initPwd);
               bcrypt
                 .compare(req.body.initPwd, foundUser.initPwd)
                 .then(comparedResult => {
@@ -228,7 +227,6 @@ authUtilMethods = {
               Object.values(foundAns[i])[0]
             )
           ) {
-            console.log("All good");
           } else {
             res.status(403).end({
               result: "Match not found"
@@ -249,7 +247,7 @@ authUtilMethods = {
   verifyTempPassword: (req, res, next) => {
     const _initPwd = req.body.initPwd;
     const _userId = req.body.userId;
-    Users.findOne({ userId: _userId })
+    Users.findOne({ 'userId': _userId })
       .exec()
       .then(foundUser => {
         if (bcrypt.compareSync(_initPwd, foundUser.initPwd)) {
@@ -268,9 +266,17 @@ authUtilMethods = {
               });
               console.log("authutil.js, line no. 259", e);
             });
+        } else {
+          res.status(404).json({
+            result: 'No match found for temporary password'
+          });
         }
       })
-      .catch();
+      .catch(e =>{
+        res.status(404).json({
+          result: 'User not found'
+        });
+      });
   },
 
   verifyToken: (req, res, next) => {
@@ -321,7 +327,6 @@ authUtilMethods = {
         }
       });
     } else {
-      console.log("hh");
       res.status(403).json({
         result: "Unauthenticated request"
       });
