@@ -905,7 +905,11 @@ validateMethods = {
           });
         }
       })
-      .catch();
+      .catch(e => {
+        res.status(404).json({
+          result: 'Sprint not found'
+        });
+      });
     } else {
       res.status(400).json({
         result: 'Ill formated request body',
