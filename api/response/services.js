@@ -110,46 +110,46 @@ router.get("/search/:ID", (req, res, next) => {
 
 
 
-// router.get('/allUsers', (req, res, next) =>{
-//   Users.find().exec()
-//   .then(result =>{
-//     res.status(200).json({
-//       result: result
-//     });
-//   })
-//   .catch()
-// });
+router.get('/allUsers', (req, res, next) =>{
+  Users.find().exec()
+  .then(result =>{
+    res.status(200).json({
+      result: result
+    });
+  })
+  .catch()
+});
 
 
-// router.get('/allUserCreds', (req, res, next) =>{
-//   UserAuth.find().exec()
-//   .then(result =>{
-//     res.status(200).json({
-//       result: result
-//     });
-//   })
-//   .catch(err =>{
-//     console.log(err);
-//   })
-// });
+router.get('/allUserCreds', (req, res, next) =>{
+  UserAuth.find().exec()
+  .then(result =>{
+    res.status(200).json({
+      result: result
+    });
+  })
+  .catch(err =>{
+    console.log(err);
+  })
+});
 
 
-// router.delete('/deleteUserProfile/:_id', (req, res, next) =>{
-//   Users.findByIdAndDelete({'_id': req.params._id}).exec()
-//   .then(result =>{
-//     res.send({result});
-//   }).catch(err =>{
-//     console.log(err);
-//   })
-// });
+router.delete('/deleteUserProfile/:_id', (req, res, next) =>{
+  Users.findByIdAndDelete({'_id': req.params._id}).exec()
+  .then(result =>{
+    res.send({result});
+  }).catch(err =>{
+    console.log(err);
+  })
+});
 
 
-// router.delete('/deleteUserCreds/:_id', (req, res, next) =>{
-//   UserAuth.findByIdAndDelete({'_id': req.params._id}).exec()
-//   .then(result =>{
-//     res.send({result});
-//   });
-// });
+router.delete('/deleteUserCreds/:_id', (req, res, next) =>{
+  UserAuth.findByIdAndDelete({'_id': req.params._id}).exec()
+  .then(result =>{
+    res.send({result});
+  });
+});
 
 
 

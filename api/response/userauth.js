@@ -32,7 +32,7 @@ router.post(
         res.status(201).json({
           result: result.userId + " setup success",
           accessToken: "http://localhost:5000/api/v1/userauth/getToken",
-          security: "http://localhost:5000/api/v1/userauth/security/questions"
+          security: "http://localhost:5000/api/v1/userauth/securityQuestions"
         });
       })
       .catch(err => {
