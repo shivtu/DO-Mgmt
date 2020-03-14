@@ -4,8 +4,14 @@ const statusTypes = [
   "created",
   "in-progress",
   "on-hold",
-  "fixed",
+  "completed",
   "canceled"
+];
+const closingStatusTypes = [
+  "resolved",
+  "fix not available",
+  "not a bug",
+  "already fixed"
 ];
 const impactTypes = [
   "critical",
@@ -41,6 +47,8 @@ const bugFixSchema = mongoose.Schema({
   closedOn: { type: Date, min: Date.now() },
   resolutionNotes: { type: String },
   updateNotes: { type: JSON, default: [] },
+  closingStatus: { type: String, required: false, enum: closingStatusTypes },
+  closingNote: { type: String, required: false },
   NPRId: { type: String },
   files: { type: Array }
 });
