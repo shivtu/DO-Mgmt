@@ -193,24 +193,23 @@ validateMethods = {
   },
 
 
-    /* Check if user is updating product version */
-    isUpdatingProductVersion: (req, res, next) =>{
-      const _phase = req.body.phase;
+  /* Check if user is updating product version */
+  isUpdatingProductVersion: (req, res, next) =>{
+    const _phase = req.body.phase;
 
-      if (typeof req.body.productVersion === 'undefined') {
+    if (typeof req.body.productVersion === 'undefined') {
+      next();
+    } else {
+      if (typeof req.body.productVersion !== 'undefined' && (_phase === 'delivered' || _phase === 'maintenance' || _phase === 'support' 
+      || _phase === 'release')) {
         next();
       } else {
-        if (typeof req.body.productVersion !== 'undefined' && (_phase === 'delivered' || _phase === 'maintenance' || _phase === 'support' 
-        || _phase === 'release')) {
-          next();
-        } else {
-          res.status(400).json({
-            result: 'Product version can be updated only with a release'
-          });
-        }
+        res.status(400).json({
+          result: 'Product version can be updated only with a release'
+        });
       }
-    },
-
+    }
+  },
 
 
   /**Restrict user updating certain fields */
@@ -500,7 +499,6 @@ validateMethods = {
   },
 
 
-
   /* Check if user is assigning BFR */
   isAssigningBFR: (req, res, next) =>{
 
@@ -552,12 +550,26 @@ validateMethods = {
   /* Check if user is closing/canceling the request */
   isClosingRequest: (req, res, next) => {
     if (req.body.status === 'completed' || req.body.status === 'canceled') {
+      const originalUrlContent = req.originalUrl.split('/');
+      const _assignedTo = req.body.assignedTo;
+      console.log("originalUrlContent", originalUrlContent);
       const utcDate = new Date();
       req.body['closedOn'] = utcDate.toUTCString();
     }
     next();
   },
 
+
+  isClosingBFR: (req, res, next) =>{
+    if ((req.body.status === 'completed' || req.body.status === 'canceled')
+    && typeof req.body.closingStatus === 'undefined' || req.body.closingStatus === "") {
+      res.status(400).json({
+        result: 'Bad request, completion status is required'
+      });
+    } else {
+      next();
+    }
+  },
 
 
   /* Check if user is providing update notes */
@@ -918,8 +930,7 @@ validateMethods = {
     }
   },
 
-
-
+  
 
 };
 

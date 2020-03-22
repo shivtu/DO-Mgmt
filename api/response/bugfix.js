@@ -8,7 +8,7 @@ const Validate = require("../controller/validate");
 
 /* Create a BFR */
 router.post("/create",
-Validate.validationMethod.getRecordById, // This methods sticks the result from DB to request body for consumption by other methods
+// Validate.validationMethod.getRecordById, // This methods sticks the result from DB to request body for consumption by other methods
 Validate.validationMethod.isUploadingfile,
 Validate.validationMethod.isAssigningBFR,
 (req, res, next) => {
@@ -144,9 +144,15 @@ router.get("/find/filter/limit/:_limit", (req, res, next) =>{
 router.patch('/update/:_id',
 Validate.validationMethod.isUploadingfile,
 Validate.validationMethod.isAssigningBFR,
+Validate.validationMethod.isClosingBFR,
 (req, res, next) =>{
-  Bugfix.findByIdAndUpdate({'_id': req.params.SRID}, req.body, {new: true}).exec()
-  .then()
+  console.log('req.body.closingStatus', req.body.closingStatus);
+  Bugfix.findByIdAndUpdate({'_id': req.params._id}, req.body, {new: true}).exec()
+  .then((result) =>{
+    res.status(201).json({
+      result: result
+    });
+  })
   .catch((e) =>{
     console.log(Date.now(), 'Update BFR', e);
     res.status(404).json({
